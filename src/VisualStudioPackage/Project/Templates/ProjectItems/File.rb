@@ -1,0 +1,4 @@
+class %className%
+
+end
+    

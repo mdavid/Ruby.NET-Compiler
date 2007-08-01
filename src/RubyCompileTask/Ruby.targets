@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<Import Project="$(MSBuildBinPath)\Microsoft.Common.targets" />
+	<UsingTask TaskName="Ruby.Net.RubyCompileTask" AssemblyFile="Ruby.NET.CompileTasks.dll" />
+
+	<Target Name="RubyCompilerTarget">
+		<Message Text="Building: @(IntermediateAssembly)" />
+		<RubyCompileTask
+		  Sources="@(Compile)"
+		  OutputAssembly="@(IntermediateAssembly)"
+		  MainFile="$(MainFile)" 
+		  TargetType="$(OutputType)"
+		  DebugType="$(DebugType)"
+      />
+	</Target>	
+
+	<Target Name="CoreCompile"
+		Inputs="@(Compile);@(ReferencePath)"
+		Outputs="@(IntermediateAssembly)"
+		DependsOnTargets="$(CoreCompileDependsOn);RubyCompilerTarget"
+    >
+	</Target>	
+	
+	<Target Name="CreateManifestResourceNames"/>
+
+</Project>

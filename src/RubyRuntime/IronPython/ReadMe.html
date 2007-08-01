@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>IronPython ReadMe</title>
+</head>
+
+<body>
+
+<p><a href="http://ironpython.com">IronPython</a> is a new implementation of the Python language targeting the 
+Common Language Runtime (CLR). It compiles python programs into bytecode (IL) 
+that will run on either Microsoft's .NET or the Open Source Mono platform. 
+IronPython includes an interactive interpreter and transparent on-the-fly 
+compilation of source files just like standard Python.</p>
+<p>All development of IronPython to date has been performed by Jim Hugunin.&nbsp; 
+This is the first public release of the IronPython source and binaries.</p>
+<p>This is a pre-alpha release. It's suitable for 
+experimenting and playing with; however, a large amount of testing, packaging 
+and library development remains to be done before a production-quality 
+IronPython-1.0. The only two Python programs that I know for sure run on 
+IronPython are pystone.py and the parrotbench benchmark/test-suite. Of course, 
+IronPython is the only Python implementation other than CPython-2.3 that can 
+successfully run the parrotbench benchmark/test-suite, so this shows that the 
+implementation can handle the majority and trickiest parts of Python's core 
+semantics successfully.</p>
+<h3>Installing and Running</h3>
+<p>IronPython requires either .Net-1.1 or Mono-1.0 be installed on your system.</p>
+<p>After unzipping IronPython-0.6.zip, you can complete the installation by 
+adding the included 'bin' directory to your PATH. To test your installation, you 
+should launch the interactive interpreter as shown below:</p>
+<pre>
+C:\IronPython-0.6\bin&gt;IronPythonConsole
+&gt;&gt;&gt; 2+2
+4</pre>
+<p>If you're using Mono on Windows, you can launch the interpreter like this:</p>
+<pre>C:\IronPython-0.6\bin&gt;c:\Mono-1.0\bin\mono IronPythonConsole.exe
+&gt;&gt;&gt; </pre>
+<p>IronPython should run under Mono on Linux; however, this has not been tested. 
+You're likely to have to do a little more work to get things configured 
+correctly to run on Linux.</p>
+<p>You can use IronPython to run python scripts by passing the script name on 
+the command-line just as with standard Python. Most of the standard Python 
+library is not currently implemented, so it is unlikely that many existing 
+Python scripts will run successfully under this early alpha release of 
+IronPython-0.6.</p>
+<h3>Users Guide</h3>
+<p>Instead of a user's manual, you get two paragraphs of help. Sorry.</p>
+<p>Using IronPython should be fairly straight-forward. Since it's an 
+implementation of the Python language, you should be able to use all of the 
+language constructs that you're familiar with. By default, IronPython doesn't 
+ship with any of the standard Python library, so if you wish to use these 
+libraries you'll have to provide them yourself.</p>
+<p>Using CLR libraries should also be mostly obvious. See the trivial example 
+code in the examples directory if you need help getting started. The one 
+challenge that you're likely to encounter is having IronPython find any 
+assemblies that are even a little bit out of the ordinary. Two special functions 
+have been added to the sys module to make this easier.&nbsp; They're called sys.LoadAssemblyByName(name) and sys.LoadAssemblyFromFile(filename).&nbsp; They 
+both return None. They are used to populate the list of known assemblies to make 
+import statements work and to fill in types to packages. Here are two examples.</p>
+<pre>&gt;&gt;&gt; from System import Web
+&gt;&gt;&gt; dir(Web)
+['AspNetHostingPermissionLevel', 'AspNetHostingPermissionAttribute', 'AspNetHost
+ingPermission']
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.LoadAssemblyByName(&quot;System.Web&quot;)
+&gt;&gt;&gt; dir(Web)
+['MultipartContentElement', 'HttpStatus', 'FindFileData', 'FileAction', 'HttpFil
+eResponseElement', 'HttpStaticObjectsCollection', 'AspNetHostingPermission', 'As
+yncAppEventHandler', 'HttpAsyncResult', 'HttpDebugHandlerTimeLog', 'HttpDictiona
+...
+StateProtocolExclusive', 'TraceContext', 'SecurityErrorFormatter', 'IHttpRespons
+eElement', 'HttpApplicationStateLock', 'HttpMultipartContentTemplateParser', 'Sa
+feNativeMethods', 'AspNetHostingPermissionAttribute', 'RequestQueue']</pre>
+<pre>&nbsp;</pre>
+<pre>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; import AgentServerObjects
+IronPython.Objects.PythonImportError: can't load AgentServerObjects
+at IronPython.Objects.module.Import(String fullName, Boolean keepTop)
+at IronPython.Objects.Ops.Import(module mod, String fullName)
+at input_3.Run(Frame frame)
+at IronPythonConsole.IronPython.DoInteractive()
+&gt;&gt;&gt; sys.LoadAssemblyFromFile(&quot;./Interop.AgentServerObjects.dll&quot;)
+&gt;&gt;&gt; import AgentServerObjects
+&gt;&gt;&gt;</pre>
+<h3>Building From Source</h3>
+<p>Currently, the only build system for IronPython uses Visual Studio .Net 2003. 
+You should be able to easily get started with this from the IronPython.sln file 
+in the top-level directory.</p>
+<p>The build process otherwise should be extremely straight-forward. The only 
+non-obvious part of the build is the tiny library SystemUtil.dll which is built 
+by the UtilLibraryBuilder program. The easiest thing to do is to use the copy of 
+SystemUtil.dll provided in the bin directory when rebuilding.</p>
+<h3>Unresolved Design Issues</h3>
+<p>In addition to further development work, there are several open design 
+questions that must be answered before a 1.0 release. Here are a few of those.</p>
+<ul>
+	<li>How many kinds of strings? i.e. should there be separate ascii and 
+	unicode string objects?</li>
+	<li>How to handle locals() and sys._getframe().f_locals?</li>
+	<li>How to interoperate best with other dynamic languages on the CLR?</li>
+    <li>How to most effectively expose Python code to other CLR languages?</li>
+</ul>
+<p>I'm sure that more items will be added to this list as time goes on.</p>
+
+<h3>License</h3>
+<p>Virtually all of the code is licensed under the Common Public License, 
+version 1.0 (see <a href="cpl-v10.html">cpl-v10.html</a>). In the IronPython 
+system itself there are two exceptions to this rule in IronMath/ExternalCode and 
+IronPython/ExternalCode. If you enable the flag &quot;ONLY_JIMS_CODE&quot;, then none of 
+this external code will be used and the system will be entirely licensed under 
+the CPL. Using this flag will disable division of Python longs and will switch 
+from the Python-optimized sort algorithm to the generic CLR sort library code.</p>
+<p>The code in tests is available under a variety of different licenses and you 
+should read the &quot;LICENSE&quot; file in each test sub-directory for license terms.</p>
+
+</body>
+
+</html>

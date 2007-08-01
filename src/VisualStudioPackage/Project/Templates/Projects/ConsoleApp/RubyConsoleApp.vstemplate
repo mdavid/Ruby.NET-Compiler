@@ -1,0 +1,20 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>Console Application</Name>
+    <Description>A project for creating a command-line application</Description>
+    <ProjectType>Ruby</ProjectType>
+    <SortOrder>50</SortOrder>
+	<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ConsoleApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>RubyConsoleApp.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="RubyConsoleApp.rbproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Program.rb</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>
