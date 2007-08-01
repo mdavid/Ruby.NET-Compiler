@@ -1,0 +1,4 @@
+module $safeitemrootname$
+
+end
+    

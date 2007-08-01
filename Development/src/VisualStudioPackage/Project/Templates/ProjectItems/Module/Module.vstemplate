@@ -1,0 +1,13 @@
+<VSTemplate Version="2.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+	<TemplateData>
+		<Name>Module</Name>
+		<Description>An empty module definition</Description>
+		<Icon>Module.ico</Icon>
+		<ProjectType>Ruby</ProjectType>
+		<SortOrder>11</SortOrder>
+		<DefaultName>Module.rb</DefaultName>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true">Module.rb</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

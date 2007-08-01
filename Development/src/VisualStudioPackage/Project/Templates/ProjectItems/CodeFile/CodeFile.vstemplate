@@ -1,0 +1,13 @@
+<VSTemplate Version="2.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+	<TemplateData>
+		<Name>Code File</Name>
+		<Description>A blank Ruby code file</Description>
+		<Icon>CodeFile.ico</Icon>
+		<ProjectType>Ruby</ProjectType>
+		<SortOrder>12</SortOrder>
+		<DefaultName>CodeFile.rb</DefaultName>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="false">CodeFile.rb</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

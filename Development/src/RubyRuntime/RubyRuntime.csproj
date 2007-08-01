@@ -1,0 +1,245 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{11FC7AC6-E067-48ED-8748-D8CDD7D97713}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ruby</RootNamespace>
+    <AssemblyName>Ruby.NET.Runtime</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ruby.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Built-in Classes\Array.cs" />
+    <Compile Include="Built-in Classes\Basic.cs" />
+    <Compile Include="Built-in Classes\Bignum.cs" />
+    <Compile Include="Built-in Classes\Binding.cs" />
+    <Compile Include="Built-in Classes\Class.cs" />
+    <Compile Include="Built-in Classes\Continuation.cs" />
+    <Compile Include="Built-in Classes\Data.cs" />
+    <Compile Include="Built-in Classes\Dir.cs" />
+    <Compile Include="Built-in Classes\Env.cs" />
+    <Compile Include="Built-in Classes\Exception.cs" />
+    <Compile Include="Built-in Classes\File.cs" />
+    <Compile Include="Built-in Classes\FileStat.cs" />
+    <Compile Include="Built-in Classes\Float.cs" />
+    <Compile Include="Built-in Classes\Hash.cs" />
+    <Compile Include="Built-in Classes\Integer.cs" />
+    <Compile Include="Built-in Classes\IO.cs" />
+    <Compile Include="Built-in Classes\Match.cs" />
+    <Compile Include="Built-in Classes\Numeric.cs" />
+    <Compile Include="Built-in Classes\Object.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Built-in Classes\Pack.cs" />
+    <Compile Include="Built-in Classes\Proc.cs" />
+    <Compile Include="Built-in Classes\ProcessStatus.cs" />
+    <Compile Include="Built-in Classes\Range.cs" />
+    <Compile Include="Built-in Classes\Regexp.cs" />
+    <Compile Include="Built-in Classes\String.cs" />
+    <Compile Include="Built-in Classes\Struct.cs" />
+    <Compile Include="Built-in Classes\Symbol.cs" />
+    <Compile Include="Built-in Classes\Thread.cs" />
+    <Compile Include="Built-in Classes\ThreadGroup.cs" />
+    <Compile Include="Built-in Classes\Time.cs" />
+    <Compile Include="Built-in Modules\Comparable.cs" />
+    <Compile Include="Built-in Modules\Crypt.cs" />
+    <Compile Include="Built-in Modules\Errno.cs" />
+    <Compile Include="Built-in Modules\FileTest.cs" />
+    <Compile Include="Built-in Modules\GC.cs" />
+    <Compile Include="Built-in Modules\Marshal.cs" />
+    <Compile Include="Built-in Modules\Math.cs" />
+    <Compile Include="Built-in Modules\ObjectSpace.cs" />
+    <Compile Include="Built-in Modules\Process.cs" />
+    <Compile Include="Built-in Modules\Signal.cs" />
+    <Compile Include="Built-in Modules\Sprintf.cs" />
+    <Compile Include="Compiler\AST\Args.cs" />
+    <Compile Include="Compiler\AST\Assignments.cs" />
+    <Compile Include="Compiler\AST\Calls.cs" />
+    <Compile Include="Compiler\AST\ClassesAndModules.cs" />
+    <Compile Include="Compiler\AST\ControlFlow.cs" />
+    <Compile Include="Compiler\AST\Eval.cs" />
+    <Compile Include="Compiler\AST\Exceptions.cs" />
+    <Compile Include="Compiler\AST\Formals.cs" />
+    <Compile Include="Compiler\AST\Methods.cs" />
+    <Compile Include="Compiler\AST\Node.cs" />
+    <Compile Include="Compiler\AST\Operators.cs" />
+    <Compile Include="Compiler\AST\SourceFile.cs" />
+    <Compile Include="Compiler\AST\Scoping.cs" />
+    <Compile Include="Compiler\AST\Singletons.cs" />
+    <Compile Include="Compiler\AST\Stmts.cs" />
+    <Compile Include="Compiler\AST\Strings.cs" />
+    <Compile Include="Compiler\AST\VALUE.cs" />
+    <Compile Include="Compiler\AST\Values.cs" />
+    <Compile Include="Compiler\AST\Variables.cs" />
+    <Compile Include="Compiler\CodeGenFacade.cs" />
+    <Compile Include="Compiler\ID.cs" />
+    <Compile Include="Compiler\Compiler.cs" />
+    <Compile Include="Compiler\MultiByteChar.cs" />
+    <Compile Include="Compiler\parser.cs" />
+    <Compile Include="Compiler\parser.y.cs" />
+    <Compile Include="Compiler\AssemblyRefs.cs" />
+    <Compile Include="Compiler\Ruby.cs" />
+    <Compile Include="Compiler\Scanner.cs" />
+    <Compile Include="Compiler\Terminators.cs" />
+    <Compile Include="Interop\Built-in Classes\Array.cs" />
+    <Compile Include="Interop\Built-in Classes\Bignum.cs" />
+    <Compile Include="Interop\Built-in Classes\Binding.cs" />
+    <Compile Include="Interop\Built-in Classes\Class.cs" />
+    <Compile Include="Interop\Built-in Classes\Continuation.cs" />
+    <Compile Include="Interop\Built-in Classes\Data.cs" />
+    <Compile Include="Interop\Built-in Classes\Dir.cs" />
+    <Compile Include="Interop\Built-in Classes\Exception.cs" />
+    <Compile Include="Interop\Built-in Classes\FalseClass.cs" />
+    <Compile Include="Interop\Built-in Classes\fatal.cs" />
+    <Compile Include="Interop\Built-in Classes\File.cs" />
+    <Compile Include="Interop\Built-in Classes\Fixnum.cs" />
+    <Compile Include="Interop\Built-in Classes\Float.cs" />
+    <Compile Include="Interop\Built-in Classes\Hash.cs" />
+    <Compile Include="Interop\Built-in Classes\Integer.cs" />
+    <Compile Include="Interop\Built-in Classes\Interrupt.cs" />
+    <Compile Include="Interop\Built-in Classes\IO.cs" />
+    <Compile Include="Interop\Built-in Classes\MatchData.cs" />
+    <Compile Include="Interop\Built-in Classes\Method.cs" />
+    <Compile Include="Interop\Built-in Classes\Module.cs" />
+    <Compile Include="Interop\Built-in Classes\NilClass.cs" />
+    <Compile Include="Interop\Built-in Classes\Numeric.cs" />
+    <Compile Include="Interop\Built-in Classes\Object.cs" />
+    <Compile Include="Interop\Built-in Classes\Proc.cs" />
+    <Compile Include="Interop\Built-in Classes\Range.cs" />
+    <Compile Include="Interop\Built-in Classes\Regexp.cs" />
+    <Compile Include="Interop\Built-in Classes\SignalException.cs" />
+    <Compile Include="Interop\Built-in Classes\String.cs" />
+    <Compile Include="Interop\Built-in Classes\Struct.cs" />
+    <Compile Include="Interop\Built-in Classes\Symbol.cs" />
+    <Compile Include="Interop\Built-in Classes\SystemExit.cs" />
+    <Compile Include="Interop\Built-in Classes\Thread.cs" />
+    <Compile Include="Interop\Built-in Classes\ThreadGroup.cs" />
+    <Compile Include="Interop\Built-in Classes\Time.cs" />
+    <Compile Include="Interop\Built-in Classes\TrueClass.cs" />
+    <Compile Include="Interop\Built-in Classes\UnboundMethod.cs" />
+    <Compile Include="Interop\Built-in Modules\Comparable.cs" />
+    <Compile Include="Interop\Built-in Modules\Enumerable.cs" />
+    <Compile Include="Interop\Built-in Modules\Errno.cs" />
+    <Compile Include="Interop\Built-in Modules\FileTest.cs" />
+    <Compile Include="Interop\Built-in Modules\GC.cs" />
+    <Compile Include="Interop\Built-in Modules\Kernel.cs" />
+    <Compile Include="Interop\Built-in Modules\Marshal.cs" />
+    <Compile Include="Interop\Built-in Modules\Math.cs" />
+    <Compile Include="Interop\Built-in Modules\ObjectSpace.cs" />
+    <Compile Include="Interop\Built-in Modules\Precision.cs" />
+    <Compile Include="Interop\Built-in Modules\Process.cs" />
+    <Compile Include="Interop\Built-in Modules\Signal.cs" />
+    <Compile Include="Interop\InteropMethodAttribute.cs" />
+    <Compile Include="Methods\ArgF.cs" />
+    <Compile Include="Methods\Array.cs" />
+    <Compile Include="Methods\Bignum.cs" />
+    <Compile Include="Methods\Binding.cs" />
+    <Compile Include="Methods\Class.cs" />
+    <Compile Include="Methods\Comparable.cs" />
+    <Compile Include="Methods\Continuation.cs" />
+    <Compile Include="Methods\Dir.cs" />
+    <Compile Include="Methods\Enumerable.cs" />
+    <Compile Include="Methods\Env.cs" />
+    <Compile Include="Methods\Error.cs" />
+    <Compile Include="Methods\Eval.cs" />
+    <Compile Include="Methods\Exception.cs" />
+    <Compile Include="Methods\FalseClass.cs" />
+    <Compile Include="Methods\File.cs" />
+    <Compile Include="Methods\FileStat.cs" />
+    <Compile Include="Methods\FileTest.cs" />
+    <Compile Include="Methods\Fixnum.cs" />
+    <Compile Include="Methods\Float.cs" />
+    <Compile Include="Methods\GC.cs" />
+    <Compile Include="Methods\Hash.cs" />
+    <Compile Include="Methods\Integer.cs" />
+    <Compile Include="Methods\IO.cs" />
+    <Compile Include="Methods\Kernel.cs" />
+    <Compile Include="Methods\Marshal.cs" />
+    <Compile Include="Methods\Match.cs" />
+    <Compile Include="Methods\Math.cs" />
+    <Compile Include="Methods\Method.cs" />
+    <Compile Include="Methods\NilClass.cs" />
+    <Compile Include="Methods\Numeric.cs" />
+    <Compile Include="Methods\Object.cs" />
+    <Compile Include="Methods\ObjectSpace.cs" />
+    <Compile Include="Methods\Precision.cs" />
+    <Compile Include="Methods\Proc.cs" />
+    <Compile Include="Methods\Process.cs" />
+    <Compile Include="Methods\ProcessStatus.cs" />
+    <Compile Include="Methods\Random.cs" />
+    <Compile Include="Methods\Range.cs" />
+    <Compile Include="Methods\Regexp.cs" />
+    <Compile Include="Methods\Signal.cs" />
+    <Compile Include="Methods\Sprintf.cs" />
+    <Compile Include="Methods\String.cs" />
+    <Compile Include="Methods\Struct.cs" />
+    <Compile Include="Methods\Symbol.cs" />
+    <Compile Include="Methods\Thread.cs" />
+    <Compile Include="Methods\ThreadGroup.cs" />
+    <Compile Include="Methods\Time.cs" />
+    <Compile Include="Methods\TrueClass.cs" />
+    <Compile Include="Methods\Variables.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\ArgList.cs" />
+    <Compile Include="Interop\CLRClass.cs" />
+    <Compile Include="Runtime\Frame.cs" />
+    <Compile Include="Runtime\Errors.cs" />
+    <Compile Include="Runtime\Eval.cs" />
+    <Compile Include="Methods\Pack.cs" />
+    <Compile Include="Runtime\global_variable.cs" />
+    <Compile Include="Runtime\Inits.cs" />
+    <Compile Include="Runtime\Options.cs" />
+    <Compile Include="Runtime\Program.cs" />
+    <Compile Include="Runtime\RubyAttribute.cs" />
+    <Compile Include="Runtime\RubyException.cs" />
+    <Compile Include="Runtime\RubyMethod.cs" />
+    <Compile Include="Built-in Classes\Method.cs" />
+    <Compile Include="Runtime\UsedByRubyCompilerAttribute.cs" />
+    <Compile Include="Runtime\Variables.cs" />
+    <Compile Include="Runtime\Version.cs" />
+    <Compile Include="IronPython\integer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="QUT.PERWAPI, Version=1.1.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\QUT.PERWAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="QUT.ShiftReduceParser, Version=0.9.1.0, Culture=neutral, PublicKeyToken=ffc62d346f572a54, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\QUT.ShiftReduceParser.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Compiler\parser.y" />
+    <None Include="Ruby.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\Bin\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

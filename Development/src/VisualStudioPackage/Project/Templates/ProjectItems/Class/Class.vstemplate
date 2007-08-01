@@ -1,0 +1,13 @@
+<VSTemplate Version="2.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+	<TemplateData>
+		<Name>Class</Name>
+		<Description>An empty class definition</Description>
+		<Icon>Class.ico</Icon>
+		<ProjectType>Ruby</ProjectType>
+		<SortOrder>10</SortOrder>
+		<DefaultName>Class.rb</DefaultName>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true">Class.rb</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

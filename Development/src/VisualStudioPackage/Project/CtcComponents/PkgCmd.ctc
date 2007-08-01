@@ -1,0 +1,27 @@
+#include "vsshlids.h"      
+#include "msobtnid.h"  
+  
+#define guidRubyProjectPkg {0x60CC6DB2, 0x7F18, 0x409c, {0x9E, 0x28, 0xB6, 0x99, 0x64, 0xDC, 0xF1, 0x60}}
+
+//{13ed0892-9c6c-4cd1-984bc129feb468db} 
+#define guidRubyProjectCmdSet {0x13ed0892, 0x9c6c, 0x4cd1, { 0x98, 0x4b, 0xc1, 0x29, 0xfe, 0xb4, 0x68, 0xdb } }
+
+#define CodeFileGroup       0x2001
+#define cmdidSetAsMain      0x3001
+
+
+CMDS_SECTION guidRubyProjectPkg
+
+  NEWGROUPS_BEGIN
+    guidRubyProjectCmdSet:CodeFileGroup,    guidSHLMainMenu:IDM_VS_MENU_PROJECT,    0x600;
+  NEWGROUPS_END
+
+  BUTTONS_BEGIN
+    guidRubyProjectCmdSet:cmdidSetAsMain, guidRubyProjectCmdSet:CodeFileGroup,    0x100,      guidOfficeIcon:msotcidNoIcon, BUTTON, DYNAMICVISIBILITY | DEFAULTINVISIBLE, "Set as Main";
+  BUTTONS_END
+
+CMDS_END
+
+CMDPLACEMENT_SECTION
+  guidRubyProjectCmdSet:CodeFileGroup,    guidSHLMainMenu:IDM_VS_CTXT_ITEMNODE,			0x600;
+CMDPLACEMENT_END
