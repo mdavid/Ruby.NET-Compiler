@@ -121,6 +121,14 @@ namespace Ruby
             Class superKlass = super;
             if (superKlass != null)
             {
+                // BBTAG: calling new for a subclass of a CLRClass is a special case
+                if (this._type == Type.Singleton && superKlass is Interop.CLRClass && !(this is Interop.CLRClass) && methodId == "new")
+                {
+                    klass = this;
+                    method = new RubyMethod(Ruby.Methods.rb_class_new_instance.singleton, -1, Access.Public, this);
+                    return true;
+                }
+
                 if (superKlass.get_method(methodId, out method, out klass))
                     return true;
             }
@@ -161,11 +169,11 @@ namespace Ruby
         {
             bool recur = Eval.Test(arg0);
             Class rcvr = this;
-            while (rcvr._type == Type.Singleton || rcvr._type == Type.IClass) // find a real class
-            {
-                rcvr.get_specified_methods(list, attr);
-                rcvr = rcvr.super;
-            }
+			while (rcvr._type == Type.Singleton || rcvr._type == Type.IClass) // find a real class
+			{
+				rcvr.get_specified_methods(list, attr);
+				rcvr = rcvr.super;
+			}
             do
             {
                 rcvr.get_specified_methods(list, attr);
@@ -264,27 +272,39 @@ namespace Ruby
             // overwriting Ruby built-in classes with incompatible allocator methods
 
             RubyMethod oldAlloc = null;
-            if (singleton_class(null, this)._methods.ContainsKey("allocator"))
-                oldAlloc = singleton_class(null, this)._methods["allocator"];
+            Class c = this;
 
-            if (oldAlloc != null && oldAlloc.body != null && body != null)
-            {
-                object oldObj, newObj;
+            //while (c != null)
+            //{
+                if (singleton_class(null, c)._methods.ContainsKey("allocator"))
+                    oldAlloc = singleton_class(null, c)._methods["allocator"];
 
-                oldObj = oldAlloc.body.Call0(null, oldAlloc.definingClass, null, null);
-                newObj = body.Call0(null, oldAlloc.definingClass, null, null);
+                if (oldAlloc != null && oldAlloc.body != null && body != null)
+                {
+                    object oldObj, newObj;
 
-                if (oldObj != null && newObj != null && !(oldObj.GetType().IsInstanceOfType(newObj)))
-                    return;
-            }
+                    oldObj = oldAlloc.body.Call0(null, oldAlloc.definingClass, null, null);
+                    newObj = body.Call0(null, oldAlloc.definingClass, null, null);
+
+                    if (oldObj != null && newObj != null && !(newObj.GetType().IsInstanceOfType(oldObj)))
+                    {
+                    //    if (oldObj.GetType().FullName == "Ruby.Object" && newObj.GetType().FullName != "Ruby.Basic")
+                            return;
+                        //if ((oldObj.GetType().Equals(new Ruby.Object().GetType()) && !(newObj.GetType().Equals(new Ruby.Basic(null).GetType()))))
+                        //    return;
+                    }
+                }
+
+            //    c = c.super_real();
+            //}
              
             rb_define_singleton_method(this, "allocator", body, 0, null);
         }
 
-        internal void undef_alloc_func() // author: KJG, Brian needs to check
-        {
-            rb_define_singleton_method(this, "allocator", null, 0, null);
-        }
+		internal void undef_alloc_func() // author: KJG, Brian needs to check
+		{
+			rb_define_singleton_method(this, "allocator", null, 0, null);
+		}
 
         internal void define_private_method(string name, MethodBody body, int arity, Frame caller)//status: done
         {
@@ -613,7 +633,7 @@ namespace Ruby
         }
 
 
-        internal object const_get(string name, bool recurse, Frame caller)//status: done
+        internal virtual object const_get(string name, bool recurse, Frame caller)//status: done
         {
             if (instance_vars.ContainsKey(name))
             {
@@ -636,6 +656,10 @@ namespace Ruby
 
                 while (c != null)
                 {
+                    // special case for CLR classes
+                    if (c is Interop.CLRClass)
+                        return c.const_get(name, recurse, caller);
+
                     if (c.instance_vars.ContainsKey(name))
                     {
                         if (c.instance_vars[name] is NodeAutoloadMemo)
@@ -902,34 +926,34 @@ namespace Ruby
             Class klass = ((Basic)obj).my_class;
 
             if (klass._type != Type.Singleton)
-                return klass;
+	            return klass;
             else 
             {
-                /* copy singleton(unnamed) class */
-                Class clone = new Class(klass);
+	            /* copy singleton(unnamed) class */
+	            Class clone = new Class(klass);
                 clone.Frozen = klass.Frozen;
                 clone.Tainted = klass.Tainted;
 
-                if (obj is Class)
-                    clone.my_class = clone;
-                else
-                    clone.my_class = rb_singleton_class_clone(klass);
+	            if (obj is Class)
+	                clone.my_class = clone;
+	            else
+	                clone.my_class = rb_singleton_class_clone(klass);
 
-                clone.super = klass.super;
+	            clone.super = klass.super;
                 clone.instance_vars = null;
                 clone._methods = null;
-                if (klass.instance_vars != null)
-                    clone.instance_vars = new Dictionary<string,object>(klass.instance_vars);
+	            if (klass.instance_vars != null)
+	                clone.instance_vars = new Dictionary<string,object>(klass.instance_vars);
 
-                clone._methods = new Dictionary<string,RubyMethod>();
+	            clone._methods = new Dictionary<string,RubyMethod>();
 
                 foreach (KeyValuePair<string, RubyMethod> m in klass._methods)
                     clone._methods.Add(m.Key, new RubyMethod(m.Value.body, m.Value.arity, m.Value.access, clone));
-                
+	            
                 clone.my_class.attached = clone;
                 clone._type = Type.Singleton;
 
-                return clone;
+	            return clone;
             }
         }
 
@@ -1000,7 +1024,34 @@ namespace Ruby
             if (obj is Symbol)
                 return Ruby.Runtime.Init.rb_cSymbol;
 
-            return Interop.CLRClass.CLRTypes[obj.GetType()];
+            // BBTAG: create a new CLRClass if one doesn't exist
+            if (Interop.CLRClass.CLRTypes.ContainsKey(obj.GetType()))
+            {
+                return Interop.CLRClass.CLRTypes[obj.GetType()];
+            }
+            else
+            {
+                // BBTAG: if it is a CLR class that we don't recognize, try looking in the Ruby constants table
+                return GetClassForType(obj.GetType());
+            }
+        }
+
+        internal static Class GetClassForType(System.Type type)
+        {
+            string fullName = type.FullName;
+            Class klass = Init.rb_cObject;
+
+            foreach (string token in fullName.Split('.'))
+            {
+                object c = klass.const_get(token, null);
+
+                if (!(c is Class))
+                    return null;
+
+                klass = (Class)c;
+            }
+
+            return klass;
         }
 
 

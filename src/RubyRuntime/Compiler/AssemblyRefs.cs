@@ -69,6 +69,15 @@ namespace Ruby.Compiler
         internal static ClassRef InteropMethodAttrRef   = Assembly.AddClass("Ruby.Interop", "InteropMethodAttribute");
         internal static ClassRef FrameAttributeRef      = Assembly.AddClass("Ruby.Runtime", "FrameAttribute");
 
+        /*
+        internal static ClassRef CLRClassRef            = Assembly.AddClass("Ruby.Interop", "CLRClass");
+
+        internal class CLRClass
+        {
+            internal static ClassRef DictionaryRef = System.AddClass("System.Collections.Generic", "Dictionary");
+            internal static FieldRef CLRTypesRef = CLRClassRef.AddField("CLRTypes", DictionaryRef
+        }
+         */
 
         internal static ClassRef MethodBodyNRef(int n)
         {

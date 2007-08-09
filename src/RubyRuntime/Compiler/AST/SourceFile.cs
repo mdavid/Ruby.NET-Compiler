@@ -25,9 +25,114 @@ namespace Ruby.Compiler.AST
         {
         }
 
-        internal static PERWAPI.PEFile GenerateCode(List<SOURCEFILE> files, string outfile, List<KeyValuePair<string,object>> options)
+        internal static bool RemoveAllocatorDefinition(ClassSkeleton classSkel)
+        {
+            //PERWAPI.Method ctor = classSkel.perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+            PERWAPI.CILInstruction[] initInstructions = classSkel.initMethod.GetCodeBuffer().GetInstructions();
+
+            for (int i = 0; i < initInstructions.Length; i++)
+            {
+                if (initInstructions[i] is PERWAPI.MethInstr)
+                {
+                    PERWAPI.MethInstr call = (PERWAPI.MethInstr)(initInstructions[i]);
+                    if (call.GetMethod() == Runtime.Class.define_alloc_func)
+                    {
+                        classSkel.initMethod.GetCodeBuffer().RemoveInstructions(i - 2, i);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool RedefineConstructor(PERWAPI.MethodDef ctor, PERWAPI.Class perwapiClass, int arity)
+        {
+            PERWAPI.CILInstruction[] ctorInstructions = ctor.GetCodeBuffer().GetInstructions();
+
+            // try and find a constructor in the base class
+            PERWAPI.Method superClassConstructor = null;
+            if (arity == 0)
+                superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
+            else
+            {
+                superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+                if (superClassConstructor == null)
+                {
+                    superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
+                    arity = 0;
+                }
+            }
+
+            if (superClassConstructor == null)
+                return false;
+
+            for (int i = 0; i < ctorInstructions.Length; i++)
+            {
+                if (ctorInstructions[i] is PERWAPI.MethInstr)
+                {
+                    PERWAPI.MethInstr inst = (PERWAPI.MethInstr)(ctorInstructions[i]);
+                    if (inst.GetMethod().Name() == ".ctor")
+                    {
+                        int pos = i;
+                        if (arity == 0)
+                        {
+                            ctor.GetCodeBuffer().RemoveInstruction(i - 1);
+                            pos = i - 1;
+                        }
+                        ctor.GetCodeBuffer().ReplaceInstruction(pos);
+                        ctor.GetCodeBuffer().MethInst(MethodOp.call, superClassConstructor);
+                        ctor.GetCodeBuffer().EndInsert();
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal static void SuperclassPostPass(CodeGenContext context, List<PERWAPI.ReferenceScope> peFiles)
+        {
+            foreach (ClassSkeletonPostPass postPass in context.postPassList)
+            {
+                PERWAPI.Class perwapiClass = ClassSkeleton.FindPERWAPIClass(postPass.subClass, postPass.superClassNode, peFiles);
+                if (perwapiClass != null)
+                {
+                    PERWAPI.Class perwapiClassRef;
+                    if (perwapiClass is PERWAPI.ClassDef)
+                        perwapiClassRef = ((PERWAPI.ClassDef)perwapiClass).MakeRefOf();
+                    else
+                        perwapiClassRef = (PERWAPI.ClassRef)perwapiClass;
+
+                    postPass.subClassDef.SuperType = perwapiClassRef;
+                    // redefine the constructor
+                    PERWAPI.MethodDef ctor = postPass.subClassDef.GetMethod(".ctor", new Type[0]);
+                    if (!RedefineConstructor(ctor, perwapiClass, 0))
+                    {
+                        System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                        context.Assembly.RemoveClass(postPass.subClassDef);
+                        RemoveAllocatorDefinition(postPass.subClass);
+                        context.Assembly.RemoveClass(postPass.subClass.allocator);
+                    }
+                    else
+                    {
+                        ctor = postPass.subClassDef.GetMethod(".ctor", new Type[] { Runtime.ClassRef });
+                        if (!RedefineConstructor(ctor, perwapiClass, 1))
+                        {
+                            System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                            context.Assembly.RemoveClass(postPass.subClassDef);
+                            RemoveAllocatorDefinition(postPass.subClass);
+                            context.Assembly.RemoveClass(postPass.subClass.allocator);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal static PERWAPI.PEFile GenerateCode(List<SOURCEFILE> files, List<PERWAPI.ReferenceScope> peFiles, string outfile, List<KeyValuePair<string, object>> options)
         {
             CodeGenContext context = new CodeGenContext();
+            context.peFiles = peFiles;
 
             System.IO.FileInfo file = new System.IO.FileInfo(outfile);
             string basename = file.Name.Substring(0, file.Name.Length - file.Extension.Length);
@@ -38,6 +143,8 @@ namespace Ruby.Compiler.AST
                 files[i].GenerateClassForFile(context, File.stripExtension(files[i].location.file), file.Extension == ".dll", files);
 
             ClassDef mainClass = files[0].GenerateClassForFile(context, File.stripExtension(files[0].location.file), file.Extension == ".dll", files);
+
+            SuperclassPostPass(context, peFiles);
 
             if (file.Extension == ".exe")
             {
@@ -126,6 +233,8 @@ namespace Ruby.Compiler.AST
             context.CreateAssembly(file.DirectoryName, fileName + dll_or_exe, fileName);
 
             ClassDef mainClass = GenerateClassForFile(context, fileName, false, new List<SOURCEFILE>());
+
+            SuperclassPostPass(context, new List<PERWAPI.ReferenceScope>());
 
             if (dll_or_exe == ".exe")
             {

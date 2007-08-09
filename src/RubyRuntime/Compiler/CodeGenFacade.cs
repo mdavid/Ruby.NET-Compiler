@@ -34,8 +34,15 @@ namespace Ruby.Compiler
         // BBTAG: also need the complete formals for orig_func
         internal AST.FORMALS orig_func_formals;
 
+        internal static ClassSkeleton objectSkeleton = new ClassSkeleton("Object", Runtime.ObjectRef);
+        internal ClassSkeleton currentSkeleton;
+        internal List<ClassSkeletonPostPass> postPassList = new List<ClassSkeletonPostPass>();
+
+        internal List<PERWAPI.ReferenceScope> peFiles = new List<PERWAPI.ReferenceScope>();
+
         internal CodeGenContext()
         {
+            currentSkeleton = objectSkeleton;
         }
 
         internal CodeGenContext(CodeGenContext context)
@@ -46,8 +53,11 @@ namespace Ruby.Compiler
             this.labels = context.labels;
             this.CurrentRubyClass = context.CurrentRubyClass;
 
-            this.orig_func = context.orig_func; // BBTAG
+            this.orig_func = context.orig_func;                 // BBTAG
             this.orig_func_formals = context.orig_func_formals; // BBTAG
+            this.currentSkeleton = context.currentSkeleton;     // BBTAG
+            this.postPassList = context.postPassList;           // BBTAG
+            this.peFiles = context.peFiles;                     // BBTAG
         }
 
 

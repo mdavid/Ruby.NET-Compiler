@@ -10,11 +10,50 @@ namespace Ruby.Compiler
 {
     public class Compiler
     {
+        public static string RUBY_RUNTIME = "Ruby.NET.Runtime.dll";
+        public static PERWAPI.ReferenceScope peRubyRuntime = null;
+        public static PERWAPI.ReferenceScope mscorlib = null;
+
         public static void Process(string[] args)
         {
             Process(args, null);
         }
 
+        public static List<string> GetPath()
+        {
+            List<string> pathSet = new List<string>();
+            string RUBYLIB = System.Environment.GetEnvironmentVariable("RUBYLIB");
+            string PATH = System.Environment.GetEnvironmentVariable("PATH");
+
+            if (RUBYLIB != null)
+                foreach (string path in RUBYLIB.Split(';'))
+                    pathSet.Add(path.Trim());
+
+            if (PATH != null)
+                foreach (string path in PATH.Split(';'))
+                    pathSet.Add(path.Trim());
+
+            string CLRpath = (string)Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Microsoft").OpenSubKey(".NETFramework").GetValue("InstallRoot");
+            pathSet.Add(CLRpath + "v2.0.50727");
+            pathSet.Add(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            return pathSet;
+        }
+
+        public static System.IO.FileInfo FindFile(string filename, List<string> path)
+        {
+            if (System.IO.File.Exists(filename))
+                return new System.IO.FileInfo(filename);
+
+            foreach (string dir in path)
+            {
+                string absolutePath = dir + "/" + filename;
+                if (System.IO.File.Exists(absolutePath))
+                    return new System.IO.FileInfo(absolutePath);
+            }
+            throw new LoadError("File not found: " + filename).raise(null);
+            return null;
+        }
 
         public static void Process(string[] args, TaskLoggingHelper log)
         {
@@ -87,6 +126,9 @@ namespace Ruby.Compiler
                 throw new System.Exception("Invalid target type for /target: must specify 'exe' or 'library'");
 
             List<Ruby.Compiler.AST.SOURCEFILE> files = new List<Ruby.Compiler.AST.SOURCEFILE>();
+            List<PERWAPI.ReferenceScope> peFiles = new List<PERWAPI.ReferenceScope>();
+            peRubyRuntime = PERWAPI.PEFile.ReadExportedInterface(FindFile(RUBY_RUNTIME, GetPath()).FullName);
+            mscorlib = PERWAPI.PEFile.ReadExportedInterface(FindFile("mscorlib.dll", GetPath()).FullName);
 
             if (main != null)
             {
@@ -96,10 +138,22 @@ namespace Ruby.Compiler
 
             foreach (string input in inputFiles)
             {
-                List<string> options;
-                if (input != main)
+                System.IO.FileInfo inputFile = new System.IO.FileInfo(input);
+                if (inputFile.Extension == ".dll")
                 {
-                    files.Add(File.load_file(null, input, false, out options, log));
+                    System.IO.FileInfo location = FindFile(input, GetPath());
+                    if (location == null)
+                        throw new LoadError("File not found: " + input).raise(null);
+                    PERWAPI.ReferenceScope reference = PERWAPI.PEFile.ReadExportedInterface(location.FullName);
+                    peFiles.Add(reference);
+                }
+                else
+                {
+                    List<string> options;
+                    if (input != main)
+                    {
+                        files.Add(File.load_file(null, input, false, out options, log));
+                    }
                 }
             }
 
@@ -109,7 +163,7 @@ namespace Ruby.Compiler
             List<KeyValuePair<string,object>> name = new List<KeyValuePair<string,object>>();
             name.Add(new KeyValuePair<string, object>("rb_progname", main));
 
-            PERWAPI.PEFile assembly = Ruby.Compiler.AST.SOURCEFILE.GenerateCode(files, outFile, name);
+            PERWAPI.PEFile assembly = Ruby.Compiler.AST.SOURCEFILE.GenerateCode(files, peFiles, outFile, name);
             assembly.MakeDebuggable(true, true);
             assembly.WritePEFile(debug!="none");
         }

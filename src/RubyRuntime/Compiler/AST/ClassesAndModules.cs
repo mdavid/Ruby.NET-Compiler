@@ -67,9 +67,6 @@ namespace Ruby.Compiler.AST
                 return null;
         }
 
-
-
-
         internal override void GenCode0(CodeGenContext context)
         {
             bool scope_created, super_created;
@@ -82,11 +79,73 @@ namespace Ruby.Compiler.AST
 
             string basename = ID.ToDotNetName(name.vid);
 
+            // BBTAG: try and get the superclass
+            
+            PERWAPI.Class superClass = Runtime.ObjectRef;
+            bool hasSuperClass = false;
+            bool superClassFound = false;
+            PERWAPI.Method superClassConstructor0 = Runtime.Object.ctor;
+            PERWAPI.Method superClassConstructor1 = Runtime.Object.ctor;
+
+            if (this is CLASS)
+            {
+                if (((CLASS)this).super_class != null)
+                    hasSuperClass = true;
+                superClass = ((CLASS)this).GetSuperClassRef(newContext);
+                if (superClass != null)
+                {
+                    superClassFound = true;
+                    superClassConstructor0 = superClass.GetMethodDesc(".ctor", new Type[0]);
+                    superClassConstructor1 = superClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+                }
+                else
+                    superClass = Runtime.ObjectRef;
+            }
+
             //public class MyClass: Object {
 
-            ClassDef interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, Runtime.ObjectRef);
-            interopClasses.Push(interopClass);
+            // check if this class has already been created in a referenced DLL
+            // FIXME: this won't work for nested classes
+            PERWAPI.Class classRef = ClassSkeleton.FindPERWAPIClass(null, name, context.peFiles);
+            bool defineInteropClass = (classRef == null);
+            // if it seems like an extension of a ruby builtin class, don't generate an interop class
+            // FIXME: this won't work for nested classes
+            if (Ruby.Runtime.BuiltinClasses.IsBuiltinClass(basename))
+            {
+                System.Console.WriteLine("Warning: " + basename + " is a Ruby built-in class, interop class not generated");
+                defineInteropClass = false;
+            }
+
+            //ClassDef interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, Runtime.ObjectRef); // BBTAG
+            ClassDef interopClass = null;
+            if (defineInteropClass)
+            {
+                interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, superClass); // BBTAG
+                interopClasses.Push(interopClass);
+                classRef = interopClass;
+            }
+            //context.classes[classname] = interopClass;
+
+            // BBTAG: create skeleton for this class
             
+            ClassSkeleton skeleton;
+
+            if (context.currentSkeleton.nestedClasses.ContainsKey(basename))
+                skeleton = context.currentSkeleton.nestedClasses[basename];
+            else
+                skeleton = new ClassSkeleton(basename, classRef);
+            skeleton.lexicalParent = context.currentSkeleton;
+            newContext.currentSkeleton = skeleton;
+            skeleton.lexicalParent.nestedClasses[basename] = skeleton;
+
+            if (!superClassFound && this is AST.CLASS && ((AST.CLASS)this).super_class != null && defineInteropClass)
+            {
+                // do not add to post pass list if supertype is a built-in Ruby class
+                //List<string> qualifiedSuperClass = ClassSkeleton.ConstNodeToClassList(((AST.CLASS)this).super_class);
+                //if (!(qualifiedSuperClass.Count == 1 && Ruby.Runtime.BuiltinClasses.IsBuiltinClass(qualifiedSuperClass[0])))
+                newContext.postPassList.Add(new ClassSkeletonPostPass(skeleton, interopClass, ((AST.CLASS)this).super_class));
+            }
+          
             //    public static Class classname;
             int seqNo = 0;
             internal_name = basename;
@@ -98,34 +157,38 @@ namespace Ruby.Compiler.AST
             newContext.CurrentRubyClass = singletonField;
 
             //    public MyClass() : base(singleton) { };
-            if (interopClass.GetMethod(".ctor", new Type[0]) == null)
+            CodeGenContext class_constructor = null; 
+            if (defineInteropClass)// && !hasSuperClass)
             {
-                CodeGenContext class_constructor0 = newContext.CreateConstructor(interopClass);
-                class_constructor0.ldarg(0);
-                class_constructor0.ldsfld(singletonField);
-                class_constructor0.call(Runtime.Object.ctor);
-                class_constructor0.ret();
-                class_constructor0.Close();
-            }
+                if (interopClass.GetMethod(".ctor", new Type[0]) == null)
+                {
+                    CodeGenContext class_constructor0 = newContext.CreateConstructor(interopClass);
+                    class_constructor0.ldarg(0);
+                    class_constructor0.ldsfld(singletonField);
+                    class_constructor0.call(superClassConstructor0);        
+                    class_constructor0.ret();
+                    class_constructor0.Close();
+                }
 
-            //    public MyClass(Class klass) : base(klass) { };
-            MethodDef ctor = interopClass.GetMethod(".ctor", new Type[] { Runtime.ClassRef } );
-            CodeGenContext class_constructor;
-            if (ctor == null)
-            {
-                class_constructor = newContext.CreateConstructor(interopClass, new Param(ParamAttr.Default, "klass", Runtime.ClassRef));
-                class_constructor.ldarg(0);
-                class_constructor.ldarg("klass");
-                class_constructor.call(Runtime.Object.ctor);
-                class_constructor.ret();
-                class_constructor.Close();
-            }
-            else
-            {
-                class_constructor = new CodeGenContext();
-                class_constructor.Method = ctor;
-            }
 
+                //    public MyClass(Class klass) : base(klass) { };
+                MethodDef ctor = interopClass.GetMethod(".ctor", new Type[] { Runtime.ClassRef });
+                //CodeGenContext class_constructor;
+                if (ctor == null)
+                {
+                    class_constructor = newContext.CreateConstructor(interopClass, new Param(ParamAttr.Default, "klass", Runtime.ClassRef));
+                    class_constructor.ldarg(0);
+                    class_constructor.ldarg("klass");
+                    class_constructor.call(superClassConstructor1);
+                    class_constructor.ret();
+                    class_constructor.Close();
+                }
+                else
+                {
+                    class_constructor = new CodeGenContext();
+                    class_constructor.Method = ctor;
+                }
+            }
 
             //    internal static void Init_fullname(object scope, object super, object recv, Frame caller) {
             CodeGenContext Init = newContext.CreateMethod(FileClass(), MethAttr.PublicStatic, "Init_" + internal_name, PrimitiveType.Object,
@@ -134,6 +197,7 @@ namespace Ruby.Compiler.AST
                     new Param(ParamAttr.Default, "recv", PrimitiveType.Object),
                     new Param(ParamAttr.Default, "caller", Runtime.FrameRef));
 
+            skeleton.initMethod = Init.Method;
 
             Init.startMethod(this.location);
 
@@ -148,12 +212,15 @@ namespace Ruby.Compiler.AST
 
             // Fixme: should be conditional
             // singleton.define_allocator(allocator);
-            FieldDef allocator = DefineAllocator(newContext, class_constructor.Method);
-            if (allocator != null)
+            if (defineInteropClass)
             {
-                Init.ldsfld(singletonField);
-                Init.ldsfld(allocator);
-                Init.call(Runtime.Class.define_alloc_func);
+                FieldDef allocator = DefineAllocator(newContext, class_constructor.Method);
+                if (allocator != null)
+                {
+                    Init.ldsfld(singletonField);
+                    Init.ldsfld(allocator);
+                    Init.call(Runtime.Class.define_alloc_func);
+                }
             }
 
             AddScopeBody(Init);
@@ -162,7 +229,8 @@ namespace Ruby.Compiler.AST
 
             Init.Close();
 
-            interopClasses.Pop();
+            if (defineInteropClass)
+                interopClasses.Pop();
 
             // --------------------- Return to old Context ----------------------------
 
@@ -182,18 +250,31 @@ namespace Ruby.Compiler.AST
 
 
 
-    internal class CLASS : CLASS_OR_MODULE        // Class Definition
+    internal class CLASS : CLASS_OR_MODULE		// Class Definition
     {
-        //    class name < super_class 
-        //        body
-        //    end
+        //	class name < super_class 
+        //		body
+        //	end
 
         internal CLASS(Scope parent, YYLTYPE location): base(parent, location)
         {
         }
 
-        private Node super_class;    // optional
+        internal Node super_class;	// optional
 
+        internal PERWAPI.Class GetSuperClassRef(CodeGenContext context)
+        {
+            if (super_class != null && super_class is CONST && context.currentSkeleton != null)
+            {
+                ClassSkeleton found = context.currentSkeleton.FindClass(super_class);
+                if (found != null)
+                    return found.perwapiClass;
+                else
+                    return null;
+            }
+            else
+                return null;
+        }
 
         internal override void Init(YYLTYPE location, params object[] inputs)
         {
@@ -229,11 +310,14 @@ namespace Ruby.Compiler.AST
         internal override FieldDef DefineAllocator(CodeGenContext context, MethodDef ctor)
         {
             // Conservative - don't create allocator if we're not sure what the base class is
-            if (super_class != null)
-                return null;
+            // BBTAG: should be able to create this in all cases now, since we do a test in 
+            // define_alloc_func
+            //if (super_class != null)
+            //    return null;
 
             ClassRef baseClass = Runtime.MethodBodyNRef(0);
             ClassDef allocator = context.CreateGlobalClass("_Internal", "Method_" + internal_name + "_Allocator", baseClass);
+            context.currentSkeleton.allocator = allocator;
 
             //     internal static Call0(Class last_class, object recv, ...) { body }
             CodeGenContext Call = context.CreateMethod(allocator, MethAttr.PublicVirtual, "Call0", PrimitiveType.Object, new Param[] { 
@@ -275,11 +359,11 @@ namespace Ruby.Compiler.AST
 
 
 
-    internal class SCLASS : CLASS_OR_MODULE        // Singleton Class definition
+    internal class SCLASS : CLASS_OR_MODULE		// Singleton Class definition
     {
-        //    class << singleton 
-        //        body
-        //    end
+        //	class << singleton 
+        //		body
+        //	end
 
         internal SCLASS(Scope parent, YYLTYPE location): base(parent, location)
         {
@@ -312,11 +396,11 @@ namespace Ruby.Compiler.AST
 
 
 
-    internal class MODULE : CLASS_OR_MODULE        // Module definition
+    internal class MODULE : CLASS_OR_MODULE		// Module definition
     {
-        //    module name 
-        //        body 
-        //    end
+        //	module name 
+        //		body 
+        //	end
 
         internal MODULE(Scope parent, YYLTYPE location): base(parent, location)
         {

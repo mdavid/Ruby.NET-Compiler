@@ -25,7 +25,48 @@ namespace Ruby.Interop
                 return true;
             }
             else
-                return base.get_method(methodId, out method, out klass);
+            {
+                if (base.get_method(methodId, out method, out klass))
+                    return true;
+
+                if (Init.rb_cClass.get_method(methodId, out method, out klass))
+                    return true;
+
+                if (Init.rb_cModule.get_method(methodId, out method, out klass))
+                    return true;
+
+                if (Init.rb_cObject.get_method(methodId, out method, out klass))
+                    return true;
+
+                return false;
+            }
+        }
+
+        internal override object const_get(string name, bool recurse, Frame caller)
+        {
+            if (instance_vars.ContainsKey(name))
+                return instance_vars[name];
+
+            Class c = super;
+
+            while (c != null)
+            {
+                if (c.instance_vars.ContainsKey(name))
+                    return c.instance_vars[name];
+
+                c = c.super;
+            }
+
+            if (Init.rb_cClass.instance_vars.ContainsKey(name))
+                return Init.rb_cClass.instance_vars[name];
+
+            if (Init.rb_cModule.instance_vars.ContainsKey(name))
+                return Init.rb_cModule.instance_vars[name];
+
+            if (Init.rb_cObject.instance_vars.ContainsKey(name))
+                return Init.rb_cObject.instance_vars[name];
+
+            return Eval.CallPrivate(this, caller, "const_missing", null, new Symbol(name));
         }
 
         private RubyMethod FindCLRMethod(string methodId, System.Type clrtype)
@@ -33,7 +74,9 @@ namespace Ruby.Interop
             if (this._type == Type.IClass)
             {
                 if (methodId == "new")
-                    return new CLRMethod(new List<MethodBase>(clrtype.GetConstructors(BindingFlags.Public|BindingFlags.Instance)), this);
+                    return new CLRMethod(new List<MethodBase>(clrtype.GetConstructors(BindingFlags.Public | BindingFlags.Instance)), this);
+                else if (methodId == "allocator")
+                    return new RubyMethod(Methods.rb_class_allocate_instance.singleton, 0, Access.Private, this);
 
                 List<MethodBase> methods = new List<MethodBase>(clrtype.GetMethods(BindingFlags.Public | BindingFlags.Static)).FindAll(delegate(MethodBase item) { return item.Name == methodId; });
 
@@ -76,7 +119,7 @@ namespace Ruby.Interop
                     else
                         context.define_const(Namespace, context = new CLRNamespace(Namespace));
                 }
-
+            
             if (CLRTypes.ContainsKey(type))
                 return CLRTypes[type];
             else
@@ -86,7 +129,7 @@ namespace Ruby.Interop
             klass.my_class = meta;
             CLRTypes[type] = klass;
             context.define_const(type.Name, klass);
-            return klass;
+            return klass; 
             }
         }
     }

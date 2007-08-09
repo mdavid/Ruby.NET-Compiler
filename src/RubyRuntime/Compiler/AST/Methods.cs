@@ -47,7 +47,13 @@ namespace Ruby.Compiler.AST
             context.ruby_class(parent_scope);
             DefineMethod(context);
             if (CLASS_OR_MODULE.interopClasses.Count > 0)
+            {
+                // BBTAG: remove existing interop method
+                string methodName = Translate(this.method_id);
+                if (CLASS_OR_MODULE.CurrentInteropClass().GetMethod(methodName) != null)
+                    CLASS_OR_MODULE.CurrentInteropClass().RemoveMethod(methodName);
                 AddInteropMethod(context);
+            }
         }
 
         private string Translate(string name)
@@ -199,6 +205,9 @@ namespace Ruby.Compiler.AST
 
             Call.orig_func = Call.Method;     // BBTAG
             Call.orig_func_formals = formals; // BBTAG
+            Call.currentSkeleton = context.currentSkeleton; // BBTAG
+            Call.postPassList = context.postPassList; // BBTAG
+            Call.peFiles = context.peFiles;   // BBTAG
 
             Call.startMethod(this.location);
 
@@ -220,11 +229,11 @@ namespace Ruby.Compiler.AST
 
 
 
-    internal class DEFS : DEFN    // Singleton Method Definition
+    internal class DEFS : DEFN	// Singleton Method Definition
     {
-        //    def receiver.method_id(args)
-        //        body
-        //    end
+        //	def receiver.method_id(args)
+        //		body
+        //	end
 
         internal DEFS(Scope parent, string method_id, YYLTYPE location): base(parent, method_id, location)
         {
@@ -255,9 +264,9 @@ namespace Ruby.Compiler.AST
 
     internal class BLOCK : Scope
     {
-        //    { |args| body }
+        //	{ |args| body }
 
-        protected LVALUE args;    // optional
+        protected LVALUE args;	// optional
         internal List<FieldDef> frameFields = new List<FieldDef>();
         private int arity;
 
