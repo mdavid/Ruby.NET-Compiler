@@ -56,7 +56,13 @@ namespace Ruby.Compiler.AST
                 superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
             else
             {
-                superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+                PERWAPI.Method[] constructors = perwapiClass.GetMethodDescs(".ctor");
+                foreach (PERWAPI.Method constructor in constructors)
+                {
+                    if (constructor.GetParTypes().Length == 1 && constructor.GetParTypes()[0].TypeName().Contains("Class"))
+                        superClassConstructor = constructor;
+                }
+                //superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
                 if (superClassConstructor == null)
                 {
                     superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
