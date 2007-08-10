@@ -94,6 +94,7 @@
     <Compile Include="Compiler\AST\VALUE.cs" />
     <Compile Include="Compiler\AST\Values.cs" />
     <Compile Include="Compiler\AST\Variables.cs" />
+    <Compile Include="Compiler\ClassSkeleton.cs" />
     <Compile Include="Compiler\CodeGenFacade.cs" />
     <Compile Include="Compiler\ID.cs" />
     <Compile Include="Compiler\Compiler.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\ArgList.cs" />
     <Compile Include="Interop\CLRClass.cs" />
+    <Compile Include="Runtime\BuiltinClasses.cs" />
     <Compile Include="Runtime\Frame.cs" />
     <Compile Include="Runtime\Errors.cs" />
     <Compile Include="Runtime\Eval.cs" />
