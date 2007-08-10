@@ -87,6 +87,9 @@ namespace Ruby.Interop
             }
             else
             {
+                if (methodId == "initialize")
+                    return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
+
                 List<MethodBase> methods = new List<MethodBase>(clrtype.GetMethods(BindingFlags.Public | BindingFlags.Instance)).FindAll(delegate(MethodBase item) { return item.Name == methodId; });
 
                 if (methods.Count > 0)
