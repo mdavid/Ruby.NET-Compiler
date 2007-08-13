@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using PERWAPI;
+using System.Globalization;
 
 
 namespace Ruby.Compiler
@@ -483,7 +484,7 @@ namespace Ruby.Compiler
 
         private static void rb_fatal(string msg, params object[] args)
         {
-            throw new fatal(string.Format(msg, args)).raise(null);
+            throw new fatal(string.Format(CultureInfo.InvariantCulture, msg, args)).raise(null);
         }
 
         private static string compiler_name

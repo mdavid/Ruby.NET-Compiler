@@ -14,6 +14,7 @@ using System.Text;
 using System.Diagnostics;
 using PERWAPI;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby.Compiler
 {
@@ -340,7 +341,7 @@ namespace Ruby.Compiler
             int seq = 1;
             // find a name that hasn't been used
             while (Assembly.GetClass(nsName, fullname) != null)
-                fullname = name + (seq++).ToString();
+                fullname = name + (seq++).ToString(CultureInfo.InvariantCulture);
 
             return Assembly.AddClass(TypeAttr.Public | TypeAttr.BeforeFieldInit, nsName, fullname, superType);
         }

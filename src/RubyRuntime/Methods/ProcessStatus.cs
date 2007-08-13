@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -82,28 +83,28 @@ namespace Ruby.Methods
 
             System.Text.StringBuilder buf = new System.Text.StringBuilder();
 
-            buf.Append(string.Format("#<{0}: pid={1}", status.my_class._name, status.pid));
+            buf.Append(string.Format(CultureInfo.InvariantCulture, "#<{0}: pid={1}", status.my_class._name, status.pid));
             if (status.WIFSTOPPED())
             {
                 int stopsig = status.WSTOPSIG();
                 string signame = Signal.ruby_signal_name(stopsig);
                 if (signame != null)
-                    buf.Append(string.Format(",stopped(SIG{0}={1})", signame, stopsig));
+                    buf.Append(string.Format(CultureInfo.InvariantCulture, ",stopped(SIG{0}={1})", signame, stopsig));
                 else
-                    buf.Append(string.Format(",stopped({0})", stopsig));
+                    buf.Append(string.Format(CultureInfo.InvariantCulture, ",stopped({0})", stopsig));
             }
             if (status.WIFSIGNALED())
             {
                 int termsig = status.WTERMSIG();
                 string signame = Signal.ruby_signal_name(termsig);
                 if (signame != null)
-                    buf.Append(string.Format(",signaled(SIG{0}={1})", signame, termsig));
+                    buf.Append(string.Format(CultureInfo.InvariantCulture, ",signaled(SIG{0}={1})", signame, termsig));
                 else
-                    buf.Append(string.Format(",signaled({0})", termsig));
+                    buf.Append(string.Format(CultureInfo.InvariantCulture, ",signaled({0})", termsig));
             }
             if (status.WIFEXITED())
             {
-                buf.Append(string.Format(",exited({0})", status.WEXITSTATUS()));
+                buf.Append(string.Format(CultureInfo.InvariantCulture, ",exited({0})", status.WEXITSTATUS()));
             }
             buf.Append(">");
 

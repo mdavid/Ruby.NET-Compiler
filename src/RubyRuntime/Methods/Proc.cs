@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -70,7 +71,7 @@ namespace Ruby.Methods
                         args.single_arg = false;
 
                         if (!proc.HasCorrectArgs(args.Length))
-                            throw new ArgumentError(string.Format("wrong number of arguments ({0} for {1})", args.Length, System.Math.Abs(proc._arity))).raise(caller);
+                            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", args.Length, System.Math.Abs(proc._arity))).raise(caller);
 
                         try
                         {
@@ -156,7 +157,7 @@ namespace Ruby.Methods
             sb.Append("#<");
             sb.Append(cname);
             sb.Append(":0x");
-            sb.Append(self.body.GetHashCode().ToString("X"));
+            sb.Append(self.body.GetHashCode().ToString("X", CultureInfo.InvariantCulture));
             //if ((node = data->frame.node) || (node = data->body))
             //{
             //    //sb.Append("@");

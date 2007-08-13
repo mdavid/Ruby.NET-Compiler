@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby.Methods
@@ -332,7 +333,7 @@ namespace Ruby.Methods
                 }
 
                 if (desc != null && desc.Length > 0 && desc[0] != '#')
-                    d = new String(string.Format("{0}:{1}", desc, ((Object)obj).my_class._name));
+                    d = new String(string.Format(CultureInfo.InvariantCulture, "{0}:{1}", desc, ((Object)obj).my_class._name));
 
                 Array args = new Array();
                 args.Add(mesg);
@@ -460,7 +461,7 @@ namespace Ruby.Methods
             {
                 object str = mesg;
                 str = String.RStringValue(str, caller);
-                ((String)mesg).value = string.Format("{0} - {1}", err, ((String)str).value);
+                ((String)mesg).value = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", err, ((String)str).value);
             }
             else
             {

@@ -12,6 +12,7 @@ using Ruby.Runtime;
 using Ruby;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -110,7 +111,7 @@ namespace Ruby.Methods
                         {
                             if (nextValue != null)
                             {
-                                throw new ArgumentError(string.Format("value given twice - {0}$", n)).raise(caller);
+                                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "value given twice - {0}$", n)).raise(caller);
                             }
                             nextValue = Sprintf.GETPOSARG(caller, n, ref posArg, args);
                             p++;
@@ -499,7 +500,7 @@ namespace Ruby.Methods
                             len = sString.Length;
                             if (fmtString[p] == 'X')
                             {
-                                sString = sString.ToUpper();
+                                sString = sString.ToUpperInvariant();
                             }
                             if ((flags & (Sprintf.FZERO | Sprintf.FPREC)) == Sprintf.FZERO)
                             {
@@ -675,7 +676,7 @@ namespace Ruby.Methods
                         break;
                     default:
                         if (char.IsLetterOrDigit(fmtString[p]) || fmtString[p] == ' ')
-                            throw new ArgumentError(string.Format("malformed format string - %{0}", fmtString)).raise(caller);
+                            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "malformed format string - %{0}", fmtString)).raise(caller);
                         else
                             throw new ArgumentError("malformed format string").raise(caller);
                 }

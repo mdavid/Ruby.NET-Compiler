@@ -10,6 +10,7 @@
 
 using Ruby;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -315,14 +316,14 @@ namespace Ruby.Methods
             str.Append("#<");
 
             str.Append(((Class)recv)._name + " ");
-            str.Append("dev=0x" + self.stat.st_dev.ToString("1x") + " ");
-            str.Append("ino=" + self.stat.st_ino.ToString() + " ");
-            str.Append("mode=0" + self.stat.st_mode.ToString("1o") + " ");
-            str.Append("nlink=" + self.stat.st_nlink.ToString() + " ");
-            str.Append("uid=" + self.stat.st_uid.ToString() + " ");
-            str.Append("gid=" + self.stat.st_gid.ToString() + " ");
+            str.Append("dev=0x" + self.stat.st_dev.ToString("1x", CultureInfo.InvariantCulture) + " ");
+            str.Append("ino=" + self.stat.st_ino.ToString(CultureInfo.InvariantCulture) + " ");
+            str.Append("mode=0" + self.stat.st_mode.ToString("1o", CultureInfo.InvariantCulture) + " ");
+            str.Append("nlink=" + self.stat.st_nlink.ToString(CultureInfo.InvariantCulture) + " ");
+            str.Append("uid=" + self.stat.st_uid.ToString(CultureInfo.InvariantCulture) + " ");
+            str.Append("gid=" + self.stat.st_gid.ToString(CultureInfo.InvariantCulture) + " ");
             str.Append("rdev=nil ");
-            str.Append("size=" + self.stat.st_size.ToString() + " ");
+            str.Append("size=" + self.stat.st_size.ToString(CultureInfo.InvariantCulture) + " ");
             str.Append("blocks=nil ");
             str.Append("blksize=nil ");
             str.Append("atime=" + self.stat.st_atime.ToString() + " ");

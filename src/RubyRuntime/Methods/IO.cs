@@ -12,6 +12,7 @@ using Ruby;
 using Ruby.Runtime;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -445,7 +446,7 @@ namespace Ruby.Methods
 
         private bool IsShellCommand(string command)
         {
-            switch (command.ToUpper())
+            switch (command.ToUpperInvariant())
             {
                 case "ASSOC":
                 case "AT":
@@ -602,7 +603,7 @@ namespace Ruby.Methods
         public override object Call(Class last_class, object recv, Frame caller, Proc block, Array args)
         {
             if (block != null)
-                Errors.rb_warn(string.Format("{0}::new() does not take block; use {0}::open() instead", ((Class)recv)._name));
+                Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "{0}::new() does not take block; use {0}::open() instead", ((Class)recv)._name));
 
             return rb_class_new_instance.singleton.Call(last_class, recv, caller, null, args);
         }
@@ -1140,7 +1141,7 @@ namespace Ruby.Methods
             if (ch is String && ((String)ch).value.Length >= 1)
                 c = ((String)ch).value[0];
             else
-                c = System.Convert.ToChar(ch);
+                c = System.Convert.ToChar(ch, CultureInfo.InvariantCulture);
 
             IO.rb_io_write(recv, new String(c.ToString()), caller);
 
@@ -1536,7 +1537,7 @@ namespace Ruby.Methods
             if (numargs > 0)
                 len = Numeric.rb_num2long(rest[0], caller);
             if (len < 0)
-                throw new ArgumentError(string.Format("negative length {0} given", length)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "negative length {0} given", length)).raise(caller);
 
             if (str == null)
             {
@@ -2029,7 +2030,7 @@ namespace Ruby.Methods
                 st = " (closed)";
             }
 
-            buf = string.Format("#<{0}:{1}{2}>", cname, fptr._path, st);
+            buf = string.Format(CultureInfo.InvariantCulture, "#<{0}:{1}{2}>", cname, fptr._path, st);
 
             return new String(buf);
         }

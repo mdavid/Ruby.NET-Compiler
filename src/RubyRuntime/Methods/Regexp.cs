@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -399,7 +400,7 @@ namespace Ruby.Methods
             {
                 if (argc > 1)
                 {
-                    Errors.rb_warn(string.Format("flags{0} ignored", (argc == 3) ? " and encoding" : ""));
+                    Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "flags{0} ignored", (argc == 3) ? " and encoding" : ""));
                 }
                 Regexp.rb_reg_check(caller, (Regexp)argv[0]);
                 flags = ((Regexp)argv[0])._options;

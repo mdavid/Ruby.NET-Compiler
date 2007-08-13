@@ -10,6 +10,7 @@
 
 using Ruby;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -504,7 +505,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new TypeError(string.Format("Can't coerce {0} to Bignum", Class.CLASS_OF(param0)._name)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "Can't coerce {0} to Bignum", Class.CLASS_OF(param0)._name)).raise(caller);
             }
         }
     }
@@ -527,7 +528,7 @@ namespace Ruby.Methods
             }
             catch (System.ArgumentOutOfRangeException)
             {
-                throw new ArgumentError(string.Format("illegal radix {0}", radix)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal radix {0}", radix)).raise(caller);
             }
         }
     }

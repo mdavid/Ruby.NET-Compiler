@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using System.Collections;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -158,8 +159,8 @@ namespace Ruby
             {
                 if (x is String && y is String)
                 {
-                    x = new String(((String)x).value.ToUpper());
-                    y = new String(((String)y).value.ToUpper());
+                    x = new String(((String)x).value.ToUpperInvariant());
+                    y = new String(((String)y).value.ToUpperInvariant());
                 }
 
                 object result = String.Cmp(caller, x, y);
@@ -615,7 +616,7 @@ namespace Ruby
         {
             object s = Ruby.Methods.rb_str_inspect.singleton.Call0(null, new String(str), null, null);
 
-            throw new ArgumentError(string.Format("invalid value for {0}: {1}", type, ((String)(s)).value)).raise(caller);
+            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "invalid value for {0}: {1}", type, ((String)(s)).value)).raise(caller);
         }
 
         //TODO: this does not completely replicate the 'strtod' behaviour. 
@@ -682,7 +683,7 @@ namespace Ruby
 
             try
             {
-                return double.Parse(doubleText.ToString());
+                return double.Parse(doubleText.ToString(), CultureInfo.InvariantCulture);
             }
             catch (System.Exception)
             {
@@ -717,7 +718,7 @@ namespace Ruby
             }
             catch (System.OverflowException)
             {
-                Errors.rb_warn(string.Format("Float {0} out of range", pString.Substring(p, end - p)));
+                Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "Float {0} out of range", pString.Substring(p, end - p)));
             }
 
             if (p == end)
@@ -772,7 +773,7 @@ namespace Ruby
                 }
                 catch (System.OverflowException)
                 {
-                    Errors.rb_warn(string.Format("Float {0} out of range", pString.Substring(p, end - p)));
+                    Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "Float {0} out of range", pString.Substring(p, end - p)));
                 }
                 if (badcheck)
                 {
@@ -892,20 +893,20 @@ namespace Ruby
         internal static void rb_str_splice(Frame caller, String str, int beg, int len, object _val)
         {
             if (len < 0)
-                throw new IndexError(string.Format("negative length {0}", len)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "negative length {0}", len)).raise(caller);
 
             String val = (String)_val;
             //rb_str_modify(str);
 
             if (str.value.Length < beg)
             {
-                throw new IndexError(string.Format("index {0} out of string", beg)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of string", beg)).raise(caller);
             }
             if (beg < 0)
             {
                 if (-beg > str.value.Length)
                 {
-                    throw new IndexError(string.Format("index {0} out of string", beg)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of string", beg)).raise(caller);
                 }
                 beg += str.value.Length;
             }
@@ -935,13 +936,13 @@ namespace Ruby
             match = Regexp.rb_backref_get(caller);
             if (nth >= match.value.Groups.Count)
             {
-                throw new IndexError(string.Format("index {0} out of regexp", nth)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of regexp", nth)).raise(caller);
             }
             if (nth < 0)
             {
                 if (-nth >= match.value.Groups.Count)
                 {
-                    throw new IndexError(string.Format("index {0} out of regexp", nth)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of regexp", nth)).raise(caller);
                 }
                 nth += match.value.Groups.Count;
             }
@@ -949,7 +950,7 @@ namespace Ruby
             start = match.value.Groups[nth].Index;
             if (start == -1)
             {
-                throw new IndexError(string.Format("regexp group {0} not matched", nth)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "regexp group {0} not matched", nth)).raise(caller);
             }
             len = match.value.Groups[nth].Length;
             rb_str_splice(caller, str, start, len, val);
@@ -1015,12 +1016,12 @@ namespace Ruby
 
                 if (str.value.Length <= idx)
                 {
-                    throw new IndexError(string.Format("index {0} out of string", idx)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of string", idx)).raise(caller);
                 }
                 if (idx < 0)
                 {
                     if (-idx > str.value.Length)
-                        throw new IndexError(string.Format("index {0} out of string", idx)).raise(caller);
+                        throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of string", idx)).raise(caller);
                     idx += str.value.Length;
                 }
                 if (val is int)
@@ -1111,7 +1112,7 @@ namespace Ruby
             }
             else
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", argc)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", argc)).raise(caller);
             }
 
             pat = get_pat(argv[0], true, caller);

@@ -11,6 +11,7 @@
 using Ruby;
 using Ruby.Runtime;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -713,7 +714,7 @@ namespace Ruby.Methods
         {
             Class cls = (Class)recv;
             if (cls._type == Class.Type.Singleton) // BBTAG: for anonymous classes
-                return string.Format("#<Class:{0}>", (cls.attached is Class ?
+                return string.Format(CultureInfo.InvariantCulture, "#<Class:{0}>", (cls.attached is Class ?
                         Object.Inspect(cls.attached, caller) :
                         Object.rb_any_to_s(cls.attached)));
             else
@@ -985,7 +986,7 @@ namespace Ruby.Methods
                 throw TypeError.rb_error_frozen(caller, "class/module").raise(caller);
 
             if (!klass0.const_defined(id, false))
-                throw new NameError(System.String.Format("constant {0}::{1} not defined", klass0.classname(), id)).raise(caller);
+                throw new NameError(System.String.Format(CultureInfo.InvariantCulture, "constant {0}::{1} not defined", klass0.classname(), id)).raise(caller);
 
             return klass0.remove_const(id);
         }

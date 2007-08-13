@@ -11,6 +11,7 @@
 using Ruby.Runtime;
 using Ruby;
 using System.Collections;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -327,7 +328,7 @@ namespace Ruby
             long rlen;
 
             if (len < 0)
-                throw new IndexError(string.Format("negative length ({0})", len)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "negative length ({0})", len)).raise(caller);
 
             if (beg < 0)
             {
@@ -335,7 +336,7 @@ namespace Ruby
                 if (beg < 0)
                 {
                     beg -= this.Count;
-                    throw new IndexError(string.Format("index {0} out of array", beg)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of array", beg)).raise(caller);
                 }
             }
             if (beg + len > this.Count)
@@ -436,7 +437,7 @@ namespace Ruby
                 idx += this.Count;
                 if (idx < 0)
                 {
-                    throw new IndexError(string.Format("index {0} out of array", idx - this.Count)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of array", idx - this.Count)).raise(caller);
                 }
             }
 

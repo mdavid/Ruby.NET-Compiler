@@ -11,6 +11,7 @@
 using Ruby.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -94,7 +95,7 @@ namespace Ruby
             // On the CLR, we cannot do this in verifiable code. However,
             // obj.GetHashCode() returns a unique int32 for every object.
             //
-            string syStr = string.Format("#<{0}:0x{1}>",
+            string syStr = string.Format(CultureInfo.InvariantCulture, "#<{0}:0x{1}>",
                 Class.CLASS_OF(recv).ToString(),
                 System.Convert.ToString(recv.GetHashCode(), 16)); // convert to HEX
             String rbStr = new String(syStr);
@@ -139,14 +140,14 @@ namespace Ruby
             }
             else
             {
-                throw new TypeError(string.Format("wrong argument type {0} ({1} expected)", Class.rb_obj_classname(value), typeof(T).Name)).raise(caller);  
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} ({1} expected)", Class.rb_obj_classname(value), typeof(T).Name)).raise(caller);  
             }
         }
 
         internal static void CheckType<T>(Frame caller, object value)
         {
             if (!(value is T))
-                throw new TypeError(string.Format("wrong argument type {0} ({1} expected)", Class.rb_obj_classname(value), typeof(T).Name)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} ({1} expected)", Class.rb_obj_classname(value), typeof(T).Name)).raise(caller);
         }
 
         // convert_type
@@ -156,7 +157,7 @@ namespace Ruby
             {
                 if (raise)
                 {
-                    throw new TypeError(string.Format("cannot convert {0} into {1}",
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "cannot convert {0} into {1}",
                          value == null ? "nil" :
                          (value is bool && (bool)value == true) ? "true" :
                          (value is bool && (bool)value == false) ? "false" :
@@ -181,7 +182,7 @@ namespace Ruby
                 object result = Convert<T>(value, method, true, caller);
                 if (!(result is T))
                 {
-                    throw new TypeError(string.Format("{0}#{1} should return {2}",
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0}#{1} should return {2}",
                         Class.CLASS_OF(value), method, typeof(T).Name)).raise(caller);
                 }
                 else
@@ -205,7 +206,7 @@ namespace Ruby
                 }
                 else if (!(result is T))
                 {
-                    throw new TypeError(string.Format("{0}#{1} should return {2}",
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0}#{1} should return {2}",
                         Class.CLASS_OF(value), method, typeof(T).Name)).raise(caller);
                 }
                 else

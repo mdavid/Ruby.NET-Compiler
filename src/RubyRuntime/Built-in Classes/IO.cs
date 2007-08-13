@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby
@@ -387,7 +388,7 @@ namespace Ruby
             const string suffix2 = ".~~~";
 
             if (str.value.Length > 1000)
-                throw new fatal(string.Format("Cannot do inplace edit on long filename ({0} characters)", str.value.Length)).raise(caller);
+                throw new fatal(string.Format(CultureInfo.InvariantCulture, "Cannot do inplace edit on long filename ({0} characters)", str.value.Length)).raise(caller);
 
             /* Style 0 */
             int slen = str.value.Length;
@@ -1169,7 +1170,7 @@ namespace Ruby
                     }
                     return MODE_BINMODE(flags, "rb+", "r+");
             }
-            throw new ArgumentError(string.Format("illegal access mode {0}", flags)).raise(caller);
+            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access mode {0}", flags)).raise(caller);
         }
 
         internal static int rb_io_mode_flags(Frame caller, string mode)
@@ -1189,7 +1190,7 @@ namespace Ruby
                     flags |= FMODE_WRITABLE | FMODE_APPEND | FMODE_CREATE;
                     break;
                 default:
-                    throw new ArgumentError(string.Format("illegal access mode {0}", flags)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access mode {0}", flags)).raise(caller);
             }
 
             while (i < mode.Length)
@@ -1203,7 +1204,7 @@ namespace Ruby
                         flags |= FMODE_READWRITE;
                         break;
                     default:
-                        throw new ArgumentError(string.Format("illegal access mode {0}", flags)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access mode {0}", flags)).raise(caller);
                 }
             }
 
@@ -1270,7 +1271,7 @@ namespace Ruby
                 case O_RDWR:
                     return MODE_BINARY(flags, "r+", "rb+");
             }
-            throw new ArgumentError(string.Format("illegal access modenum {0}", flags)).raise(caller);
+            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access modenum {0}", flags)).raise(caller);
         }
 
         internal static int rb_io_mode_modenum(Frame caller, string mode)
@@ -1290,7 +1291,7 @@ namespace Ruby
                     flags |= File.O_WRONLY | File.O_APPEND | File.O_CREAT;
                     break;
                 default:
-                    throw new ArgumentError(string.Format("illegal access mode {0}", mode)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access mode {0}", mode)).raise(caller);
             }
 
             for (int i = 1; i < m.Length; i++)
@@ -1304,7 +1305,7 @@ namespace Ruby
                         flags |= File.O_RDWR;
                         break;
                     default:
-                        throw new ArgumentError(string.Format("illegal access mode {0}", mode)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal access mode {0}", mode)).raise(caller);
                 }
             }
 
@@ -1848,7 +1849,7 @@ namespace Ruby
         {
             if (!Eval.RespondTo(val, mid))
             {
-                throw new TypeError(string.Format("{0} must have {1} method, {2} given", id, mid, ((Class)val).my_class._name)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0} must have {1} method, {2} given", id, mid, ((Class)val).my_class._name)).raise(caller);
             }
         }
 

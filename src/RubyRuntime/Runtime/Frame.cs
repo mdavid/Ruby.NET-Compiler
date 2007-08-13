@@ -11,6 +11,7 @@
 
 using System.Collections.Generic;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby.Runtime
@@ -79,7 +80,7 @@ namespace Ruby.Runtime
 
         internal string callPoint()
         {
-            string location = baseName(file()) + ":" + line.ToString();
+            string location = baseName(file()) + ":" + line.ToString(CultureInfo.InvariantCulture);
             if (methodName() != "")
                 location += ":in `" + methodName() + "'";
             return location;

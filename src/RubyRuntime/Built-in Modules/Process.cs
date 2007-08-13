@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -148,7 +149,7 @@ namespace Ruby
 
         internal static int do_aspawn(int process_status, string command, string[] arguments)
         {
-            return do_spawn(process_status, string.Format("{0} {1}", command, string.Join(" ", arguments)));
+            return do_spawn(process_status, string.Format(CultureInfo.InvariantCulture, "{0} {1}", command, string.Join(" ", arguments)));
         }
 
         internal static int proc_spawn_n(Array argv, string prog, Frame caller)

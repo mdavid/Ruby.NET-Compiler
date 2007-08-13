@@ -17,6 +17,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Collections;
+using System.Globalization;
 
 namespace IronMath {
     /// <summary>
@@ -185,7 +186,7 @@ namespace IronMath {
         }
 
         internal double ToFloat64() {
-            return double.Parse(ToString(10));
+            return double.Parse(ToString(10), CultureInfo.InvariantCulture);
 
             //!!! code above is horribly inefficient; however, code below is inaccurate which is clearly worse
             //            double ret = (double)sign;

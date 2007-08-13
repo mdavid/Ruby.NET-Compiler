@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -26,7 +27,7 @@ namespace Ruby.Methods
             int i = Numeric.rb_num2long(p1, caller);
 
             if (!Numeric.FIXABLE(i))
-                throw new RangeError(string.Format("integer {0} out of range of fixnum", i)).raise(caller);
+                throw new RangeError(string.Format(CultureInfo.InvariantCulture, "integer {0} out of range of fixnum", i)).raise(caller);
             
             return i;
         }
@@ -42,7 +43,7 @@ namespace Ruby.Methods
         {
             int i = Numeric.rb_num2long(recv, caller);
             if (rest.Count == 0)
-                return new String(i.ToString());
+                return new String(i.ToString(CultureInfo.InvariantCulture));
 
             return rb_big_to_s.singleton.Call(last_class, new Bignum(i), caller, block, rest);
         }

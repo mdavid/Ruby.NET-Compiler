@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -21,7 +22,7 @@ namespace Ruby
             object value = Eval.CallPrivate(a, caller, "<=>", null, b);
             if (value == null)
             {
-                throw new ArgumentError(string.Format("comparison of {0} with {1} failed", Class.rb_obj_classname(a), Class.rb_obj_classname(b))).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "comparison of {0} with {1} failed", Class.rb_obj_classname(a), Class.rb_obj_classname(b))).raise(caller);
             }
             else if (value is int)
             {

@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -101,7 +102,7 @@ namespace Ruby
         {
             if (data == null || !(data is Thread))
             {
-                throw new TypeError(string.Format("wrong argument type {0} (expected Thread)", Class.rb_obj_classname(data))).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} (expected Thread)", Class.rb_obj_classname(data))).raise(caller);
             }
             return (Thread)data;
         }

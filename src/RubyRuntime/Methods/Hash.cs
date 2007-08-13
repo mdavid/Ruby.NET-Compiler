@@ -14,6 +14,7 @@ using Ruby;
 namespace Ruby.Methods
 {
     using KeyValuePair = System.Collections.Generic.KeyValuePair<Dictionary.Key, object>;
+    using System.Globalization;
 
 
     
@@ -593,7 +594,7 @@ namespace Ruby.Methods
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
         {
-            Errors.rb_warn(string.Format("Hash#{0} is deprecated; use Hash#values_at", "indexes")); //rb_frame_last_func
+            Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "Hash#{0} is deprecated; use Hash#values_at", "indexes")); //rb_frame_last_func
 
             System.Collections.ArrayList result = new System.Collections.ArrayList(args.Length);
 

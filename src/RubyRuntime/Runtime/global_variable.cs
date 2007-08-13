@@ -12,6 +12,7 @@
 using Ruby;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace Ruby.Runtime
 {
@@ -66,7 +67,7 @@ namespace Ruby.Runtime
         internal override void setter(string id, object val, Frame caller)
         {
             if ((val != null) && !(val is String))
-                throw new TypeError(string.Format("value of {0} must be String", id)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "value of {0} must be String", id)).raise(caller);
 
             this.value = val;
         }

@@ -13,6 +13,7 @@ using Ruby;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -71,13 +72,13 @@ namespace Ruby
         {
             if (posArg > 0)
             {
-                throw new ArgumentError(string.Format("numbered({0}) after unnumbered({1})", n, posArg)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "numbered({0}) after unnumbered({1})", n, posArg)).raise(caller);
             }
             else
             {
                 if (n < 1)
                 {
-                    throw new ArgumentError(string.Format("invalid index - {0}$", n)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "invalid index - {0}$", n)).raise(caller);
                 }
                 else
                 {
@@ -97,7 +98,7 @@ namespace Ruby
             {
                 if (posArg < 0)
                 {
-                    throw new ArgumentError(string.Format("unnumbered({0}) mixed with numbered", nextArg)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "unnumbered({0}) mixed with numbered", nextArg)).raise(caller);
                 }
                 else
                 {
@@ -215,7 +216,7 @@ namespace Ruby
                     //width
                     while (char.IsNumber(fmt[c]))
                     {
-                        temp = 10 * temp + int.Parse(fmt[c].ToString());
+                        temp = 10 * temp + int.Parse(fmt[c].ToString(), CultureInfo.InvariantCulture);
                         c++;
                     }
                     width = temp;
@@ -225,7 +226,7 @@ namespace Ruby
                         //precision
                         while (char.IsNumber(fmt[c]))
                         {
-                            temp = 10 * temp + int.Parse(fmt[c].ToString());
+                            temp = 10 * temp + int.Parse(fmt[c].ToString(), CultureInfo.InvariantCulture);
                             c++;
                         }
                         precision = temp;
@@ -240,12 +241,12 @@ namespace Ruby
                     switch (type)
                     {
                         case 'd':
-                            result.Append(((int)args[argNum]).ToString());
+                            result.Append(((int)args[argNum]).ToString(CultureInfo.InvariantCulture));
                             argNum++;
                             break;
                         case 'g':
                         case 'e':
-                            result.Append(((double)args[argNum]).ToString("r").ToLower());
+                            result.Append(((double)args[argNum]).ToString("r", CultureInfo.InvariantCulture).ToLowerInvariant());
                             argNum++;
                             break;
                         case 's':
@@ -258,20 +259,20 @@ namespace Ruby
                             break;
                         case 'x':
                         case 'X':
-                            result.Append(((int)args[argNum]).ToString("x"));
+                            result.Append(((int)args[argNum]).ToString("x", CultureInfo.InvariantCulture));
                             argNum++;
                             break;
                         case '%':
                             result.Append("%");
                             break;
                         case 'f':
-                            string fix = ((double)args[argNum]).ToString(string.Format("f{0}", precision));
+                            string fix = ((double)args[argNum]).ToString(string.Format(CultureInfo.InvariantCulture, "f{0}", precision), CultureInfo.InvariantCulture);
                             if (width > 0)
                                 fix = fix.Substring(0, width);
                             result.Append(fix);
                             break;
                         default:
-                            throw new NotImplementedError(string.Format("{0}", fmt)).raise(null);
+                            throw new NotImplementedError(fmt).raise(null);
                     }
                     c++;
                 }

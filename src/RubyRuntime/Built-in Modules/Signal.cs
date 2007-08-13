@@ -11,6 +11,7 @@
 
 using Ruby;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -93,7 +94,7 @@ namespace Ruby
             if (sig >= NSIG)
             {
                 //FIXME: caller
-                Exception.rb_bug(string.Format("trap_handler: Bad signal {0}", sig), null);
+                Exception.rb_bug(string.Format(CultureInfo.InvariantCulture, "trap_handler: Bad signal {0}", sig), null);
             }
 
             signal(sig, sighandler);

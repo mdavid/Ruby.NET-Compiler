@@ -9,6 +9,7 @@
 **********************************************************************/
 using Ruby.Compiler;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -307,7 +308,7 @@ namespace Ruby
                 Errors.rb_warn("do not use Fixnums as Symbols");
                 string id = rb_id2name((uint)(int)obj);
                 if (id == null)
-                    throw new ArgumentError(string.Format("{0} is not a symbol", obj)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} is not a symbol", obj)).raise(caller);
                 return id;
             }
             else if (obj is Symbol)

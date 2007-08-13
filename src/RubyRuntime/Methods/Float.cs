@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -30,7 +31,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new TypeError(string.Format("failed to convert {0} into Float", Class.rb_obj_classname(p1))).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "failed to convert {0} into Float", Class.rb_obj_classname(p1))).raise(caller);
             }
         }
     }
@@ -620,7 +621,7 @@ namespace Ruby.Methods
                 )
             {
                 //in this range use exponential notation
-                number = val.ToString("e14"); 
+                number = val.ToString("e14", CultureInfo.InvariantCulture); 
                 int eIndex = number.IndexOf('e');
                 if (number[eIndex - 1] == '0')
                 {
@@ -637,7 +638,7 @@ namespace Ruby.Methods
             }
             else
             {
-                number = val.ToString("0.0#################");
+                number = val.ToString("0.0#################", CultureInfo.InvariantCulture);
             }
 
             return new String(number);

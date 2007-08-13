@@ -15,6 +15,7 @@ namespace Ruby
 {
 
     using HashKeyValuePair = System.Collections.Generic.KeyValuePair<Dictionary.Key, object>;
+    using System.Globalization;
 
     public partial class Marshal //author: war
     {
@@ -234,7 +235,7 @@ namespace Ruby
                 //TEST: The .Net and the CRuby statements are different. CRuby puts the memory location
                 //of the pointer into a string -- is this memory location read latter, if so we need to save the klass
                 //object in a collection for latter retrieval. 
-                path = string.Format("#<{0}:0x{1:x}>", s, klass.GetHashCode());
+                path = string.Format(CultureInfo.InvariantCulture, "#<{0}:0x{1:x}>", s, klass.GetHashCode());
                 //        sprintf(RSTRING(path)->ptr, "#<%s:0x%lx>", s, klass);
                 ((Class)klass).instance_variable_set(tmp_classpath, new String(path));
 
@@ -262,7 +263,7 @@ namespace Ruby
                     type = "module";
                 }
 
-                throw new TypeError(string.Format("can't dump anonymous {0} {1}", type, n)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't dump anonymous {0} {1}", type, n)).raise(caller);
             }
 
             return path;
@@ -416,7 +417,7 @@ namespace Ruby
             else
             {
                 int len;
-                buf.Append(d.ToString("r"));
+                buf.Append(d.ToString("r", CultureInfo.InvariantCulture));
                 len = buf.Length;
                 char[] bufArray = new char[20];
                 int manLength = save_mantissa(d, bufArray);
@@ -452,7 +453,7 @@ namespace Ruby
         {
             if (s.Length > 0 && s[0] == '#')
             {
-                throw new TypeError(string.Format("can't dump anonymous class {0}", s)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't dump anonymous class {0}", s)).raise(caller);
             }
             w_symbol((int)Symbol.rb_intern(s), arg, caller);
         }
@@ -543,7 +544,7 @@ namespace Ruby
 
             if (StructLen(s, caller) != ((Array)members).Count)
             {
-                throw new TypeError(string.Format("struct size differs ({0} required {1} given)", StructLen(s, caller), ((Array)members).Count)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "struct size differs ({0} required {1} given)", StructLen(s, caller), ((Array)members).Count)).raise(caller);
             }
 
             return members;
@@ -750,7 +751,7 @@ namespace Ruby
                 {
                     w_uclass(obj, Ruby.Runtime.Init.rb_cHash, arg, caller);
                     if (((Hash)obj).defaultProc != null)
-                        throw new TypeError(string.Format("cannot dump hash with default proc")).raise(caller);
+                        throw new TypeError("cannot dump hash with default proc").raise(caller);
                     else if (((Hash)obj).defaultValue == null)
                         w_byte(TYPE_HASH, arg, caller);
                     else
@@ -770,7 +771,7 @@ namespace Ruby
                         
                     w_class(TYPE_DATA, obj, arg, true, caller);
                     if (!Eval.RespondTo(obj, s_dump_data))
-                        throw new TypeError(string.Format("no marshal_dump is defined for class {0}", rb_obj_classname(obj, caller))).raise(caller);
+                        throw new TypeError(string.Format(CultureInfo.InvariantCulture, "no marshal_dump is defined for class {0}", rb_obj_classname(obj, caller))).raise(caller);
 
                     v = Eval.CallPrivate0(obj, caller, s_dump_data, null);
                     w_object(v, arg, limit, caller);
@@ -781,7 +782,7 @@ namespace Ruby
                     w_ivar(((Object)obj).instance_vars, c_arg, caller);
                 }
                 else
-                    throw new TypeError(string.Format("can't dump {0}", ((Basic)obj).my_class.classname())).raise(caller);
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't dump {0}", ((Basic)obj).my_class.classname())).raise(caller);
             }
 
             if (ivtbl != null)
@@ -824,7 +825,7 @@ namespace Ruby
 
         internal static void long_toobig(Frame caller, int size)
         {
-            throw new TypeError(string.Format("long too big for this architecture (size {0}, given {1})", SIZEOF_LONG, size)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "long too big for this architecture (size {0}, given {1})", SIZEOF_LONG, size)).raise(caller);
         }
 
         internal static double load_mantissa(double d, string buf, int len)
@@ -890,7 +891,7 @@ namespace Ruby
 
             if (path[0] == '#')
             {
-                throw new ArgumentError(string.Format("can't retrieve anonymous class {0}", path)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "can't retrieve anonymous class {0}", path)).raise(caller);
             }
             while (p < path.Length)
             {
@@ -917,13 +918,13 @@ namespace Ruby
                     case Class.Type.Module:
                         break;
                     default:
-                        throw new TypeError(string.Format("{0} does not refer class/module", path)).raise(caller);
+                        throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0} does not refer class/module", path)).raise(caller);
                 }
             }
             return c;
 
         undefined_class:
-            throw new ArgumentError(string.Format("undefined class/module {0}", path.Substring(0, p))).raise(caller);
+            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "undefined class/module {0}", path.Substring(0, p))).raise(caller);
         }
 
         internal static object path2class(Frame caller, string path)
@@ -932,7 +933,7 @@ namespace Ruby
 
             if (!(v is Class))
             {
-                throw new ArgumentError(string.Format("{0} does not refer class", path)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} does not refer class", path)).raise(caller);
             }
             return v;
         }
@@ -1211,7 +1212,7 @@ namespace Ruby
 
             if (((Class)v)._type != Class.Type.Module)
             {
-                throw new ArgumentError(string.Format("{0} does not refer module", path)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} does not refer module", path)).raise(caller);
             }
             return v;
         }
@@ -1268,7 +1269,7 @@ namespace Ruby
 
                         if (((Class)c)._type == Class.Type.Singleton)
                         {
-                            throw new TypeError(string.Format("singleton can't be loaded")).raise(caller);
+                            throw new TypeError("singleton can't be loaded").raise(caller);
                         }
                         int temp = 0;
                         v = r_object0(caller, arg, null, ref temp, extmod);
@@ -1440,7 +1441,7 @@ namespace Ruby
 
                             if ((string)((Array)mem).value[i] != Symbol.rb_id2name((uint)slot))
                             {
-                                string errorString = string.Format("struct {0} not compatible (:{1} for :{2})",
+                                string errorString = string.Format(CultureInfo.InvariantCulture, "struct {0} not compatible (:{1} for :{2})",
                                     rb_class2name(klass, caller),
                                     Symbol.rb_id2name((uint)slot),
                                     ((Array)mem).value[i]);
@@ -1461,7 +1462,7 @@ namespace Ruby
 
                         if (!Eval.RespondTo(klass, s_load))
                         {
-                            throw new TypeError(string.Format("class {0} needs to have method `_load'", rb_class2name(klass, caller))).raise(caller) ;
+                            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "class {0} needs to have method `_load'", rb_class2name(klass, caller))).raise(caller);
                         }
 
                         data = r_string(caller, arg);
@@ -1491,7 +1492,7 @@ namespace Ruby
                         }
                         if (!Eval.RespondTo(v, s_mload))
                         {
-                            throw new TypeError(string.Format("instance of {0} needs to have method `marshal_load'", rb_class2name(klass, caller))).raise(caller);
+                            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "instance of {0} needs to have method `marshal_load'", rb_class2name(klass, caller))).raise(caller);
                         }
                         r_entry(caller, v, arg);
                         data = r_object(caller, arg);
@@ -1505,7 +1506,7 @@ namespace Ruby
                         v = Ruby.Methods.rb_obj_alloc.singleton.Call0(null, klass, caller, null);
                         if (!(v is Object))
                         {
-                            throw new ArgumentError(string.Format("dump format error")).raise(caller);
+                            throw new ArgumentError("dump format error").raise(caller);
                         }
                         r_entry(caller, v, arg);
                         r_ivar(caller, v, arg);
@@ -1536,7 +1537,7 @@ namespace Ruby
                         r_entry(caller, v, arg);
                         if (!Eval.RespondTo(v, s_load_data))
                         {
-                            throw new TypeError(string.Format("class {0} needs to have instance method `_load_data'", rb_class2name(klass, caller))).raise(caller);
+                            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "class {0} needs to have instance method `_load_data'", rb_class2name(klass, caller))).raise(caller);
                         }
                         int temp = 0;
                         Eval.CallPrivate1(v, caller, s_load_data, null, r_object0(caller, arg, null, ref temp, extmod));
@@ -1575,7 +1576,7 @@ namespace Ruby
                     return new Symbol((uint)r_symlink(caller, arg));
 
                 default:
-                    throw new ArgumentError(string.Format("dump format error(0x{0})", type)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "dump format error(0x{0})", type)).raise(caller);
             }
 
             if (proc != null) //TEST:

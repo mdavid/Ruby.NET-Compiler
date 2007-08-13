@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using System;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -323,7 +324,7 @@ namespace Ruby
         {
             String desc = rb_reg_desc(caller, re);
 
-            throw new RegExpError(string.Format("{0}: {1}", err, desc.value)).raise(caller);
+            throw new RegExpError(string.Format(CultureInfo.InvariantCulture, "{0}: {1}", err, desc.value)).raise(caller);
         }
 
         internal int rb_reg_search(String str, int pos, bool reverse, Frame caller)
@@ -413,7 +414,7 @@ namespace Ruby
                             for (; replsub + i < repl.value.Length; i++)
                                 if (!char.IsDigit(repl.value[replsub + i]))
                                     break;
-                            int matchnum = int.Parse(repl.value.Substring(replsub + 1, i - 1));
+                            int matchnum = int.Parse(repl.value.Substring(replsub + 1, i - 1), CultureInfo.InvariantCulture);
                             if (matchnum < match.value.Groups.Count)
                                 replstr.Append(match.value.Groups[matchnum]);
                             replsub += i - 1;
@@ -600,7 +601,7 @@ namespace Ruby
             internal override void setter(string id, object val, Frame caller)
             {
                 //ignorecase_setter
-                Errors.rb_warn(string.Format("modifying {0} is deprecated", id));
+                Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "modifying {0} is deprecated", id));
                 Regexp.ignorecase.value = Eval.Test(val);
             }
         }

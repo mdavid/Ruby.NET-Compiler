@@ -12,6 +12,7 @@ using Ruby;
 using System.Collections.Generic;
 using Ruby.Methods;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby.Runtime
 {
@@ -764,7 +765,7 @@ namespace Ruby.Runtime
                 scope = new Binding(caller, self);
 
                 if (!(scope is IContext))
-                    throw new TypeError(string.Format("wrong argument type {0} (expected Proc/Binding)", scope.GetType())).raise(caller);
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} (expected Proc/Binding)", scope.GetType())).raise(caller);
 
                 object ret = Eval.eval_under(ruby_class, self, (String)src, (IContext)scope, file, line, caller);
 

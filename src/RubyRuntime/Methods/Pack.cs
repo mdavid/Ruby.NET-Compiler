@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -67,7 +68,7 @@ namespace Ruby.Methods
                     }
                     else
                     {
-                        throw new ArgumentError(string.Format("'{0}' allowed only after types {1}", fmtString[p], natstr)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "'{0}' allowed only after types {1}", fmtString[p], natstr)).raise(caller);
                     }
                 }
                 if (p < pend && fmtString[p] == '*') /* set data length */
@@ -97,7 +98,7 @@ namespace Ruby.Methods
                             break;
                         }
                     }
-                    len = int.Parse(fmtString.Substring(numStart, numEnd - numStart));
+                    len = int.Parse(fmtString.Substring(numStart, numEnd - numStart), CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -749,7 +750,7 @@ namespace Ruby.Methods
                     }
                     else
                     {
-                        throw new ArgumentError(string.Format("'{0}' allowed only after types {1}", fmtString[p], natstr)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "'{0}' allowed only after types {1}", fmtString[p], natstr)).raise(caller);
                     }
                 }
                 if (p >= pend)
@@ -777,7 +778,7 @@ namespace Ruby.Methods
                             break;
                         }
                     }
-                    len = int.Parse(fmtString.Substring(numStart, numEnd - numStart));
+                    len = int.Parse(fmtString.Substring(numStart, numEnd - numStart), CultureInfo.InvariantCulture);
                 }
                 else
                 {

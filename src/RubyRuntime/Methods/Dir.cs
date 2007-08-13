@@ -10,6 +10,7 @@
 
 using Ruby;
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -368,7 +369,7 @@ namespace Ruby.Methods
         public override object Call(Class last_class, object recv, Frame caller, Proc block, object p1, Array rest)
         {
             if (rest.Count > 1)
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for {1})", new object[] { rest.Count, 2 })).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", rest.Count, 2)).raise(caller);
             // rest[0] posix permissions, ignored here
 
             string path = String.StringValue(p1, caller);

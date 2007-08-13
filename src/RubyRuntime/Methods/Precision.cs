@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -20,7 +21,7 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
         {
-            throw new TypeError(string.Format("undefined conversion from {0} into {1}", p1, recv)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "undefined conversion from {0} into {1}", p1, recv)).raise(caller);
         }
     }
 

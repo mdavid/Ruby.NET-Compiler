@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -120,7 +121,7 @@ namespace Ruby
 
             out_of_range:            
             if (raiseException)
-                throw new RangeError(string.Format("{0}..{1}{2} out of range", range.Begin, range.Excl ? "." : "", range.End)).raise(caller);
+                throw new RangeError(string.Format(CultureInfo.InvariantCulture, "{0}..{1}{2} out of range", range.Begin, range.Excl ? "." : "", range.End)).raise(caller);
 
             return null;
         }

@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using Microsoft.Build.Utilities;
 using Ruby.Runtime;
+using System.Globalization;
 
 
 namespace Ruby
@@ -174,7 +175,7 @@ namespace Ruby
         internal static void test_check(int n, Array args, Frame caller)
         {
             if (++n != args.Count)
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for {1})", args.Count, n)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", args.Count, n)).raise(caller);
         }
 
         internal static string rb_path_last_separator(string path)
@@ -291,7 +292,7 @@ namespace Ruby
 
                     if (dir == null)
                     {
-                        throw new ArgumentError(string.Format("couldn't find HOME environment -- expanding `{0}'", s)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "couldn't find HOME environment -- expanding `{0}'", s)).raise(caller);
                     }
                     dirlen = dir.Length;
                     //BUFCHECK(dirlen > buflen);
@@ -603,7 +604,7 @@ namespace Ruby
 
         private static char downcase(bool nocase, char c)
         {
-            return nocase && char.IsUpper(c) ? char.ToLower(c) : c;
+            return nocase && char.IsUpper(c) ? char.ToLowerInvariant(c) : c;
         }
 
         private static string range(string pat, char test, int flags)

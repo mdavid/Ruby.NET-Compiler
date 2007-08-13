@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -806,7 +807,7 @@ namespace Ruby.Methods
                 }
             }
 
-            throw new ArgumentError(string.Format("unknown command ?{0}", cmd)).raise(caller);
+            throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "unknown command ?{0}", cmd)).raise(caller);
         }
     }
 

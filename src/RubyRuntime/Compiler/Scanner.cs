@@ -19,6 +19,7 @@ using gppg;
 namespace Ruby.Compiler
 {
     using AST;
+    using System.Globalization;
 
     internal enum Lex_State
     {
@@ -632,7 +633,7 @@ namespace Ruby.Compiler
                             {
                                 /* hexadecimal */
                                 c = nextc();
-                                if (char.IsDigit((char)c) || ('A' <= char.ToUpper((char)c) && char.ToUpper((char)c) <= 'F'))
+                                if (char.IsDigit((char)c) || ('A' <= char.ToUpperInvariant((char)c) && char.ToUpperInvariant((char)c) <= 'F'))
                                 {
                                     do
                                     {
@@ -642,7 +643,7 @@ namespace Ruby.Compiler
                                             nondigit = c;
                                             continue;
                                         }
-                                        if (!(char.IsDigit((char)c) || ('A' <= char.ToUpper((char)c) && char.ToUpper((char)c) <= 'F')))
+                                        if (!(char.IsDigit((char)c) || ('A' <= char.ToUpperInvariant((char)c) && char.ToUpperInvariant((char)c) <= 'F')))
                                             break;
                                         nondigit = 0;
                                         tokadd((char)c);
@@ -854,7 +855,7 @@ namespace Ruby.Compiler
 
                         if (is_float)
                         {
-                            double d = double.Parse(tok());
+                            double d = double.Parse(tok(), CultureInfo.InvariantCulture);
                             yylval.node = new VALUE(d, yylloc);
                             return (int)Tokens.tFLOAT;
                         }
@@ -1157,7 +1158,7 @@ namespace Ruby.Compiler
                             } while (char.IsDigit((char)c));
                             pushback(c);
                             tokfix();
-                            yylval.node = new NTH_REF(parser.CurrentScope, int.Parse(tok().Substring(1)), yylloc);
+                            yylval.node = new NTH_REF(parser.CurrentScope, int.Parse(tok().Substring(1), CultureInfo.InvariantCulture), yylloc);
                             return (int)Tokens.tNTH_REF;
 
                         default:
@@ -2336,7 +2337,7 @@ namespace Ruby.Compiler
 
         public override void yyerror(string fmt, params object[] args)
         {
-                yyerror(System.String.Format(fmt, args));
+            yyerror(System.String.Format(CultureInfo.InvariantCulture, fmt, args));
         }
 
 
@@ -2349,7 +2350,7 @@ namespace Ruby.Compiler
 
         internal void yywarn(string fmt, params object[] args)
         {
-            yywarn(System.String.Format(fmt, args));
+            yywarn(System.String.Format(CultureInfo.InvariantCulture, fmt, args));
         }
     }
 }

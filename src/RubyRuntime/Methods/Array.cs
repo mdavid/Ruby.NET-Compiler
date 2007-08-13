@@ -13,6 +13,7 @@ using Ruby.Runtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -1034,7 +1035,7 @@ namespace Ruby.Methods
         public override object Call(Class last_class, object recv, Frame caller, Proc block, Array rest)
         {
             if (rest.Count > 0)
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 0)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 0)", rest.Count)).raise(caller);
 
             if (block == null)
                 throw new LocalJumpError("no block given").raise(caller);
@@ -1125,7 +1126,7 @@ namespace Ruby.Methods
                         return Proc.rb_yield(block, caller, rest[0]);
                     else
                     {
-                        throw new IndexError(string.Format("index {0} out of array", Numeric.rb_num2long(rest[0], caller))).raise(caller);
+                        throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of array", Numeric.rb_num2long(rest[0], caller))).raise(caller);
                     }
 
                 }
@@ -1507,7 +1508,7 @@ namespace Ruby.Methods
                 }
                 else if (len != tmp.Count)
                 {
-                    throw new IndexError(string.Format("element size differ {0} should be {1}", tmp.Count, len)).raise(caller);
+                    throw new IndexError(string.Format(CultureInfo.InvariantCulture, "element size differ {0} should be {1}", tmp.Count, len)).raise(caller);
                 }
 
                 for (int j = 0; j < len; j++)
@@ -1798,7 +1799,7 @@ namespace Ruby.Methods
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
         {
-            Errors.rb_warn(string.Format("Array#{0} is deprecated; use Array#values_at", "indexes")); // rb_frame_last_func
+            Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "Array#{0} is deprecated; use Array#values_at", "indexes")); // rb_frame_last_func
 
             Array result = new Array();
 
@@ -1908,7 +1909,7 @@ namespace Ruby.Methods
             }
             if (rest.Count != 2)
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
             }
             if (rest[0] is int)
             {

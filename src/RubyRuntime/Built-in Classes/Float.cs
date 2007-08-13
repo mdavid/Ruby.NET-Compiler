@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -40,7 +41,7 @@ namespace Ruby
 
         public override string ToString() // status: done
         {
-            return value.ToString();
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
 

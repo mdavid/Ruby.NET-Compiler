@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -206,7 +207,7 @@ namespace Ruby.Methods
             int argc = argv.Count;
             if (argc > 0)
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 0)", argc)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 0)", argc)).raise(caller);
             }
             else
             {

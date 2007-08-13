@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby.Methods
@@ -588,13 +589,13 @@ namespace Ruby.Methods
                 {
                     sigstr = String.rb_check_string_type(sig, caller).value;
                     if (sigstr == null)
-                        throw new ArgumentError(string.Format("bad signal type {0}", ((Basic)sig).my_class._name)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "bad signal type {0}", ((Basic)sig).my_class._name)).raise(caller);
                 }
 
                 if (sigstr.StartsWith("SIG"))
                     sigstr = sigstr.Substring(3);
                 if (!Signal.siglist.TryGetValue(sigstr, out signal))
-                    throw new ArgumentError(string.Format("unsupported name `SIG{0}'", sigstr)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "unsupported name `SIG{0}'", sigstr)).raise(caller);
             }
 
             if (signal < 0)

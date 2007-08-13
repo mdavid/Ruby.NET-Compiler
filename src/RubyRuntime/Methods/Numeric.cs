@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -33,7 +34,7 @@ namespace Ruby.Methods
         public override object Call2(Class last_class, object recv, Frame caller, Proc block, object param0, object param1)
         {
             /* Numerics are immutable values, which should not be copied */
-            throw new TypeError(string.Format("can't copy %s", ((Class)recv)._name)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't copy {0}", ((Class)recv)._name)).raise(caller);
         }
     }
 
@@ -392,7 +393,7 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            throw new TypeError(string.Format("can't define singleton method {0} for {1}", param0.ToString(), this.GetType().Name)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't define singleton method {0} for {1}", param0.ToString(), this.GetType().Name)).raise(caller);
         }
     }
 }

@@ -12,6 +12,7 @@ using Ruby;
 using Ruby.Runtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -502,7 +503,7 @@ namespace Ruby.Methods
 
         public override object Call(Class klass, object recv, Frame caller, Proc block, Array rest)
         {
-            Errors.rb_warn(string.Format("ENV#{0} is deprecated; use ENV#values_at", "indexes")); // rb_frame_last_func
+            Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, "ENV#{0} is deprecated; use ENV#values_at", "indexes")); // rb_frame_last_func
 
             Array ary = new Array();
 

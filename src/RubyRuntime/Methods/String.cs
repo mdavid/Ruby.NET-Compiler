@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -36,7 +37,7 @@ namespace Ruby.Methods
 
             if (argc < 1 || 2 < argc)
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 1)", argc)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 1)", argc)).raise(caller);
             }
 
             Array buf = new Array();
@@ -143,7 +144,7 @@ namespace Ruby.Methods
             }
             if (argc != 2)
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", argc)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", argc)).raise(caller);
             }
             return String.rb_str_aset(caller, str, argv[0], argv[1]);
         }
@@ -244,8 +245,8 @@ namespace Ruby.Methods
                     if (tmp == null)
                     {
 
-                        string errMsg = Class.CLASS_OF(sub)._name;                        
-                        throw new TypeError(string.Format("type mismatch: {0} given", errMsg)).raise(caller);                    
+                        string errMsg = Class.CLASS_OF(sub)._name;
+                        throw new TypeError(string.Format(CultureInfo.InvariantCulture, "type mismatch: {0} given", errMsg)).raise(caller);                    
                     }
                     sub = tmp;
                 }
@@ -330,7 +331,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new TypeError(string.Format("type mismatch: {0} given", Class.rb_obj_classname(sub))).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "type mismatch: {0} given", Class.rb_obj_classname(sub))).raise(caller);
             }
 
             return null;
@@ -356,7 +357,7 @@ namespace Ruby.Methods
             }
 
             if(numBase < 0){
-                throw new ArgumentError(string.Format("illegal radix {0}", numBase)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal radix {0}", numBase)).raise(caller);
             }
 
             return String.rb_str_to_inum(str, caller, numBase, false);
@@ -677,7 +678,7 @@ namespace Ruby.Methods
 
             if (arg is int)
             {
-                if (((String)recv).value.Contains(((int)arg).ToString()))
+                if (((String)recv).value.Contains(((int)arg).ToString(CultureInfo.InvariantCulture)))
                 {
                     return true;
                 }
@@ -804,7 +805,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
             }
 
             //pat = (Regexp)rest[0];
@@ -1358,7 +1359,7 @@ namespace Ruby.Methods
             }
             if (argc != 1)
             {
-                throw new ArgumentError(string.Format("wrong number of arguments (%d for 1)", argc)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 1)", argc)).raise(caller);
             }
             return String.rb_str_aref(caller, str, argv[0]);
         }
@@ -1381,7 +1382,7 @@ namespace Ruby.Methods
                 pos = str.Length + pos;
 
             if (pos < 0 || pos > str.Length)
-                throw new IndexError(string.Format("index {0} out of string", pos)).raise(caller);
+                throw new IndexError(string.Format(CultureInfo.InvariantCulture, "index {0} out of string", pos)).raise(caller);
 
             System.Text.StringBuilder sb = new System.Text.StringBuilder(str, str.Length + str2.Length);
             sb.Insert(pos, str2);
@@ -1461,7 +1462,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            return new String(((String)recv).value.ToUpper());
+            return new String(((String)recv).value.ToUpperInvariant());
         }
     }
 
@@ -1472,7 +1473,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            ((String)recv).value = ((String)recv).value.ToUpper();
+            ((String)recv).value = ((String)recv).value.ToUpperInvariant();
             return recv;
         }
     }
@@ -1484,7 +1485,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            return new String(((String)recv).value.ToLower());
+            return new String(((String)recv).value.ToLowerInvariant());
         }
     }
 
@@ -1495,7 +1496,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            ((String)recv).value = ((String)recv).value.ToLower();
+            ((String)recv).value = ((String)recv).value.ToLowerInvariant();
             return recv;
         }
     }
@@ -1676,7 +1677,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
             }
         }
     }
@@ -1720,7 +1721,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
             }
         }
     }
@@ -1765,7 +1766,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", rest.Count)).raise(caller);
             }
         }
     }
@@ -1855,7 +1856,7 @@ namespace Ruby.Methods
             send = str.Length;
             if (char.IsLower(str[s]))
             {
-                str[s] = char.ToUpper(str[s]);
+                str[s] = char.ToUpperInvariant(str[s]);
                 modify = true;
             }
             while (++s < send)
@@ -1865,7 +1866,7 @@ namespace Ruby.Methods
                     str[s] = (char)(str[s] + mbclen(str[s]) - 1);
                 }
                 else if(char.IsUpper(str[s])){
-                    str[s] = char.ToLower(str[s]);
+                    str[s] = char.ToLowerInvariant(str[s]);
                     modify = true;
                 }
             }
@@ -1888,7 +1889,7 @@ namespace Ruby.Methods
         {
             char[] c = ((String)recv).value.ToCharArray();
             for (int i = 0; i < c.Length; i++)
-                c[i] = (char.IsUpper(c[i])) ? char.ToLower(c[i]) : char.ToUpper(c[i]);
+                c[i] = (char.IsUpper(c[i])) ? char.ToLowerInvariant(c[i]) : char.ToUpperInvariant(c[i]);
 
             return new String(new string(c));
         }
@@ -1904,7 +1905,7 @@ namespace Ruby.Methods
             String str = (String)recv;
             char[] c = str.value.ToCharArray();
             for (int i = 0; i < c.Length; i++)
-                c[i] = (char.IsUpper(c[i])) ? char.ToLower(c[i]) : char.ToUpper(c[i]);
+                c[i] = (char.IsUpper(c[i])) ? char.ToLowerInvariant(c[i]) : char.ToUpperInvariant(c[i]);
 
             str.value = new string(c);
             return str;
@@ -2044,7 +2045,7 @@ namespace Ruby.Methods
 
 
             string val = String.StringValue(param0, caller);
-            return System.String.Compare(((String)recv).value, val, true);
+            return System.String.Compare(((String)recv).value, val, System.StringComparison.InvariantCultureIgnoreCase);
         }
     }
 

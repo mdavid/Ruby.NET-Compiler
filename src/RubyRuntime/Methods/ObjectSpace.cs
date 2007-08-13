@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby.Methods
@@ -188,13 +189,13 @@ namespace Ruby.Methods
             }
             catch (System.Collections.Generic.KeyNotFoundException)
             {
-                throw new RangeError(string.Format("{0} is not id value", ptr.ToString("x"))).raise(caller);
+                throw new RangeError(string.Format(CultureInfo.InvariantCulture, "{0} is not id value", ptr.ToString("x", CultureInfo.InvariantCulture))).raise(caller);
             }
 
             if (((result == null) || (result is bool) || (result is int)) || ((result is Basic) && ((Basic)result).my_class != null))
                 return result;
 
-            throw new RangeError(string.Format("{0} is recycled object", ptr.ToString("x"))).raise(caller);
+            throw new RangeError(string.Format(CultureInfo.InvariantCulture, "{0} is recycled object", ptr.ToString("x", CultureInfo.InvariantCulture))).raise(caller);
         }
     }
 }

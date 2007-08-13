@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 
 namespace Ruby.Methods
@@ -152,14 +153,14 @@ namespace Ruby.Methods
             {
                 string errorString = "incompatible marshal file format (can't be read)\n" +
                     "\tformat version {0}.{1} required; {2}.{3} given";
-                throw new TypeError(string.Format(errorString, Marshal.MARSHAL_MAJOR, Marshal.MARSHAL_MINOR, major, minor)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, errorString, Marshal.MARSHAL_MAJOR, Marshal.MARSHAL_MINOR, major, minor)).raise(caller);
             }
             if (Eval.Test(Options.ruby_verbose) && minor != Marshal.MARSHAL_MINOR)
             {
 
                 string errorString = "incompatible marshal file format (can be read)\n" +
                     "\tformat version {0}.{1} required; {2}.{3} given";
-                Errors.rb_warn(string.Format(errorString, Marshal.MARSHAL_MAJOR, Marshal.MARSHAL_MINOR, major, minor));
+                Errors.rb_warn(string.Format(CultureInfo.InvariantCulture, errorString, Marshal.MARSHAL_MAJOR, Marshal.MARSHAL_MINOR, major, minor));
             }
 
             arg.data   = new Hash();

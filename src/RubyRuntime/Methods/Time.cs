@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {  
@@ -350,7 +351,7 @@ namespace Ruby.Methods
 
             System.DateTime time = ((Time)recv).value;
             string ascTime;
-            ascTime = time.ToString("ddd MMM dd HH:mm:ss yyyy");
+            ascTime = time.ToString("ddd MMM dd HH:mm:ss yyyy", CultureInfo.InvariantCulture);
             return new String(ascTime);
         }
     }

@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -33,7 +34,7 @@ namespace Ruby
             object result = Object.Convert<Integer>(val, method, true, caller);
             if (!(result is int || result is Integer))
             {
-                throw new TypeError(string.Format("{0}#{1} should return Integer",
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0}#{1} should return Integer",
                     Class.CLASS_OF(val), method)).raise(caller);
             }
             else

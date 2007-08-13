@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -60,7 +61,7 @@ namespace Ruby
             catch
             {
                 if (raise_error)
-                    throw new TypeError(string.Format("{0} can't be coerced into {1}", Class.rb_obj_classname(y), Class.rb_obj_classname(x))).raise(caller); 
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "{0} can't be coerced into {1}", Class.rb_obj_classname(y), Class.rb_obj_classname(x))).raise(caller); 
 
                 return false;
             }
@@ -72,7 +73,7 @@ namespace Ruby
 
             if (!do_coerce(ref self, ref y, false, caller)
                 || null == (ret = Eval.CallPrivate(self, caller, func, null, y)))
-                throw new ArgumentError(string.Format("comparison of {0} with {1} failed", self, y)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "comparison of {0} with {1} failed", self, y)).raise(caller);
 
             return ret;
         }
@@ -131,7 +132,7 @@ namespace Ruby
                 }
                 catch (System.OverflowException)
                 {
-                    throw new RangeError(string.Format("float {0} out of range of integer", (double)o)).raise(caller);
+                    throw new RangeError(string.Format(CultureInfo.InvariantCulture, "float {0} out of range of integer", (double)o)).raise(caller);
                 }
             }
             else if (o is Bignum)

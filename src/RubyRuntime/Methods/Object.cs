@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -85,12 +86,12 @@ namespace Ruby.Methods
 
                 if ((bool)rb_inspecting_p(last_class, obj, caller, block))
                 {
-                    s = string.Format("#<{0}:0x{1:x} ...>", c, obj.GetHashCode());
+                    s = string.Format(CultureInfo.InvariantCulture, "#<{0}:0x{1:x} ...>", c, obj.GetHashCode());
                     return new String(s);
                 }
 
                 str = new String();
-                str.value = string.Format("-<{0}:0x{1:x}", c, obj.GetHashCode());
+                str.value = string.Format(CultureInfo.InvariantCulture, "-<{0}:0x{1:x}", c, obj.GetHashCode());
                 return rb_protect_inspect(last_class, caller, block, inspect_obj, obj, str);
             }
             return Eval.CallPrivate0(obj, caller, "to_s", null);

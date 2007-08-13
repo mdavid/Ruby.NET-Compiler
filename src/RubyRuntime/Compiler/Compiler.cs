@@ -60,19 +60,19 @@ namespace Ruby.Compiler
             {
                 if (arg.StartsWith("/"))
                 {
-                    if (arg.ToLower().StartsWith("/out:"))
+                    if (arg.StartsWith("/out:", StringComparison.InvariantCultureIgnoreCase))
                         outFile = arg.Substring(5);
-                    else if (arg.ToLower().StartsWith("/target:"))
-                        target = arg.Substring(8).ToLower();
-                    else if (arg.ToLower().StartsWith("/t:"))
-                        target = arg.Substring(3).ToLower();
-                    else if (arg.ToLower().StartsWith("/main:"))
+                    else if (arg.StartsWith("/target:", StringComparison.InvariantCultureIgnoreCase))
+                        target = arg.Substring(8).ToLowerInvariant();
+                    else if (arg.StartsWith("/t:", StringComparison.InvariantCultureIgnoreCase))
+                        target = arg.Substring(3).ToLowerInvariant();
+                    else if (arg.StartsWith("/main:", StringComparison.InvariantCultureIgnoreCase))
                         main = arg.Substring(6);
-                    else if (arg.ToLower().StartsWith("/debug:"))
-                        debug = arg.Substring(7).ToLower();
-                    else if (arg.ToLower().StartsWith("/debug"))
-                        debug = arg.Substring(6).ToLower();
-                    else if (arg.ToLower().StartsWith("/help") || arg.ToLower().StartsWith("/?"))
+                    else if (arg.StartsWith("/debug:", StringComparison.InvariantCultureIgnoreCase))
+                        debug = arg.Substring(7).ToLowerInvariant();
+                    else if (arg.StartsWith("/debug", StringComparison.InvariantCultureIgnoreCase))
+                        debug = arg.Substring(6).ToLowerInvariant();
+                    else if (arg.StartsWith("/help", StringComparison.InvariantCultureIgnoreCase) || arg.StartsWith("/?", StringComparison.InvariantCultureIgnoreCase))
                     {
                         Console.WriteLine("Usage RubyCompiler.exe {<options>|<sourcefiles>}");
                         Console.WriteLine();

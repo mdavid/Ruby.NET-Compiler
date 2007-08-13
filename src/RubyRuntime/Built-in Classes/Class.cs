@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -262,7 +263,7 @@ namespace Ruby
                 throw new TypeError("can't make subclass of virtual class").raise(caller);
 
             if (this._type != Type.Class)
-                throw new TypeError(System.String.Format("Superclass must be a Class ({0} given)", super._name)).raise(caller);
+                throw new TypeError(System.String.Format(CultureInfo.InvariantCulture, "Superclass must be a Class ({0} given)", super._name)).raise(caller);
         }
 
         public void define_alloc_func(MethodBody body)
@@ -370,7 +371,7 @@ namespace Ruby
                 access = Access.Private;
             else if ((_type == Type.Singleton) && name.Equals("allocate"))
             {
-                Errors.rb_warn((System.String.Format("defining {0}.allocate is deprecated; use define_alloc_func()", ((Class)attached)._name)));
+                Errors.rb_warn((System.String.Format(CultureInfo.InvariantCulture, "defining {0}.allocate is deprecated; use define_alloc_func()", ((Class)attached)._name)));
                 name = "allocator";
             }
 
@@ -400,7 +401,7 @@ namespace Ruby
                 Errors.rb_warn("removing " + name + " may cause serious problem");
 
             if (!_methods.ContainsKey(name) || (_methods[name] == null))
-                throw new NameError(System.String.Format("method `{0}' not defined in {1}", name, this._name)).raise(caller);
+                throw new NameError(System.String.Format(CultureInfo.InvariantCulture, "method `{0}' not defined in {1}", name, this._name)).raise(caller);
 
             _methods.Remove(name);
 
@@ -1077,10 +1078,10 @@ namespace Ruby
                 if (val is Class)
                     klass = (Class)val;
                 else
-                    throw new TypeError(System.String.Format("{0} is not a class", val)).raise(caller);
+                    throw new TypeError(System.String.Format(CultureInfo.InvariantCulture, "{0} is not a class", val)).raise(caller);
 
                 if ((type == Type.Module) && (klass._type != Type.Module))
-                    throw new TypeError(System.String.Format("{0} is not a module", val)).raise(caller);
+                    throw new TypeError(System.String.Format(CultureInfo.InvariantCulture, "{0} is not a module", val)).raise(caller);
 
                 // BBTAG: try skipping proxy classes when doing the base class check
                 if ((type == Type.Class) && (super != null) && (klass.super_real() != super))
@@ -1157,7 +1158,7 @@ namespace Ruby
             Object.CheckType<Class>(caller, arg);
             
             if (((Class)arg)._type != val)
-                throw new TypeError(string.Format("wrong argument type {0} ({1} expected)", ((Class)arg)._type, val.ToString())).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} ({1} expected)", ((Class)arg)._type, val.ToString())).raise(caller);
         }
 
         internal static void is_class_or_module(Frame caller, object arg, string msg)
@@ -1199,13 +1200,13 @@ namespace Ruby
             int argCount = args.Count;
 
             if (numMandatoryParams > argCount) //Not enough params supplied 
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for {1})", argCount, numMandatoryParams)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", argCount, numMandatoryParams)).raise(caller);
 
             if (!excessExpected)
             {
                 int numMaxParams = numMandatoryParams + numOptionalParams;
                 if (argCount > numMaxParams) //Too many params
-                    throw new ArgumentError(string.Format("wrong number of arguments ({0} for {1})", argCount, numMaxParams)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", argCount, numMaxParams)).raise(caller);
             }
 
             return argCount;

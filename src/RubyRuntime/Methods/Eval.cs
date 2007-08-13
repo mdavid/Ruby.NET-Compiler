@@ -11,6 +11,7 @@
 using Ruby;
 using Ruby.Runtime;
 using System.Collections.Generic;
+using System.Globalization;
 
 
 namespace Ruby.Methods
@@ -206,7 +207,7 @@ namespace Ruby.Methods
                 scope = new Binding(caller, self);
 
             if (!(scope is IContext))
-                throw new TypeError(string.Format("wrong argument type {0} (expected Proc/Binding)", scope.GetType())).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} (expected Proc/Binding)", scope.GetType())).raise(caller);
 
             return Eval.eval(self, (String)src, (IContext)scope, file, line, caller);
         }

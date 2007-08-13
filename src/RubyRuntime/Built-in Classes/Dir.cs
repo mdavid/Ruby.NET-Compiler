@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -72,7 +73,7 @@ namespace Ruby
         internal static Dir GetDIR(Frame caller, object obj)
         {
             if (!(obj is Dir))
-                throw new TypeError(string.Format("wrong argument type {0} (expected Dir)", ((Object)obj).my_class._name)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} (expected Dir)", ((Object)obj).my_class._name)).raise(caller);
 
             Dir dir = (Dir)obj;
             if (dir._dir == null)
@@ -94,7 +95,7 @@ namespace Ruby
 
             if (!(dir is Dir))
             {
-                throw new TypeError(string.Format("wrong argument type {0} (expected Dir)", ((Object)dir).my_class._name)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "wrong argument type {0} (expected Dir)", ((Object)dir).my_class._name)).raise(caller);
             }
             return (Dir)dir;
         }

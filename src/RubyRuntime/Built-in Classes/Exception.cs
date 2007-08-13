@@ -11,6 +11,7 @@
 using Ruby.Runtime;
 using Ruby;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -76,7 +77,7 @@ namespace Ruby
                 stderr.Write(caller.callPoint());
             stderr.Write("[BUG] ");
             stderr.Write(mesg);
-            stderr.Write(string.Format("\nruby {0} ({1}) [{2}]\n\n", new object[] { Version.ruby_version, Version.ruby_release_date, Version.ruby_platform }));
+            stderr.Write(string.Format(CultureInfo.InvariantCulture, "\nruby {0} ({1}) [{2}]\n\n", new object[] { Version.ruby_version, Version.ruby_release_date, Version.ruby_platform }));
 
             try
             {
@@ -152,7 +153,7 @@ namespace Ruby
 
         internal static TypeError rb_error_frozen(Frame caller, string what)
         {
-            return new TypeError(string.Format("can't modify frozen {0}", what));
+            return new TypeError(string.Format(CultureInfo.InvariantCulture, "can't modify frozen {0}", what));
         }
 
         internal static void rb_check_frozen(Frame caller, object obj)
@@ -260,7 +261,7 @@ namespace Ruby
 
         internal static NotImplementedError rb_notimplement(Frame caller, string method)
         {
-            return new NotImplementedError(string.Format("The {0}() function is unimplemented on this machine", method));
+            return new NotImplementedError(string.Format(CultureInfo.InvariantCulture, "The {0}() function is unimplemented on this machine", method));
         }
     }
 
@@ -291,9 +292,9 @@ namespace Ruby
 
                     string trace;
                     if (file != null)
-                        trace = System.String.Format("{0}:{1} in `{2}'", file, frame0.GetFileLineNumber(), methodName);
+                        trace = System.String.Format(CultureInfo.InvariantCulture, "{0}:{1} in `{2}'", file, frame0.GetFileLineNumber(), methodName);
                     else
-                        trace = System.String.Format("??? in `{0}'", methodName);
+                        trace = System.String.Format(CultureInfo.InvariantCulture, "??? in `{0}'", methodName);
 
                     backtrace.Add(new String(trace));
                 }
@@ -383,7 +384,7 @@ namespace Ruby
         internal static SystemCallError rb_sys_fail(string mesg, Frame caller)
         {
             if (Errno.errno == 0)
-                Exception.rb_bug(string.Format("rb_sys_fail({0}) - errno == 0", (mesg != null ? mesg : "")), caller);
+                Exception.rb_bug(string.Format(CultureInfo.InvariantCulture, "rb_sys_fail({0}) - errno == 0", (mesg != null ? mesg : "")), caller);
 
             SystemCallError error;
             if (Errno.errno == Errno.EPERM)
@@ -392,11 +393,11 @@ namespace Ruby
             }
             else if (Errno.errno == Errno.EPERM)
             {
-                error = new SystemCallError(string.Format("No such file or directory - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENOENT"), Errno.ENOENT);
+                error = new SystemCallError(string.Format(CultureInfo.InvariantCulture, "No such file or directory - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENOENT"), Errno.ENOENT);
             }
             else if (Errno.errno == Errno.EPERM)
             {
-                error = new SystemCallError(string.Format("Permission denied - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("EACCES"), Errno.EACCES);
+                error = new SystemCallError(string.Format(CultureInfo.InvariantCulture, "Permission denied - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("EACCES"), Errno.EACCES);
             }
             else
             {
@@ -412,16 +413,16 @@ namespace Ruby
             SystemCallError error = null;
             if (e is System.IO.FileNotFoundException || e is System.IO.DirectoryNotFoundException || e is System.IO.DriveNotFoundException)
             {
-                error = new SystemCallError(string.Format("No such file or directory - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENOENT"), Errno.ENOENT);
+                error = new SystemCallError(string.Format(CultureInfo.InvariantCulture, "No such file or directory - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENOENT"), Errno.ENOENT);
             }
             else if (e is System.IO.IOException)
             {
                 if (e.Message.Contains("ready"))
-                    error = new SystemCallError(string.Format("No such device or address - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENXIO"), Errno.ENXIO);
+                    error = new SystemCallError(string.Format(CultureInfo.InvariantCulture, "No such device or address - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("ENXIO"), Errno.ENXIO);
             }
             else if (e is System.UnauthorizedAccessException)
             {
-                error = new SystemCallError(string.Format("Permission denied - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("EACCES"), Errno.EACCES);
+                error = new SystemCallError(string.Format(CultureInfo.InvariantCulture, "Permission denied - {0}", mesg), (Class)Ruby.Runtime.Init.rb_mErrno.instance_variable_get("EACCES"), Errno.EACCES);
             }
 
             if (error == null)
@@ -433,7 +434,7 @@ namespace Ruby
             }
 
             if (e == null || (error.errno) == 0)
-                Exception.rb_bug(string.Format("rb_sys_fail({0}) - errno == 0", (mesg != null ? mesg : "")), caller);
+                Exception.rb_bug(string.Format(CultureInfo.InvariantCulture, "rb_sys_fail({0}) - errno == 0", (mesg != null ? mesg : "")), caller);
 
             return error;
         }

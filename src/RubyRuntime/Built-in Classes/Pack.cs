@@ -12,6 +12,7 @@ using Ruby.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -262,7 +263,7 @@ namespace Ruby
             }
             if (n > lenp)
             {
-                throw new ArgumentError(string.Format("malformed UTF-8 character (expected {0} bytes, given {1} bytes)", n, lenp)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "malformed UTF-8 character (expected {0} bytes, given {1} bytes)", n, lenp)).raise(caller);
             }
             lenp = n--;
             if (n != 0)
@@ -365,7 +366,7 @@ namespace Ruby
             {
                 return Bignum.rb_big2ulong_pack((Bignum)x, caller);
             }
-            throw new TypeError(string.Format("cannot convert {0} to `integer'", Class.CLASS_OF(x)._name)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "cannot convert {0} to `integer'", Class.CLASS_OF(x)._name)).raise(caller);
         }
 
         internal static ulong num2i64(object x, Frame caller)
@@ -381,7 +382,7 @@ namespace Ruby
             {
                 return Bignum.rb_big2uquad_pack((Bignum)x, caller);
             }
-            throw new TypeError(string.Format("cannot convert {0} to `integer'", Class.CLASS_OF(x)._name)).raise(caller);
+            throw new TypeError(string.Format(CultureInfo.InvariantCulture, "cannot convert {0} to `integer'", Class.CLASS_OF(x)._name)).raise(caller);
         }
 
         internal static object i64_2_num(long x, Frame caller)

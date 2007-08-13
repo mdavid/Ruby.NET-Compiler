@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -99,7 +100,7 @@ namespace Ruby.Methods
             Range range = (Range)recv;
 
             if (!Eval.RespondTo(range.Begin, "succ"))
-                throw new TypeError(string.Format("cannot iterate from {0}", (Class.CLASS_OF(range.Begin)._name))).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "cannot iterate from {0}", (Class.CLASS_OF(range.Begin)._name))).raise(caller);
                 
             if (range.Begin is int && range.End is int)
             {
@@ -164,7 +165,7 @@ namespace Ruby.Methods
             else if (rest.Count == 1)
                 step = Numeric.rb_num2long(rest[0], caller);
             else
-                throw new ArgumentError(string.Format("wrong number of arguments ({0} for 1)", rest.Count)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 1)", rest.Count)).raise(caller);
 
             if (step < 0)
                 throw new ArgumentError("step can't be negative").raise(caller);
@@ -199,7 +200,7 @@ namespace Ruby.Methods
             else
             {
                 if (!Eval.RespondTo(range.Begin, "succ"))
-                    throw new TypeError(string.Format("cannot iterate from {0}", Class.rb_obj_classname(range.Begin))).raise(caller);
+                    throw new TypeError(string.Format(CultureInfo.InvariantCulture, "cannot iterate from {0}", Class.rb_obj_classname(range.Begin))).raise(caller);
 
                 object current = range.Begin;
 

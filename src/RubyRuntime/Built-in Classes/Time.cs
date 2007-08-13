@@ -15,6 +15,7 @@ using System;
 namespace Ruby
 {
     using Methods;
+    using System.Globalization;
 
 
     public partial class Time : Basic
@@ -133,31 +134,31 @@ namespace Ruby
                     switch (c)
                     {
                         case 'a':
-                            result.Append(dt.ToString("ddd"));
+                            result.Append(dt.ToString("ddd", CultureInfo.InvariantCulture));
                             break;
                         case 'A':
-                            result.Append(dt.ToString("dddd"));
+                            result.Append(dt.ToString("dddd", CultureInfo.InvariantCulture));
                             break;
                         case 'b':
-                            result.Append(dt.ToString("MMM"));
+                            result.Append(dt.ToString("MMM", CultureInfo.InvariantCulture));
                             break;
                         case 'B':
-                            result.Append(dt.ToString("MMMM"));
+                            result.Append(dt.ToString("MMMM", CultureInfo.InvariantCulture));
                             break;
                         case 'c':
-                            result.Append(dt.ToString());
+                            result.Append(dt.ToString(CultureInfo.InvariantCulture));
                             break;
                         case 'd':
-                            result.Append(dt.ToString("dd"));
+                            result.Append(dt.ToString("dd", CultureInfo.InvariantCulture));
                             break;
                         case 'H':
-                            result.Append(dt.ToString("HH"));
+                            result.Append(dt.ToString("HH", CultureInfo.InvariantCulture));
                             break;
                         case 'I':
-                            result.Append(dt.ToString("hh"));
+                            result.Append(dt.ToString("hh", CultureInfo.InvariantCulture));
                             break;
                         case 'j':
-                            string day = dt.DayOfYear.ToString();
+                            string day = dt.DayOfYear.ToString(CultureInfo.InvariantCulture);
                             if (day.Length < 3)
                             {
                                 if (day.Length == 1)
@@ -172,16 +173,16 @@ namespace Ruby
                             result.Append(day);
                             break;
                         case 'm':
-                            result.Append(dt.ToString("MM"));
+                            result.Append(dt.ToString("MM", CultureInfo.InvariantCulture));
                             break;
                         case 'M':
-                            result.Append(dt.ToString("mm"));
+                            result.Append(dt.ToString("mm", CultureInfo.InvariantCulture));
                             break;
                         case 'p':
-                            result.Append(dt.ToString("tt"));
+                            result.Append(dt.ToString("tt", CultureInfo.InvariantCulture));
                             break;
                         case 'S':
-                            result.Append(dt.ToString("ss"));
+                            result.Append(dt.ToString("ss", CultureInfo.InvariantCulture));
                             break;
                         case 'U':
                             {
@@ -191,7 +192,7 @@ namespace Ruby
                                 {
                                     weekOfYear--;
                                 }
-                                result.Append(weekOfYear.ToString());
+                                result.Append(weekOfYear.ToString(CultureInfo.InvariantCulture));
                             }
                             break;
                         case 'W':
@@ -202,23 +203,23 @@ namespace Ruby
                                 {
                                     weekOfYear--;
                                 }
-                                result.Append(weekOfYear.ToString());
+                                result.Append(weekOfYear.ToString(CultureInfo.InvariantCulture));
                             }
                             break;
                         case 'w':
-                            result.Append(((int)dt.DayOfWeek).ToString());
+                            result.Append(((int)dt.DayOfWeek).ToString(CultureInfo.InvariantCulture));
                             break;
                         case 'x':
-                            result.Append(dt.ToString("d"));
+                            result.Append(dt.ToString("d", CultureInfo.InvariantCulture));
                             break;
                         case 'X':
-                            result.Append(dt.ToString("t"));
+                            result.Append(dt.ToString("t", CultureInfo.InvariantCulture));
                             break;
                         case 'y':
-                            result.Append(dt.ToString("t"));
+                            result.Append(dt.ToString("t", CultureInfo.InvariantCulture));
                             break;
                         case 'Y':
-                            result.Append(dt.ToString("yyyy"));
+                            result.Append(dt.ToString("yyyy", CultureInfo.InvariantCulture));
                             break;
                         case 'Z':
                             {
@@ -227,7 +228,7 @@ namespace Ruby
                             }
                             break;
                         case '%':
-                            result.Append(dt.ToString("%"));
+                            result.Append(dt.ToString("%", CultureInfo.InvariantCulture));
                             break;
                         default:
                             //invalid format - do nothing
@@ -308,7 +309,7 @@ namespace Ruby
                 secs = (int)time;
                 if (interval && secs < 0)
                 {
-                    throw new ArgumentError(string.Format("{0} must be positive", tstr)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} must be positive", tstr)).raise(caller);
                 }
                 usec = 0;
 
@@ -317,7 +318,7 @@ namespace Ruby
             {
                 if (interval && ((Float)time).value < 0.0)
                 {
-                    throw new ArgumentError(string.Format("{0} must be positive", tstr)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} must be positive", tstr)).raise(caller);
                 }
                 else
                 {
@@ -326,7 +327,7 @@ namespace Ruby
                     secs = (long)f;
                     if (f != secs)
                     {
-                        throw new RangeError(string.Format("{0} out of Time range", ((Float)time).value)).raise(caller);
+                        throw new RangeError(string.Format(CultureInfo.InvariantCulture, "{0} out of Time range", ((Float)time).value)).raise(caller);
                     }
                     usec = (long)(d * 1e6);
                 }
@@ -336,13 +337,13 @@ namespace Ruby
                 secs = Numeric.rb_num2long(time, caller);
                 if (interval && secs < 0)
                 {
-                    throw new ArgumentError(string.Format("{0} must be positive", tstr)).raise(caller);
+                    throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "{0} must be positive", tstr)).raise(caller);
                 }
                 usec = 0;
             }
             else
             {
-                throw new TypeError(string.Format("can't convert {0} into {1}", Marshal.rb_obj_classname(time, caller), tstr)).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "can't convert {0} into {1}", Marshal.rb_obj_classname(time, caller), tstr)).raise(caller);
             }
         }
 
@@ -482,7 +483,7 @@ namespace Ruby
             sec_off = (uint)f;
             if (f != (double)sec_off)
             {
-                throw new RangeError(string.Format("time {0} {1} out of Time range", sign < 0 ? "-" : "+", v)).raise(caller);
+                throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time {0} {1} out of Time range", sign < 0 ? "-" : "+", v)).raise(caller);
             }
             
             usec_off = (long)(d * 1e6);
@@ -496,7 +497,7 @@ namespace Ruby
                 //a different type of error later on from a different location.
                 if (sec < -2147483648)
                 {
-                    throw new RangeError(string.Format("time - {0} out of Time range", v)).raise(caller);
+                    throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time - {0} out of Time range", v)).raise(caller);
                 }
             }
             else {
@@ -506,7 +507,7 @@ namespace Ruby
                 //wartag: simple rangeerror once we get over (2^31-1)
                 if (sec > 2147483647)
                 {
-                    throw new RangeError(string.Format("time - {0} out of Time range", v)).raise(caller);
+                    throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time - {0} out of Time range", v)).raise(caller);
                 }
             }
             //Time.CheckAddition(tobj.value, Time.GetTicks(sec, usec), caller);
@@ -612,7 +613,7 @@ namespace Ruby
                     tm.tm_mon = -1;
                     for (int i = 0; i < 12; i++)
                     {
-                        if (s.value.Length == 3 && string.Compare(s.value, Time.months[i], true) == 0)
+                        if (s.value.Length == 3 && string.Compare(s.value, Time.months[i], StringComparison.InvariantCultureIgnoreCase) == 0)
                         {
                             tm.tm_mon = i;
                             break;

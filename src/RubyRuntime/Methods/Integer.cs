@@ -10,6 +10,7 @@
 
 using Ruby.Runtime;
 using Ruby;
+using System.Globalization;
 
 namespace Ruby.Methods
 {
@@ -30,7 +31,7 @@ namespace Ruby.Methods
             }
             else
             {
-                throw new TypeError(string.Format("failed to convert {0} into Integer", Class.rb_obj_classname(p1))).raise(caller);
+                throw new TypeError(string.Format(CultureInfo.InvariantCulture, "failed to convert {0} into Integer", Class.rb_obj_classname(p1))).raise(caller);
             }
         }
     }
@@ -189,7 +190,7 @@ namespace Ruby.Methods
             int i = Numeric.rb_num2long(recv, caller);
 
             if (i < 0 || 0xFF < i)
-                throw new RangeError(string.Format("{0} out of char range", i)).raise(caller);
+                throw new RangeError(string.Format(CultureInfo.InvariantCulture, "{0} out of char range", i)).raise(caller);
 
             return new String(((char)i).ToString());
         }

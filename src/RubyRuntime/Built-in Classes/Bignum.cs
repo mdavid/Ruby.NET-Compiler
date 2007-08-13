@@ -9,6 +9,7 @@
 **********************************************************************/
 
 using Ruby.Runtime;
+using System.Globalization;
 
 namespace Ruby
 {
@@ -28,7 +29,7 @@ namespace Ruby
             // IronMath's make method for doubles is very naive
             // build IronMath integer by parsing the double
 
-            string number = value.ToString("e14");
+            string number = value.ToString("e14", CultureInfo.InvariantCulture);
             int eIndex = number.IndexOf('e');
             if (number[eIndex - 1] == '0')
             {
@@ -44,12 +45,12 @@ namespace Ruby
             }
             number = number.Remove(number.IndexOf('.'), 1);
 
-            int exp = int.Parse(number.Substring(number.IndexOf('e') + 1));
+            int exp = int.Parse(number.Substring(number.IndexOf('e') + 1), CultureInfo.InvariantCulture);
             exp -= number.IndexOf('e') - 1;
             if (value < 0)
                 exp++;
 
-            int digits = int.Parse(number.Remove(number.IndexOf('e')));
+            int digits = int.Parse(number.Remove(number.IndexOf('e')), CultureInfo.InvariantCulture);
 
             IronMath.integer x = IronMath.integer.make(digits);
             IronMath.integer y = IronMath.integer.make(10).pow(exp);
@@ -342,7 +343,7 @@ namespace Ruby
                 default:
                     if (numBase < 2 || 36 < numBase)
                     {
-                        throw new ArgumentError(string.Format("illegal radix {0}", numBase)).raise(caller);
+                        throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "illegal radix {0}", numBase)).raise(caller);
                     } 
                     if (numBase <= 32)
                     {
