@@ -151,10 +151,11 @@ namespace Ruby.Interop
         {
             if (parameter.IsInstanceOfType(arg))
                 return 1;
-            else if (arg is Basic && parameter.IsInstanceOfType(((Basic)arg).Inner()))
+            if (arg is Basic && parameter.IsInstanceOfType(((Basic)arg).Inner()))
                 return 0;
-            else
-                return -1;
+            if (arg == null && parameter.IsValueType)
+                return 1;
+            return -1;
         }
     }
 
