@@ -109,15 +109,31 @@ namespace Ruby.Compiler
             if (perwapiClass != null)
                 return perwapiClass;
 
-            List<PERWAPI.ReferenceScope> rubyRuntimeList = new List<PERWAPI.ReferenceScope>();
+            List<PERWAPI.ReferenceScope> dlls = new List<PERWAPI.ReferenceScope>();
 
             if (Ruby.Compiler.Compiler.peRubyRuntime == null)
                 Ruby.Compiler.Compiler.peRubyRuntime = PERWAPI.PEFile.ReadExportedInterface(Ruby.Compiler.Compiler.FindFile(Ruby.Compiler.Compiler.RUBY_RUNTIME, Ruby.Compiler.Compiler.GetPath()).FullName);
 
             if (Ruby.Compiler.Compiler.peRubyRuntime != null)
             {
-                rubyRuntimeList.Add(Ruby.Compiler.Compiler.peRubyRuntime);
-                return GetClassFromPEFile(node, rubyRuntimeList, "Ruby");
+                dlls.Add(Ruby.Compiler.Compiler.peRubyRuntime);
+                ClassRef classRef = GetClassFromPEFile(node, dlls, "Ruby");
+                if (classRef != null)
+                    return classRef;
+            }
+
+            dlls.Clear();
+
+            // finally look in mscorlib
+            if (Ruby.Compiler.Compiler.mscorlib != null)
+                Ruby.Compiler.Compiler.mscorlib = PERWAPI.PEFile.ReadExportedInterface(Ruby.Compiler.Compiler.FindFile("mscorlib.dll", Ruby.Compiler.Compiler.GetPath()).FullName);
+
+            if (Ruby.Compiler.Compiler.mscorlib != null)
+            {
+                dlls.Add(Ruby.Compiler.Compiler.mscorlib);
+                ClassRef classRef = GetClassFromPEFile(node, dlls, "");
+                if (classRef != null)
+                    return classRef;
             }
 
             return null;

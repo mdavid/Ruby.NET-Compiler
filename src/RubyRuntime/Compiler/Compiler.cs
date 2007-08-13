@@ -22,20 +22,12 @@ namespace Ruby.Compiler
         public static List<string> GetPath()
         {
             List<string> pathSet = new List<string>();
-            string RUBYLIB = System.Environment.GetEnvironmentVariable("RUBYLIB");
-            string PATH = System.Environment.GetEnvironmentVariable("PATH");
-
-            if (RUBYLIB != null)
-                foreach (string path in RUBYLIB.Split(';'))
-                    pathSet.Add(path.Trim());
-
-            if (PATH != null)
-                foreach (string path in PATH.Split(';'))
-                    pathSet.Add(path.Trim());
 
             string CLRpath = (string)Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Microsoft").OpenSubKey(".NETFramework").GetValue("InstallRoot");
             pathSet.Add(CLRpath + "v2.0.50727");
-            pathSet.Add(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            assemblyLocation = assemblyLocation.Remove(assemblyLocation.LastIndexOf('\\'));
+            pathSet.Add(assemblyLocation);
 
             return pathSet;
         }
