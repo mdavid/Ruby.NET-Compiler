@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Emit;
 using Ruby.Methods;
 using Ruby.Runtime;
 using Ruby;
@@ -74,7 +75,12 @@ namespace Ruby.Interop
             if (this._type == Type.IClass)
             {
                 if (methodId == "new")
-                    return new CLRMethod(new List<MethodBase>(clrtype.GetConstructors(BindingFlags.Public | BindingFlags.Instance)), this);
+                {
+                    if (clrtype.IsSubclassOf(typeof(System.Delegate)))
+                        return new RubyMethod(new DelegateConstructor(clrtype), 0, Access.Public, this);
+                    else
+                        return new CLRMethod(new List<MethodBase>(clrtype.GetConstructors(BindingFlags.Public | BindingFlags.Instance)), this);
+                }
                 else if (methodId == "allocator")
                     return new RubyMethod(Methods.rb_class_allocate_instance.singleton, 0, Access.Private, this);
 
@@ -224,6 +230,70 @@ namespace Ruby.Interop
             }
             else
                 throw new Exception("matching method not found").raise(caller);
+        }
+    }
+
+    internal class DelegateConstructor : Ruby.Runtime.MethodBody0
+    {
+        public DelegateConstructor(System.Type delegateType)
+        {
+            this.delegateType = delegateType;
+        }
+
+        System.Type delegateType;
+        DynamicMethod wrapper;
+
+        internal DynamicMethod BuildWrapper()
+        {
+            MethodInfo mi = delegateType.GetMethod("Invoke");
+            ParameterInfo[] param = mi.GetParameters();
+            System.Type[] args = new System.Type[param.Length + 1];
+            args[0] = typeof(Ruby.Proc);
+
+            for (int i = 0; i < param.Length; i++)
+                args[i + 1] = param[i].ParameterType;
+
+            DynamicMethod dm = new DynamicMethod(
+                "proc_invoker", mi.ReturnType, args, typeof(Ruby.Proc), true);
+            ILGenerator il = dm.GetILGenerator();
+            
+            il.Emit(OpCodes.Ldarg_0); // proc
+            il.Emit(OpCodes.Ldnull); // caller
+
+            il.Emit(OpCodes.Ldc_I4, param.Length); // params object[] args
+            il.Emit(OpCodes.Newarr, typeof(System.Object));
+
+            for (int i = 0; i < param.Length; i++)
+            {
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Ldc_I4, i);
+                il.Emit(OpCodes.Ldarg, i + 1);
+                if (param[i].ParameterType.IsValueType)
+                    il.Emit(OpCodes.Box);
+                il.Emit(OpCodes.Stelem, typeof(System.Object));
+            }
+
+            il.Emit(OpCodes.Call, typeof(Ruby.Proc).GetMethod(
+                "yield", BindingFlags.Instance | BindingFlags.NonPublic));
+
+            if (mi.ReturnType == typeof(void))
+                il.Emit(OpCodes.Pop);
+            else if (mi.ReturnType.IsValueType)
+                il.Emit(OpCodes.Unbox, mi.ReturnType);
+            else
+                il.Emit(OpCodes.Castclass, mi.ReturnType);
+
+            il.Emit(OpCodes.Ret);
+
+            return dm;
+        }
+
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
+        {
+            if (wrapper == null)
+                wrapper = BuildWrapper();
+
+            return wrapper.CreateDelegate(delegateType, block);
         }
     }
 
