@@ -44,6 +44,10 @@ class Form1 < System::Windows::Forms::Form
 		
 		get_Controls.Add(@button1)
 
+		@button1.add_Click(System::EventHandler.new { 
+			System::Windows::Forms::MessageBox.Show("Message!")
+		})
+
 		set_ClientSize(System::Drawing::Size.new(600, 300))
 		set_Name("Form1")
 		set_Text("Form1")
