@@ -11,6 +11,8 @@
 using Ruby.Methods;
 using Ruby;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Ruby.Runtime;
 
     // Ruby.Inits - defines standard Ruby classes and modules and binds their methods
@@ -1876,7 +1878,7 @@ namespace Ruby.Runtime
             Class.rb_define_module_function(rb_mSignal, "list", sig_list.singleton, 0, null);
 
             Signal.install_sighandler(Signal.SIGINT, Signal.sighandler);
-            Signal.install_sighandler(Signal.SIGSEGV, Signal.sigsegv);
+            //Signal.install_sighandler(Signal.SIGSEGV, Signal.sigsegv);
         }
 
         static void Init_process()
@@ -2034,8 +2036,8 @@ namespace Ruby.Runtime
                 foreach (string path in RUBYLIB.Split(';'))
                     ((Array)Eval.rb_load_path.value).Add(new String(path.Trim()));
 
-            string CLRpath = (string)Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Microsoft").OpenSubKey(".NETFramework").GetValue("InstallRoot");
-            ((Array)Eval.rb_load_path.value).Add(new String(CLRpath + "v2.0.50727"));
+            string CLRpath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(string)).Location);
+            ((Array)Eval.rb_load_path.value).Add(new String(CLRpath));
         }
 
         static void Init_Proc()

@@ -1,6 +1,8 @@
 using Ruby;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Ruby.Runtime;
@@ -23,9 +25,9 @@ namespace Ruby.Compiler
         {
             List<string> pathSet = new List<string>();
 
-            string CLRpath = (string)Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Microsoft").OpenSubKey(".NETFramework").GetValue("InstallRoot");
-            pathSet.Add(CLRpath + "v2.0.50727");
-            string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string CLRpath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(string)).Location);
+            pathSet.Add(CLRpath);
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
             assemblyLocation = assemblyLocation.Remove(assemblyLocation.LastIndexOf('\\'));
             pathSet.Add(assemblyLocation);
 
