@@ -72,37 +72,116 @@ namespace Ruby.Interop
 
         private RubyMethod FindCLRMethod(string methodId, System.Type clrtype)
         {
+            BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
             if (this._type == Type.IClass)
             {
                 if (methodId == "new")
                 {
                     if (clrtype.IsSubclassOf(typeof(System.Delegate)))
+                    {
                         return new RubyMethod(new DelegateConstructor(clrtype), 0, Access.Public, this);
+                    }
                     else
-                        return new CLRMethod(new List<MethodBase>(clrtype.GetConstructors(BindingFlags.Public | BindingFlags.Instance)), this);
+                    {
+                        ConstructorInfo[] ci = clrtype.GetConstructors();
+
+                        if (ci == null || ci.Length == 0)
+                            return null;
+
+                        MethodBase[] mi = new MethodBase[ci.Length];
+                        System.Array.Copy(ci, mi, ci.Length);
+                        return new RubyMethod(new MultiMethod(mi), -1, Access.Public, this);
+                    }
                 }
                 else if (methodId == "allocator")
+                {
                     return new RubyMethod(Methods.rb_class_allocate_instance.singleton, 0, Access.Private, this);
+                }
 
-                List<MethodBase> methods = new List<MethodBase>(clrtype.GetMethods(BindingFlags.Public | BindingFlags.Static)).FindAll(delegate(MethodBase item) { return item.Name == methodId; });
-
-                if (methods.Count > 0)
-                    return new CLRMethod(methods, this);
-                else
-                    return null;
+                flags = BindingFlags.Static | BindingFlags.Public;
             }
-            else
+
+            if (methodId == "initialize")
+                return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
+
+            bool is_setter = false;
+            // methods ending with "=" are expected to be either
+            // field or property setters
+            if (methodId.EndsWith("="))
             {
-                if (methodId == "initialize")
-                    return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
-
-                List<MethodBase> methods = new List<MethodBase>(clrtype.GetMethods(BindingFlags.Public | BindingFlags.Instance)).FindAll(delegate(MethodBase item) { return item.Name == methodId; });
-
-                if (methods.Count > 0)
-                    return new CLRMethod(methods, this);
-                else
-                    return null;
+                is_setter = true;
+                methodId = methodId.Substring(0, methodId.Length - 1);
             }
+
+            if (methodId == "[]")
+            {
+                object[] attributes = clrtype.GetCustomAttributes(
+                    typeof(System.Reflection.DefaultMemberAttribute), true);
+
+                if (attributes.Length > 0)
+                {
+                    methodId = ((DefaultMemberAttribute)attributes[0]).MemberName;
+                }
+            }
+
+            MemberInfo[] members = clrtype.GetMember(methodId, flags);
+
+            if (members == null || members.Length == 0)
+                return null;
+
+            if (members[0] is MethodBase)
+            {
+                if (is_setter)
+                    return null;
+
+                MethodBase[] methods = new MethodBase[members.Length];
+                System.Array.Copy(members, methods, members.Length);
+                return new RubyMethod(new MultiMethod(methods), -1, Access.Public, this);
+            }
+
+            if (members[0] is PropertyInfo)
+            {
+                // not all the property overloads may have the getter/setter
+                // we're looking for, so we maintain a count and resize
+                // the methods array later if necessary
+                int count = 0;
+                MethodBase[] methods = new MethodBase[members.Length];
+                
+                foreach (PropertyInfo pi in members)
+                {
+                    MethodInfo method = is_setter ? pi.GetSetMethod() : pi.GetGetMethod();
+                    if (method != null)
+                        methods[count++] = method;
+                }
+                
+                if (count == 0)
+                    return null;
+
+                if (count < members.Length)
+                    System.Array.Resize(ref methods, count);
+
+                return new RubyMethod(new MultiMethod(methods), -1, Access.Public, this);
+            }
+
+            FieldInfo field = members[0] as FieldInfo;
+            if (field != null)
+            {
+                if (is_setter)
+                    return new RubyMethod(new FieldSetter(field), 1, Access.Public, this);
+                else
+                    return new RubyMethod(new FieldGetter(field), 0, Access.Public, this);
+            }
+
+            //EventInfo eventinfo = members[0] as EventInfo;
+            //if (eventinfo != null)
+            //{
+            //    return ...;
+            //}
+
+            //Type type = members[0] as Type;
+            //TODO: nested types?
+
+            return null;
         }
 
         internal static void LoadCLRAssembly(System.Reflection.Assembly Assembly, Frame caller)
@@ -143,85 +222,117 @@ namespace Ruby.Interop
         }
     }
 
-    internal class CLRMethod : RubyMethod
+    internal class FieldGetter : Ruby.Runtime.MethodBody0
     {
-        private List<MethodBase> methods;
-
-        internal CLRMethod(List<MethodBase> methods, Class definingClass)
-            : base(new CLRMethodBody(methods), -1, Access.Public, definingClass)
+        FieldInfo field;
+        internal FieldGetter(FieldInfo field)
         {
-            this.methods = methods;
+            this.field = field;
         }
 
-        internal static int Matches(System.Type parameter, object arg)
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            if (parameter.IsInstanceOfType(arg))
-                return 1;
-            if (arg is Basic && parameter.IsInstanceOfType(((Basic)arg).Inner()))
-                return 0;
-            if (arg == null && parameter.IsValueType)
-                return 1;
-            return -1;
+            return field.GetValue(recv);
         }
     }
 
-
-    internal class CLRMethodBody : Ruby.Runtime.MethodBody
+    internal class FieldSetter : Ruby.Runtime.MethodBody1
     {
-        private List<MethodBase> methods;
+        FieldInfo field;
+        internal FieldSetter(FieldInfo field)
+        {
+            this.field = field;
+        }
 
-        internal CLRMethodBody(List<MethodBase> methods)
+        public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
+        {
+            field.SetValue(recv, p1);
+            return p1;
+        }
+    }
+
+    internal class MultiMethod : Ruby.Runtime.MethodBody
+    {
+        MethodBase[] methods;
+
+        internal MultiMethod(MethodBase[] methods)
         {
             this.methods = methods;
         }
 
-        public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
+        internal enum MatchResult
         {
-            MethodBase matching_method = null;
-            bool[] conversion = null;
-            bool conversions = false;
+            NoMatch,
+            Exact,
+            BasicConversion
+        }
+
+        private static MatchResult MatchArgument(System.Type parameter, object arg)
+        {
+            if (parameter.IsInstanceOfType(arg))
+                return MatchResult.Exact;
+            if (arg is Basic && parameter.IsInstanceOfType(((Basic)arg).Inner()))
+                return MatchResult.BasicConversion;
+            if (arg == null && !parameter.IsValueType)
+                return MatchResult.Exact;
+            return MatchResult.NoMatch;
+        }
+
+        private MethodBase MatchArguments(object[] args, out MatchResult[] conversions)
+        {
+            conversions = new MatchResult[args.Length];
+
             foreach (MethodBase method in methods)
             {
                 ParameterInfo[] parameters = method.GetParameters();
                 if (parameters.Length != args.Length)
                     continue;
-                conversion = new bool[args.Length];
-                bool match = true;
-                conversions = false;
+
                 for (int i = 0; i < args.Length; i++)
                 {
-                    int test = CLRMethod.Matches(parameters[i].ParameterType, args[i]);
-                    if (test < 0)
-                    {
-                        match = false;
-                        break;
-                    }
-                    if (test == 0)
-                    {
-                        conversion[i] = true;
-                        conversions = true;
-                    }
+                    MatchResult result = MatchArgument(parameters[i].ParameterType, args[i]);
+                    if (result == MatchResult.NoMatch)
+                        goto next_method;
+                    else
+                        conversions[i] = result;
                 }
-                if (!match)
-                    continue;
 
-                matching_method = method;
-                break;
+                return method;
+
+                next_method: ;
             }
 
-            if (matching_method != null)
+            return null;
+        }
+
+        public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
+        {
+            object[] out_args = args.ToArray(); 
+            MatchResult[] conversions;
+            MethodBase method = MatchArguments(out_args, out conversions);
+
+            if (method != null)
             {
-                if (conversions)
-                    for (int i = 0; i< args.Length; i++)
-                        if (conversion[i])
-                            args[i] = ((Basic)args[i]).Inner();
+                for (int i = 0; i < args.Length; i++)
+                {
+                    switch (conversions[i])
+                    {
+                        case MatchResult.Exact:
+                            break;
+                        case MatchResult.BasicConversion:
+                            out_args[i] = ((Basic)out_args[i]).Inner();
+                            break;
+                        default:
+                            throw new System.NotSupportedException();
+                    }
+                }
 
                 try
                 {
-                    if (matching_method.IsConstructor)
-                        return ((ConstructorInfo)matching_method).Invoke(args.ToArray());
+                    if (!method.IsConstructor)
+                        return method.Invoke(recv, out_args);
                     else
-                        return matching_method.Invoke(recv, args.ToArray());
+                        return ((ConstructorInfo)method).Invoke(out_args);
                 }
                 catch (System.Reflection.TargetInvocationException e)
                 {
@@ -229,7 +340,12 @@ namespace Ruby.Interop
                 }
             }
             else
-                throw new Exception("matching method not found").raise(caller);
+            {
+                throw new Exception(
+                    string.Format("couldn't match arguments to ({0}:{1})",
+                    this.methods[0].DeclaringType.FullName,
+                    this.methods[0].Name)).raise(caller);
+            }
         }
     }
 
@@ -269,7 +385,7 @@ namespace Ruby.Interop
                 il.Emit(OpCodes.Ldc_I4, i);
                 il.Emit(OpCodes.Ldarg, i + 1);
                 if (param[i].ParameterType.IsValueType)
-                    il.Emit(OpCodes.Box);
+                    il.Emit(OpCodes.Box, param[i].ParameterType);
                 il.Emit(OpCodes.Stelem, typeof(System.Object));
             }
 
