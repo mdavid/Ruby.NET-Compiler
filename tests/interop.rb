@@ -22,7 +22,7 @@ def test_ok(cond,n=1)
 end
 
 require "mscorlib"
-require "system"
+require "System"
 mscorlib = System::Reflection::Assembly::Load("mscorlib")
 
 def clr_string(s)
