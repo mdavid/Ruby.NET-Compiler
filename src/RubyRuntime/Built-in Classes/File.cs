@@ -10,6 +10,7 @@
 
 
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Build.Utilities;
 using Ruby.Runtime;
 using System.Globalization;
@@ -762,11 +763,11 @@ namespace Ruby
             if (is_absolute_path(fname))
                 return find_fullname(fname, try_add_ext);
 
-            fname = fname.Replace('/', '\\');
+            fname = fname.Replace('/', Path.DirectorySeparatorChar);
 
             foreach (String dir in path)
             {
-                string fullname = find_fullname(dir.value + @"\" + fname, try_add_ext);
+                string fullname = find_fullname(Path.Combine(dir.value, fname), try_add_ext);
                 if (fullname != null)
                     return fullname;
             }
@@ -830,7 +831,7 @@ namespace Ruby
         internal static string basename(string name)
         {
             System.IO.FileInfo file = new System.IO.FileInfo(name);
-            return file.DirectoryName + @"\" + file.Name.Substring(0, file.Name.Length - file.Extension.Length);
+            return Path.Combine(file.DirectoryName, file.Name.Substring(0, file.Name.Length - file.Extension.Length));
         }
 
         internal static string stripExtension(string name)

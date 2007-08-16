@@ -12,6 +12,7 @@ using Ruby.Runtime;
 using Ruby;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using PERWAPI;
 using System.Globalization;
@@ -387,7 +388,7 @@ namespace Ruby.Compiler
                             script = args[i];
                     }
 
-                    script = script.Replace('/', '\\');
+                    script = script.Replace('/', Path.DirectorySeparatorChar);
                     i++;
                 }
 

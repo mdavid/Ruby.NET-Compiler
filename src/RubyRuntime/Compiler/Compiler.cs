@@ -27,8 +27,7 @@ namespace Ruby.Compiler
 
             string CLRpath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(string)).Location);
             pathSet.Add(CLRpath);
-            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            assemblyLocation = assemblyLocation.Remove(assemblyLocation.LastIndexOf('\\'));
+            string assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             pathSet.Add(assemblyLocation);
 
             return pathSet;
