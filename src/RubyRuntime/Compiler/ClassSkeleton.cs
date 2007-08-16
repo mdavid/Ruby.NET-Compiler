@@ -125,7 +125,7 @@ namespace Ruby.Compiler
             dlls.Clear();
 
             // finally look in mscorlib
-            if (Ruby.Compiler.Compiler.mscorlib != null)
+            if (Ruby.Compiler.Compiler.mscorlib == null)
                 Ruby.Compiler.Compiler.mscorlib = PERWAPI.PEFile.ReadExportedInterface(Ruby.Compiler.Compiler.FindFile("mscorlib.dll", Ruby.Compiler.Compiler.GetPath()).FullName);
 
             if (Ruby.Compiler.Compiler.mscorlib != null)

@@ -65,6 +65,11 @@ namespace Ruby.Compiler.AST
                 //superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
                 if (superClassConstructor == null)
                 {
+                    // don't use zero-arg constructor for built-in Ruby classes if we need a constructor that
+                    // takes a Ruby.Class
+                    if (perwapiClass.NameSpace() == "Ruby")
+                        return false;
+
                     superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
                     arity = 0;
                 }
@@ -131,6 +136,10 @@ namespace Ruby.Compiler.AST
                             context.Assembly.RemoveClass(postPass.subClass.allocator);
                         }
                     }
+                }
+                else
+                {
+                    System.Console.WriteLine("Warning: superclass not found for " + postPass.subClass.name);
                 }
             }
         }
