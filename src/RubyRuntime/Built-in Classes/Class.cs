@@ -1025,34 +1025,42 @@ namespace Ruby
             if (obj is Symbol)
                 return Ruby.Runtime.Init.rb_cSymbol;
 
+            
+            Class result = null;
+            System.Type type = obj.GetType();
+
+            if (Interop.CLRClass.CLRTypes.TryGetValue(type, out result))
+                return result;
+
+            // BBTAG: if it is a CLR class that we don't recognize, try looking in the Ruby constants table
+            if (TryGetClassForType(type, out result))
+                return result;
+
             // BBTAG: create a new CLRClass if one doesn't exist
-            if (Interop.CLRClass.CLRTypes.ContainsKey(obj.GetType()))
-            {
-                return Interop.CLRClass.CLRTypes[obj.GetType()];
-            }
-            else
-            {
-                // BBTAG: if it is a CLR class that we don't recognize, try looking in the Ruby constants table
-                return GetClassForType(obj.GetType());
-            }
+            return Interop.CLRClass.Load(type, null);
         }
 
-        internal static Class GetClassForType(System.Type type)
+        internal static bool TryGetClassForType(System.Type type, out Class result)
         {
             string fullName = type.FullName;
             Class klass = Init.rb_cObject;
+            result = null;
 
             foreach (string token in fullName.Split('.'))
             {
+                if (!klass.const_defined(token))
+                    return false;
+
                 object c = klass.const_get(token, null);
 
                 if (!(c is Class))
-                    return null;
+                    return false;
 
                 klass = (Class)c;
             }
 
-            return klass;
+            result = klass;
+            return true;
         }
 
 
