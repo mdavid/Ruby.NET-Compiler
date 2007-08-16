@@ -264,7 +264,8 @@ namespace Ruby.Interop
         {
             NoMatch,
             Exact,
-            BasicConversion
+            BasicConversion,
+            ProcConversion
         }
 
         private static MatchResult MatchArgument(System.Type parameter, object arg)
@@ -275,16 +276,20 @@ namespace Ruby.Interop
                 return MatchResult.BasicConversion;
             if (arg == null && !parameter.IsValueType)
                 return MatchResult.Exact;
+            if (arg is Proc && parameter.IsSubclassOf(typeof(System.Delegate)))
+                return MatchResult.ProcConversion;
             return MatchResult.NoMatch;
         }
 
-        private MethodBase MatchArguments(object[] args, out MatchResult[] conversions)
+        private MethodBase MatchArguments(object[] args, out MatchResult[] conversions,
+            out ParameterInfo[] parameters)
         {
             conversions = new MatchResult[args.Length];
+            parameters = null;
 
             foreach (MethodBase method in methods)
             {
-                ParameterInfo[] parameters = method.GetParameters();
+                parameters = method.GetParameters();
                 if (parameters.Length != args.Length)
                     continue;
 
@@ -307,13 +312,28 @@ namespace Ruby.Interop
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
         {
-            object[] out_args = args.ToArray(); 
+            object[] out_args;
+
+            if (args.block != null)
+            {
+                out_args = new object[args.Length + 1];
+                for (int i = 0; i < args.Length; i++)
+                    out_args[i] = args[i];
+
+                out_args[args.Length] = args.block;
+            }
+            else
+            {
+                out_args = args.ToArray();
+            }
+
             MatchResult[] conversions;
-            MethodBase method = MatchArguments(out_args, out conversions);
+            ParameterInfo[] parameters;
+            MethodBase method = MatchArguments(out_args, out conversions, out parameters);
 
             if (method != null)
             {
-                for (int i = 0; i < args.Length; i++)
+                for (int i = 0; i < out_args.Length; i++)
                 {
                     switch (conversions[i])
                     {
@@ -321,6 +341,11 @@ namespace Ruby.Interop
                             break;
                         case MatchResult.BasicConversion:
                             out_args[i] = ((Basic)out_args[i]).Inner();
+                            break;
+                        case MatchResult.ProcConversion:
+                            out_args[i] = DelegateConstructor.Convert(
+                                (Proc)out_args[i],
+                                parameters[i].ParameterType);
                             break;
                         default:
                             throw new System.NotSupportedException();
@@ -402,6 +427,14 @@ namespace Ruby.Interop
             il.Emit(OpCodes.Ret);
 
             return dm;
+        }
+
+        internal static object Convert(Proc block, System.Type delegateType)
+        {
+            // TODO: we should actually be caching
+            // these DelegateConstructors somewhere
+            DelegateConstructor d = new DelegateConstructor(delegateType);
+            return d.BuildWrapper().CreateDelegate(delegateType, block);
         }
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
