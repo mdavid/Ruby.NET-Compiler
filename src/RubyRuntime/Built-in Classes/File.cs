@@ -919,6 +919,8 @@ namespace Ruby
 
             // Fixme: Read DATA after program here
 
+            IO.rb_io_close(f);
+
             return AST;
         }
 
