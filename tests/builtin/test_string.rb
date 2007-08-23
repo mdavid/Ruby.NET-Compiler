@@ -134,17 +134,17 @@ class TestString < Test::Unit::TestCase
     assert_equal(true, @hello.==(HasToStrAndEql2.new))
   end
 
-  def test_gsub_cheating_block
-    util_gsub_cheating_block(:gsub)
-  end
+  #def test_gsub_cheating_block
+  #  util_gsub_cheating_block(:gsub)
+  #end
 
   def test_gsub_arity
     util_gsub_arity(:gsub)
   end
 
-  def test_gsub_bang_cheating_block
-    util_gsub_cheating_block(:gsub!)
-  end
+  #def test_gsub_bang_cheating_block
+  #  util_gsub_cheating_block(:gsub!)
+  #end
 
   def test_gsub_bang_arity
     util_gsub_arity(:gsub!)
