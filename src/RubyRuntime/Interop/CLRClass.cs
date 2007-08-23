@@ -10,7 +10,7 @@ namespace Ruby.Interop
 {
     internal class CLRClass: Class
     {
-        private System.Type clrtype;
+        internal readonly System.Type clrtype;
 
         internal CLRClass(System.Type clrtype, Class superclass, Type type): base(clrtype.Name, superclass, type)
         {
@@ -75,6 +75,7 @@ namespace Ruby.Interop
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
             if (this._type == Type.IClass)
             {
+                // static methods
                 if (methodId == "new")
                 {
                     if (clrtype.IsSubclassOf(typeof(System.Delegate)))
@@ -97,12 +98,23 @@ namespace Ruby.Interop
                 {
                     return new RubyMethod(Methods.rb_class_allocate_instance.singleton, 0, Access.Private, this);
                 }
+                else if (methodId == "[]")
+                {
+                    // instantiate a generic type
+                    // ruby: type = ns::List[System::Int32]
+                    return new RubyMethod(
+                        new GenericTypeGetter(clrtype.Assembly, clrtype.FullName),
+                        -1, Access.Public, this);
+                }
 
                 flags = BindingFlags.Static | BindingFlags.Public;
             }
-
-            if (methodId == "initialize")
-                return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
+            else
+            {
+                // instance methods
+                if (methodId == "initialize")
+                    return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
+            }
 
             bool is_setter = false;
             // methods ending with "=" are expected to be either
@@ -113,6 +125,7 @@ namespace Ruby.Interop
                 methodId = methodId.Substring(0, methodId.Length - 1);
             }
 
+            // default member access, an Indexer in C#
             if (methodId == "[]")
             {
                 object[] attributes = clrtype.GetCustomAttributes(
@@ -178,8 +191,18 @@ namespace Ruby.Interop
             //    return ...;
             //}
 
-            //Type type = members[0] as Type;
-            //TODO: nested types?
+            // nested types
+            System.Type type = members[0] as System.Type;
+            if (type != null)
+            {
+                // see section 10.7.1 of ECMA
+                if (type.IsGenericTypeDefinition)
+                    type = type.MakeGenericType(clrtype.GetGenericArguments());
+
+                return new RubyMethod(
+                    new NestedTypeGetter(Load(type, null, false)),
+                    0, Access.Public, this);
+            }
 
             return null;
         }
@@ -187,38 +210,108 @@ namespace Ruby.Interop
         internal static void LoadCLRAssembly(System.Reflection.Assembly Assembly, Frame caller)
         {
             foreach (System.Type type in Assembly.GetExportedTypes())
-                Load(type, caller);
+                Load(type, caller, true);
         }
 
-        internal static Dictionary<System.Type, Class> CLRTypes = new Dictionary<System.Type, Class>();
+        private static Dictionary<System.Type, CLRClass> cache =
+            new Dictionary<System.Type, CLRClass>();
 
-        internal static Class Load(System.Type type, Frame caller)
+        internal static bool TryLoad(System.Type type, out CLRClass klass)
+        {
+            // TODO: (reader) lock ?
+            return cache.TryGetValue(type, out klass);
+        }
+
+        internal static CLRClass Define(System.Type type, CLRClass klass)
+        {
+            // TODO: (writer) lock ?
+            CLRClass existing;
+            if (cache.TryGetValue(type, out existing))
+                return existing;
+
+            cache[type] = klass;
+            return klass;
+        }
+
+        internal static CLRClass Load(System.Type type, Frame caller, bool makeConstant)
         {
             if (type == null)
                 return null;
 
-            Class context = Ruby.Runtime.Init.rb_cObject;
-            if (type.Namespace != null)
-                foreach (string Namespace in type.Namespace.Split('.'))
-                {
-                    object innerContext;
-                    if (context.const_defined(Namespace, false) && (innerContext = context.const_get(Namespace, caller)) is Class)
-                        context = (Class)innerContext;
-                    else
-                        context.define_const(Namespace, context = new CLRNamespace(Namespace));
-                }
-            
-            if (CLRTypes.ContainsKey(type))
-                return CLRTypes[type];
-            else
+            CLRClass klass;
+            if (!TryLoad(type, out klass))
             {
-            Class klass = new CLRClass(type, Load(type.BaseType, caller), Type.Class);
-            Class meta = new CLRClass(type, klass.super, Type.IClass);
-            klass.my_class = meta;
-            CLRTypes[type] = klass;
-            context.define_const(type.Name, klass);
-            return klass; 
+                System.Type baseType = type.BaseType;
+                CLRClass baseClass = baseType == null 
+                    ? null
+                    : Load(baseType, caller, makeConstant && baseType.Assembly == type.Assembly);
+
+                klass = klass = new CLRClass(type, baseClass, Type.Class);
+                CLRClass meta = new CLRClass(type, klass.super, Type.IClass);
+                klass.my_class = meta;
+                klass = Define(type, klass);
             }
+
+            if (makeConstant)
+            {
+                Class context = context = Ruby.Runtime.Init.rb_cObject;
+                if (type.Namespace != null)
+                {
+                    foreach (string Namespace in type.Namespace.Split('.'))
+                    {
+                        object innerContext;
+                        if (context.const_defined(Namespace, false) && (innerContext = context.const_get(Namespace, caller)) is Class)
+                            context = (Class)innerContext;
+                        else
+                            context.define_const(Namespace, context = new CLRNamespace(Namespace));
+                    }
+                }
+
+                if (type.IsNested)
+                {
+                    // nested types can be loaded by a getter in their owner
+                    // ruby: Namespace::Type.InnerType
+                }
+                else if (type.IsGenericTypeDefinition)
+                {
+                    string name = type.Name.Substring(0, type.Name.LastIndexOf('`'));
+                    string containerName =
+                        type.Namespace == null
+                        ? name
+                        : type.Namespace + "." + name;
+
+                    // if a non-generic type exists with the same name
+                    // we can use that in the construction of a generic type
+                    System.Type container = type.Assembly.GetType(containerName);
+
+                    // otherwise we much build a GenericContainer
+                    if (container == null && !context.const_defined(name))
+                    {
+                        context.define_const(name,
+                            new GenericContainer(type.Assembly, containerName));
+                    }
+                }
+                else
+                {
+                    context.define_const(type.Name, klass);
+                }
+            }
+
+            return klass;
+        }
+    }
+
+    internal class NestedTypeGetter : Ruby.Runtime.MethodBody0
+    {
+        CLRClass klass;
+        internal NestedTypeGetter(CLRClass klass)
+        {
+            this.klass = klass;
+        }
+
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
+        {
+            return klass;
         }
     }
 
@@ -248,6 +341,56 @@ namespace Ruby.Interop
         {
             field.SetValue(recv, p1);
             return p1;
+        }
+    }
+
+    // given a name and assembly, this instantiates a generic type
+    // based on the arguments / arity of the method call
+    internal class GenericTypeGetter : Ruby.Runtime.MethodBody
+    {
+        private Assembly assembly;
+        private string fullname;
+
+        internal GenericTypeGetter(Assembly assembly, string fullname)
+        {
+            this.assembly = assembly;
+            this.fullname = fullname;
+        }
+
+        public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
+        {
+            if (args.Length == 0)
+                throw new System.ArgumentException();
+
+            string name = fullname + "`" + args.Length;
+            System.Type type = assembly.GetType(name);
+
+            if (type == null)
+                throw new System.TypeLoadException();
+
+
+            System.Type[] typeArguments = new System.Type[args.Length];
+            for (int i = 0; i < args.Length; i++)
+            {
+                System.Type typeArg = args[i] as System.Type;
+                if (typeArg != null)
+                {
+                    typeArguments[i] = typeArg;
+                    continue;
+                }
+
+                CLRClass klass = args[i] as CLRClass;
+                if (klass != null)
+                {
+                    typeArguments[i] = klass.clrtype;
+                    continue;
+                }
+
+                // TODO: support ruby types?
+                throw new System.ArgumentException();
+            }
+
+            return CLRClass.Load(type.MakeGenericType(typeArguments), caller, false);
         }
     }
 
@@ -451,6 +594,22 @@ namespace Ruby.Interop
         internal CLRNamespace(string Namespace)
             : base(Namespace, null, Type.Module)
         {
+        }
+    }
+
+    // this is used in the case where there exists a type T`n but no T
+    internal class GenericContainer : Class
+    {
+        private string name;
+        private Assembly assembly;
+
+        internal GenericContainer(Assembly assembly, string name)
+            : base(name, null, Type.Module)
+        {
+            this.name = name;
+            this.assembly = assembly;
+
+            this.define_module_function("[]", new GenericTypeGetter(assembly, name), -1, null);
         }
     }
 }

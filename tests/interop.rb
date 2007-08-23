@@ -105,6 +105,30 @@ test_ok(
 end).Invoke(nil, true)
 
 ##########################################################################
+test_check "nested types"
+test_ok(nil != System::Environment.SpecialFolder)
+
+##########################################################################
+test_check "enums"
+test_ok(0 == System::Environment.SpecialFolder.Desktop)
+
+##########################################################################
+test_check "generics"
+list = System::Collections::Generic::List[System::Int32].new
+list.Add(2)
+list.Add(1)
+list.Sort
+test_ok(list[0] == 1)
+
+# generic nested type
+d = System::Collections::Generic::Dictionary[System::Int32, System::Int32].new
+d[1] = 1
+d[2] = 2
+
+keys = System::Collections::Generic::Dictionary[System::Int32, System::Int32].KeyCollection.new(d)
+test_ok(keys.Count == 2)
+
+##########################################################################
 if $failed > 0
   printf "test: %d failed %d\n", $ntest, $failed
 else
