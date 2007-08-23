@@ -223,8 +223,8 @@ class TestHash < Test::Unit::TestCase
 
   def test_select_block_returns_nonbool
     h = {'a'=>5 }
-    assert_equals([], h.select { nil })
-    assert_equals([['a', 5]], h.select { 0 })
+    assert_equal([], h.select { nil })
+    assert_equal([['a', 5]], h.select { 0 })
   end
 
   def test_self_aref_with_hash
