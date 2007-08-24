@@ -2033,7 +2033,7 @@ namespace Ruby.Runtime
             ((Array)Eval.rb_load_path.value).Add(new String(@"."));
             string RUBYLIB = System.Environment.GetEnvironmentVariable("RUBYLIB");
             if (RUBYLIB != null)
-                foreach (string path in RUBYLIB.Split(';'))
+                foreach (string path in RUBYLIB.Split(Path.PathSeparator))
                     ((Array)Eval.rb_load_path.value).Add(new String(path.Trim()));
 
             string CLRpath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(string)).Location);
