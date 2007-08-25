@@ -391,17 +391,9 @@ namespace Ruby.Compiler
                     script = script.Replace('/', Path.DirectorySeparatorChar);
                     i++;
                 }
+
             if (script == "-")
-            {
-                StringBuilder sb = new StringBuilder();
-                for (; ; )
-                {
-                    string buff = System.Console.ReadLine();
-                    if (buff == null) break;
-                    sb.AppendLine(buff);
-                }
-                e_script = new String(sb.ToString());
-            }
+                e_script = new String(System.Console.In.ReadToEnd());
 
             ruby_script(script);
             ruby_set_argv(args, i);
