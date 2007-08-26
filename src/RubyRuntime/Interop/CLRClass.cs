@@ -594,6 +594,7 @@ namespace Ruby.Interop
         internal CLRNamespace(string Namespace)
             : base(Namespace, null, Type.Module)
         {
+            this.my_class = Init.rb_cModule;
         }
     }
 
