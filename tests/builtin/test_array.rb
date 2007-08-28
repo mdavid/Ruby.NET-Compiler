@@ -56,6 +56,29 @@ class TestArray < Test::Unit::TestCase
     assert_raise(ArgumentError) { @arr[1, 2, 3, 4] = 1}
   end
 
+  def test_hash_with_nil_element
+    assert_nothing_raised { [nil].hash }
+    assert_nothing_raised { [1, nil, 2].hash }
+  end
+
+  def test_hash_with_custom_element_hash
+    # nil
+    assert_raise(TypeError) { [NilHash.new].hash }
+
+    # In-range float
+    assert_nothing_raised { [FloatHash.new].hash }
+    # Too large float
+    assert_raise(RangeError) { [BigFloatHash.new].hash }
+
+    # Bignum
+    assert_raise(RangeError) { [BignumHash.new].hash }
+
+    # Other object (calls to_int)
+    assert_raise(TypeError) { [StringHash.new].hash }
+    assert_nothing_raised { [CustomHash.new].hash }
+    assert_raise(TypeError) { [CustomHashWeirdToInt.new].hash }
+  end
+
   def test_indexes
     # TODO: MRI uses aref; should we test everything again?
     old_w = $-w
@@ -133,6 +156,15 @@ class TestArray < Test::Unit::TestCase
 
   class MyArray < Array
   end
+
+  # Used for testing Array#hash
+  class NilHash; def hash; nil; end; end
+  class FloatHash; def hash; 1.3; end; end
+  class BigFloatHash; def hash; Float(20 ** 20); end; end
+  class BignumHash; def hash; 20 ** 20; end; end
+  class StringHash; def hash; 'a'; end; end
+  class CustomHash; def hash; self; end; def to_int; 5; end; end
+  class CustomHashWeirdToInt; def hash; self; end; def to_int; self; end; end
 
   def util_frozen_during_iteration(meth)
     # Only used by sort!, actually.

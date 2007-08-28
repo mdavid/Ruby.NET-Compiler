@@ -1476,7 +1476,9 @@ namespace Ruby.Methods
             for (int i = 0; i < ary.Count; i++)
             {
                 hash = (hash << 1) | (hash < 0 ? 1 : 0);
-                hash = hash ^ ary[i].GetHashCode();
+                // rb_hash
+                object n = Eval.CallPrivate(ary[i], caller, "hash", null);
+                hash ^= Numeric.rb_num2long(n, caller);
             }
 
             return hash;
