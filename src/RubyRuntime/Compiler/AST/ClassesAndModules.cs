@@ -109,7 +109,8 @@ namespace Ruby.Compiler.AST
             // FIXME: this won't work for nested classes
             if (Ruby.Runtime.BuiltinClasses.IsBuiltinClass(basename))
             {
-                System.Console.WriteLine("Warning: " + basename + " is a Ruby built-in class, interop class not generated");
+                if (Compiler.RubyCompilerRunning())
+                    System.Console.WriteLine("Warning: " + basename + " is a Ruby built-in class, interop class not generated");
                 defineInteropClass = false;
             }
 
@@ -161,7 +162,7 @@ namespace Ruby.Compiler.AST
                 {
                     CodeGenContext class_constructor0 = newContext.CreateConstructor(interopClass);
                     class_constructor0.ldarg(0);
-                    class_constructor0.ldsfld(singletonField);
+                    class_constructor0.ldsfld(singletonField);     
                     class_constructor0.call(superClassConstructor0);        
                     class_constructor0.ret();
                     class_constructor0.Close();

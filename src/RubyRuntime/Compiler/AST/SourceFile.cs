@@ -120,7 +120,8 @@ namespace Ruby.Compiler.AST
                     PERWAPI.MethodDef ctor = postPass.subClassDef.GetMethod(".ctor", new Type[0]);
                     if (!RedefineConstructor(ctor, perwapiClass, 0))
                     {
-                        System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                        if (Compiler.RubyCompilerRunning())
+                            System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                         context.Assembly.RemoveClass(postPass.subClassDef);
                         RemoveAllocatorDefinition(postPass.subClass);
                         context.Assembly.RemoveClass(postPass.subClass.allocator);
@@ -130,7 +131,8 @@ namespace Ruby.Compiler.AST
                         ctor = postPass.subClassDef.GetMethod(".ctor", new Type[] { Runtime.ClassRef });
                         if (!RedefineConstructor(ctor, perwapiClass, 1))
                         {
-                            System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                            if (Compiler.RubyCompilerRunning())
+                                System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                             context.Assembly.RemoveClass(postPass.subClassDef);
                             RemoveAllocatorDefinition(postPass.subClass);
                             context.Assembly.RemoveClass(postPass.subClass.allocator);
@@ -139,7 +141,8 @@ namespace Ruby.Compiler.AST
                 }
                 else
                 {
-                    System.Console.WriteLine("Warning: superclass not found for " + postPass.subClass.name);
+                    if (Compiler.RubyCompilerRunning())
+                        System.Console.WriteLine("Warning: superclass not found for " + postPass.subClass.name);
                 }
             }
         }

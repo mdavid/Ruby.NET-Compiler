@@ -21,6 +21,11 @@ namespace Ruby.Compiler
             Process(args, null);
         }
 
+        public static bool RubyCompilerRunning()
+        {
+            return Assembly.GetEntryAssembly().FullName.Contains("RubyCompiler");
+        }
+
         public static List<string> GetPath()
         {
             List<string> pathSet = new List<string>();
@@ -50,7 +55,7 @@ namespace Ruby.Compiler
 
         public static void Process(string[] args, TaskLoggingHelper log)
         {
-             List<string> inputFiles = new List<string>();
+            List<string> inputFiles = new List<string>();
 
             string outFile = null;
             string debug = "full";
