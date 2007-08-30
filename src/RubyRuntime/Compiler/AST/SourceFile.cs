@@ -181,7 +181,7 @@ namespace Ruby.Compiler.AST
             PERWAPI.CILLabel endLabel = Main.NewLabel();
 
             // try {
-            Main.StartBlock();
+            Main.StartBlock(Clause.Try);
 
             if (SetOptions != null)
             {
@@ -207,13 +207,13 @@ namespace Ruby.Compiler.AST
             Main.call(LoadMethod.Method);
             Main.pop();
 
-            Main.leave(endLabel);
+            Main.Goto(endLabel);
 
             // }
             TryBlock block = Main.EndTryBlock();
 
             // finally {
-            Main.StartBlock();
+            Main.StartBlock(Clause.Finally);
 
             //    Program.ruby_stop();
             Main.call(Runtime.Program.ruby_stop);

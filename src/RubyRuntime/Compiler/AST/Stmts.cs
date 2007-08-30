@@ -167,7 +167,8 @@ namespace Ruby.Compiler.AST
             if (body != null)
             {
                 body.GenCode(context);
-                context.pop();
+                if (context.Reachable())
+                    context.pop();
             }
 
             context.CodeLabel(context.labels.Next);
@@ -231,7 +232,8 @@ namespace Ruby.Compiler.AST
             if (body != null)
             {
                 body.GenCode(context);
-                context.pop();
+                if (context.Reachable())
+                    context.pop();
             }
 
             context.CodeLabel(context.labels.Next);

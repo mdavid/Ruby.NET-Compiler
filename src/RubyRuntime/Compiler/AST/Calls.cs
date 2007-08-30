@@ -57,21 +57,21 @@ namespace Ruby.Compiler.AST
 
             context.CodeLabel(retryLabel);
 
-            context.StartBlock();
+            context.StartBlock(Clause.Try);
             {
                 // object result = Call(...)
                 GenCall0(context);
                 context.stloc(result);
 
-                context.leave(endLabel);
+                context.Goto(endLabel);
             }
             PERWAPI.TryBlock tryBlock = context.EndTryBlock();
-            context.StartBlock();
+            context.StartBlock(Clause.Catch);
             {
                 CatchBreakException(context, result, endLabel);
             }
             context.EndCatchBlock(Runtime.BreakExceptionRef, tryBlock);
-            context.StartBlock();
+            context.StartBlock(Clause.Catch);
             {
                 CatchRetryException(context, retryLabel);
             }
@@ -102,7 +102,7 @@ namespace Ruby.Compiler.AST
             context.stloc(result);
 
             // goto endLabel;
-            context.leave(endLabel);
+            context.Goto(endLabel);
 
             // reThrowLabel:
             context.CodeLabel(reThrowLabel);
@@ -128,7 +128,7 @@ namespace Ruby.Compiler.AST
             context.bne( reThrowLabel);
 
             // goto retryLabel
-            context.leave(retryLabel);
+            context.Goto(retryLabel);
 
             // reThrowLabel:
             context.CodeLabel(reThrowLabel);

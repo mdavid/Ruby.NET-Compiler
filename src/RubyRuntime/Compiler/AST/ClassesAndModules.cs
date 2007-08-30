@@ -82,15 +82,12 @@ namespace Ruby.Compiler.AST
             // BBTAG: try and get the superclass
             
             PERWAPI.Class superClass = Runtime.ObjectRef;
-            bool hasSuperClass = false;
             bool superClassFound = false;
             PERWAPI.Method superClassConstructor0 = Runtime.Object.ctor;
             PERWAPI.Method superClassConstructor1 = Runtime.Object.ctor;
 
             if (this is CLASS)
             {
-                if (((CLASS)this).super_class != null)
-                    hasSuperClass = true;
                 superClass = ((CLASS)this).GetSuperClassRef(newContext);
                 if (superClass != null)
                 {

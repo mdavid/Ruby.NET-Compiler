@@ -51,29 +51,30 @@ namespace Ruby.Compiler.AST
 
             if (ensure != null)
             {
-                context.StartBlock(); // outer try block with finally
+                context.StartBlock(Clause.Try); // outer try block with finally
 
-                context.StartBlock(); // inner try block with catch
+                context.StartBlock(Clause.Try); // inner try block with catch
             }
 
             GenInnerBlock(context, RescueTemp);
 
             if (ensure != null)
             {
-                context.leave(finalLabel);
+                context.Goto(finalLabel);
 
                 PERWAPI.TryBlock innerTry = context.EndTryBlock();
 
-                context.StartBlock();
+                context.StartBlock(Clause.Catch);
                 GenRescue(context, null, 0, null);
                 context.EndCatchBlock(Runtime.SystemExceptionRef, innerTry);
 
                 PERWAPI.TryBlock outerTry = context.EndTryBlock();
                 
                 // Fixme: reset labels to prevent branches out of finally block.    
-                context.StartBlock();
+                context.StartBlock(Clause.Finally);
                 ensure.GenCode(context);
-                context.pop();
+                if (context.Reachable())
+                    context.pop();
                 context.endfinally();
                 context.EndFinallyBlock(outerTry);
 
@@ -97,13 +98,10 @@ namespace Ruby.Compiler.AST
             catchLabels.Redo = context.labels.Redo;
             catchLabels.Return = context.labels.Return;
             catchLabels.Retry = context.NewLabel();
-            catchLabels.InTryBlock = true;
-
-            context.labels.InTryBlock = true;
 
             context.CodeLabel(catchLabels.Retry);
 
-            context.StartBlock();
+            context.StartBlock(Clause.Try);
             {
                 if (body != null)
                     body.GenCode(context);
@@ -113,7 +111,7 @@ namespace Ruby.Compiler.AST
                 if (context.Reachable())
                 {
                     context.stloc(RescueTemp);
-                    context.leave(elseLabel);
+                    context.Goto(elseLabel);
                 }
             }
             PERWAPI.TryBlock innerTry = context.EndTryBlock();
@@ -122,7 +120,7 @@ namespace Ruby.Compiler.AST
 
             if (rescue != null)
             {
-                context.StartBlock();
+                context.StartBlock(Clause.Catch);
                 {
                     Labels original = context.labels;
                     context.labels = catchLabels;
@@ -134,14 +132,13 @@ namespace Ruby.Compiler.AST
                 context.EndCatchBlock(Runtime.SystemExceptionRef, innerTry);
             }
 
-            context.labels.InTryBlock = false;
-
             context.CodeLabel(elseLabel);
             {
                 if (_else != null)
                 {
                     _else.GenCode(context);
-                    context.stloc(RescueTemp);
+                    if (context.Reachable())
+                        context.stloc(RescueTemp);
                 }
             }
             context.CodeLabel(endLabel);
@@ -276,7 +273,8 @@ namespace Ruby.Compiler.AST
                 else
                     context.ldnull();
 
-                context.stloc(RescueTemp);
+                if (context.Reachable())
+                    context.stloc(RescueTemp);
 
                 // reset $!
                 //Eval.ruby_errinfo.value = null;
@@ -284,7 +282,7 @@ namespace Ruby.Compiler.AST
                 context.ldnull();
                 context.stfld(Runtime.global_variable.value);
 
-                context.leave(endLabel);
+                context.Goto(endLabel);
 
                 context.CodeLabel(nextClause);
             }
@@ -314,26 +312,24 @@ namespace Ruby.Compiler.AST
 
             PERWAPI.CILLabel endLabel = context.NewLabel();
 
-            context.labels.InTryBlock = true;
-
-            context.StartBlock();
+            context.StartBlock(Clause.Try);
             {
                 expr.GenCode(context);
-                context.stloc(RescueTemp);
-                context.leave(endLabel);
+                if (context.Reachable())
+                    context.stloc(RescueTemp);
+                context.Goto(endLabel);
             }
             PERWAPI.TryBlock tryBlock = context.EndTryBlock();
 
-            context.StartBlock();
+            context.StartBlock(Clause.Catch);
             {
                 context.pop();
                 rescue.GenCode(context);
-                context.stloc(RescueTemp);
-                context.leave(endLabel);
+                if (context.Reachable())
+                    context.stloc(RescueTemp);
+                context.Goto(endLabel);
             }
             context.EndCatchBlock(Runtime.RubyExceptionRef, tryBlock);
-
-            context.labels.InTryBlock = false;
 
             context.CodeLabel(endLabel);
 

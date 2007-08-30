@@ -269,7 +269,7 @@ namespace Ruby.Compiler.AST
             context.labels.Return = context.NewLabel();
 
             // try { ... }
-            context.StartBlock();
+            context.StartBlock(Clause.Try);
             {
                 if (BEGIN != null)
                     BEGIN.GenCode(context);
@@ -284,7 +284,7 @@ namespace Ruby.Compiler.AST
                         context.stloc(returnTemp);
                 }
 
-                context.leave(context.labels.Return);
+                context.Goto(context.labels.Return);
             }
             PERWAPI.TryBlock tryBlock = context.EndTryBlock();        
 
@@ -305,7 +305,7 @@ namespace Ruby.Compiler.AST
         internal void CatchReturnException(CodeGenContext context, PERWAPI.TryBlock tryBlock)
         {
             // catch (Ruby.ReturnException exception) { ... }
-            context.StartBlock();
+            context.StartBlock(Clause.Catch);
             {
                 PERWAPI.CILLabel falseLabel = context.NewLabel();
 
@@ -321,7 +321,7 @@ namespace Ruby.Compiler.AST
                 context.ldloc(exception);
                 context.ldfld(Runtime.ReturnException.return_value);
                 context.stloc(returnTemp);
-                context.leave(context.labels.Return);
+                context.Goto(context.labels.Return);
 
                 // falseLabel:
                 context.CodeLabel(falseLabel);

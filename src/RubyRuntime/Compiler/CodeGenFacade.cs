@@ -287,23 +287,43 @@ namespace Ruby.Compiler
             return buffer.NewLabel();
         }
 
-        internal void StartBlock()
+        internal Stack<Clause> blocks = new Stack<Clause>();
+
+        internal void Goto(CILLabel label)
         {
+            Clause top = Clause.None;
+            if (blocks.Count > 0)
+                top = blocks.Peek();
+
+            if (top == Clause.Try || top == Clause.Catch)
+                leave(label);
+            else if (top == Clause.Finally)
+                endfinally();
+            else
+                br(label);
+        }
+
+        internal void StartBlock(Clause blockType)
+        {
+            blocks.Push(blockType);
             buffer.StartBlock();
         }
 
         internal TryBlock EndTryBlock()
         {
+            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Try);
             return buffer.EndTryBlock();
         }
 
         internal void EndCatchBlock(PERWAPI.Class type, TryBlock tryBlock)
         {
+            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Catch);
             buffer.EndCatchBlock(type, tryBlock);
         }
 
         internal void EndFinallyBlock(TryBlock tryBlock)
         {
+            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Finally);
             buffer.EndFinallyBlock(tryBlock);
         }
 
@@ -610,7 +630,9 @@ namespace Ruby.Compiler
             buffer.EndInstCounter();
             CILInstruction prev = buffer.GetPrevInstruction();
             return !((prev is Instr &&
-                    (((Instr)prev).GetOp() == Op.ret || ((Instr)prev).GetOp() == Op.throwOp)) ||
+                    (((Instr)prev).GetOp() == Op.ret ||
+                    ((Instr)prev).GetOp() == Op.endfinally ||
+                    ((Instr)prev).GetOp() == Op.throwOp)) ||
                     (prev is BranchInstr &&
                     ((int)((BranchInstr)prev).GetOp() == (int)BranchOp.br ||
                      (int)((BranchInstr)prev).GetOp() == (int)BranchOp.br_s ||
@@ -730,11 +752,10 @@ namespace Ruby.Compiler
     }
 
 
-
+    internal enum Clause { None, Try, Catch, Finally };
     
     internal class Labels
     {
-        internal bool InTryBlock = false;
         internal CILLabel Redo;
         internal CILLabel Retry;
         internal CILLabel Break;

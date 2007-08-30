@@ -118,7 +118,7 @@ namespace Ruby.Compiler.AST
             {
                 // return
                 context.stloc(parent_scope.returnTemp);
-                context.leave(context.labels.Return);
+                context.Goto(context.labels.Return);
             }
         }
     }
@@ -146,10 +146,7 @@ namespace Ruby.Compiler.AST
             if (context.labels != null && context.labels.Break != null)
             {
                 context.stloc(parent_scope.returnTemp);
-                if (context.labels.InTryBlock)
-                    context.leave(context.labels.Break);
-                else
-                    context.br(context.labels.Break);
+                context.Goto(context.labels.Break);
             }
             else
             {
@@ -187,12 +184,9 @@ namespace Ruby.Compiler.AST
             context.stloc(parent_scope.returnTemp);
 
             if (context.labels != null && context.labels.Next != null)
-                if (context.labels.InTryBlock)
-                    context.leave(context.labels.Next);
-                else
-                    context.br(context.labels.Next);
+                context.Goto(context.labels.Next);
             else
-                context.leave(context.labels.Return);
+                context.Goto(context.labels.Return);
         }
     }
 
@@ -211,10 +205,7 @@ namespace Ruby.Compiler.AST
             context.newLine(location);
 
             if (context.labels != null && context.labels.Redo != null)
-                if (context.labels.InTryBlock)
-                    context.leave(context.labels.Redo);
-                else
-                    context.br(context.labels.Redo);
+                context.Goto(context.labels.Redo);
             else
                 throw new System.Exception("unexpected REDO not in loop or block");
         }
@@ -235,10 +226,7 @@ namespace Ruby.Compiler.AST
             context.newLine(location);
 
             if (context.labels != null && context.labels.Retry != null)
-                if (context.labels.InTryBlock)
-                    context.leave(context.labels.Retry);                
-                else
-                    context.br(context.labels.Retry);
+                context.Goto(context.labels.Retry);                
             else
             {
                 System.Diagnostics.Debug.Assert(this.parent_scope is BLOCK);
