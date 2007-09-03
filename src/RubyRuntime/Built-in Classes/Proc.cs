@@ -27,7 +27,7 @@ namespace Ruby
 
         // ----------------------------------------------------------------------------
 
-        internal Proc(Class klass)
+        public Proc(Class klass)
             : base(klass)
         {
             this.kind = ProcKind.RawProc;

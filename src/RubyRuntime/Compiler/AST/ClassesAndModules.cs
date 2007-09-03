@@ -156,7 +156,7 @@ namespace Ruby.Compiler.AST
 
             //    public MyClass() : base(singleton) { };
             CodeGenContext class_constructor = null; 
-            if (defineInteropClass)// && !hasSuperClass)
+            if (defineInteropClass)
             {
                 if (interopClass.GetMethod(".ctor", new Type[0]) == null)
                 {

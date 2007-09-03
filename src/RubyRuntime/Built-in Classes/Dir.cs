@@ -25,7 +25,7 @@ namespace Ruby
         //-----------------------------------------------------------------
 
 
-        internal Dir(Class klass)
+        public Dir(Class klass)
             : base(klass)
         {
         }

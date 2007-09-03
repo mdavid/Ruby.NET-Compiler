@@ -142,23 +142,28 @@ namespace Ruby.Methods
     }
 
 
-    
+
     internal class rb_f_raise : MethodBody0 // author: cjs, status: done
     {
         internal static rb_f_raise singleton = new rb_f_raise();
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            return Call1(last_class, recv, caller, block, Eval.ruby_errinfo.value);
+            Exception exc = (Exception)Eval.ruby_errinfo.value;
+
+            if (exc == null)
+                exc = new RuntimeError("");
+
+            throw exc.raise(caller);
         }
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
         {
             Exception exc;
 
-            if (p1 is Exception)
-                exc = (Exception)p1;
-            else if (p1 is String)
+            if (p1 == null)
+                exc = null;
+            if (p1 is String)
                 exc = new RuntimeError(((String)p1).value);
             else if (Eval.RespondTo(p1, "exception"))
                 exc = (Exception)Eval.CallPrivate(p1, caller, "exception", null);
@@ -170,7 +175,28 @@ namespace Ruby.Methods
 
         public override object Call2(Class last_class, object recv, Frame caller, Proc block, object p1, object p2)
         {
-            throw ((Exception)Eval.CallPrivate(p1, caller, "new", null, p2)).raise(caller);
+            Exception exc;
+
+            if (Eval.RespondTo(p1, "exception"))
+                exc = (Exception)Eval.CallPrivate(p1, caller, "exception", null, p2);
+            else
+                throw new TypeError("exception object expected").raise(caller);
+
+            throw exc.raise(caller);
+        }
+
+        public override object Call3(Class last_class, object recv, Frame caller, Proc block, object p1, object p2, object p3)
+        {
+            Exception exc;
+
+            if (Eval.RespondTo(p1, "exception"))
+                exc = (Exception)Eval.CallPrivate(p1, caller, "exception", null, p2);
+            else
+                throw new TypeError("exception object expected").raise(caller);
+
+            exc.set_backtrace(p3);
+
+            throw exc.raise(caller);
         }
     }
 

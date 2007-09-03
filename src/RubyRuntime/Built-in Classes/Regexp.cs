@@ -47,7 +47,7 @@ namespace Ruby
         {
         }
 
-        internal Regexp(Class klass)
+        public Regexp(Class klass)
             : base(klass) //status: done
         {
         }
@@ -619,15 +619,17 @@ namespace Ruby
             }
         }
     }
-    
 
 
-    
-    internal class RegExpError : StandardError //status: done
+
+
+    public class RegExpError : StandardError //status: done
     {
-        internal RegExpError(string message) : this(message, Ruby.Runtime.Init.rb_eRegexpError) { }
+        public RegExpError(string message) : this(message, Ruby.Runtime.Init.rb_eRegexpError) { }
 
-        protected RegExpError(string message, Class klass) : base(message, klass) { }
+        public RegExpError(string message, Class klass) : base(message, klass) { }
+
+        public RegExpError(Class klass) : base(klass) { }
     }
 }
 

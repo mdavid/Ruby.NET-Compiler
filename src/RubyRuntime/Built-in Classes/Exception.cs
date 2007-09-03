@@ -32,7 +32,7 @@ namespace Ruby
         {
         }
 
-        internal Exception(Class klass)
+        public Exception(Class klass)
             : this(klass._name, klass)
         {
         }
@@ -96,9 +96,14 @@ namespace Ruby
     {
         internal int _status;
 
-        internal SystemExit(string message) : base(message, Ruby.Runtime.Init.rb_eSystemExit) { }
+        public SystemExit(string message) : base(message, Ruby.Runtime.Init.rb_eSystemExit) { }
 
-        internal SystemExit(string message, Class klass)
+        public SystemExit(Class klass): base(klass)
+        {
+            this._status = 0;
+        }
+
+        public SystemExit(string message, Class klass)
             : base(message, klass)
         {
             this._status = 0; //default to 0 (success)
@@ -109,54 +114,62 @@ namespace Ruby
 
     public partial class fatal : Exception //status: done
     {
-        internal fatal(string message) : base(message, Ruby.Runtime.Init.rb_eFatal) { }
+        public fatal(string message) : base(message, Ruby.Runtime.Init.rb_eFatal) { }
 
-        protected fatal(string message, Class klass) : base(message, klass) { }
+        public fatal(string message, Class klass) : base(message, klass) { }
+
+        public fatal(Class klass) : base(klass) { }
     }
 
 
 
     public partial class SignalException : Exception //status: done
     {
-        internal SignalException(string message) : base(message, Ruby.Runtime.Init.rb_eSignal) { }
+        public SignalException(string message) : base(message, Ruby.Runtime.Init.rb_eSignal) { }
 
-        protected SignalException(string message, Class klass) : base(message, klass) { }
+        public SignalException(string message, Class klass) : base(message, klass) { }
+
+        public SignalException(Class klass) : base(klass) { }
     }
 
 
 
     public partial class Interrupt : Exception //status: done
     {
-        internal Interrupt(Frame caller, string message) : base(message, Ruby.Runtime.Init.rb_eInterrupt) { }
+        public Interrupt(Frame caller, string message) : base(message, Ruby.Runtime.Init.rb_eInterrupt) { }
 
-        internal Interrupt(Frame caller, string message, Class klass) : base(message, klass) { }
+        public Interrupt(Frame caller, string message, Class klass) : base(message, klass) { }
+
+        public Interrupt(Class klass) : base(klass) { }
     }
 
 
 
     public class StandardError : Exception //status: done
     {
-        internal StandardError(string message) : base(message, Ruby.Runtime.Init.rb_eStandardError) { }
+        public StandardError(string message) : base(message, Ruby.Runtime.Init.rb_eStandardError) { }
 
-        protected StandardError(Class klass) : base(klass) { }
+        public StandardError(Class klass) : base(klass) { }
 
-        protected StandardError(string message, Class klass) : base(message, klass) { }
+        public StandardError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class TypeError : StandardError //status: done
+    public class TypeError : StandardError //status: done
     {
-        internal TypeError(string message) : base(message, Ruby.Runtime.Init.rb_eTypeError) { }
+        public TypeError(string message) : base(message, Ruby.Runtime.Init.rb_eTypeError) { }
 
-        protected TypeError(string message, Class klass) : base(message, klass) { }
+        public TypeError(Class klass) : base(klass) { }
 
-        internal static TypeError rb_error_frozen(Frame caller, string what)
+        public TypeError(string message, Class klass) : base(message, klass) { }
+
+        public static TypeError rb_error_frozen(Frame caller, string what)
         {
             return new TypeError(string.Format(CultureInfo.InvariantCulture, "can't modify frozen {0}", what));
         }
 
-        internal static void rb_check_frozen(Frame caller, object obj)
+        public static void rb_check_frozen(Frame caller, object obj)
         {
             if (((Basic)obj).Frozen)
                 throw TypeError.rb_error_frozen(caller, ((Basic)obj).my_class._name).raise(caller);
@@ -170,96 +183,108 @@ namespace Ruby
         [UsedByRubyCompiler]
         public ArgumentError(string message) : base(message, Ruby.Runtime.Init.rb_eArgError) { }
 
-        protected ArgumentError(string message, Class klass) : base(message, klass) { }
+        public ArgumentError(Class klass) : base(klass) { }
+
+        public ArgumentError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class IndexError : StandardError //status: done
+    public class IndexError : StandardError //status: done
     {
-        internal IndexError(string message) : this(message, Ruby.Runtime.Init.rb_eIndexError) { }
+        public IndexError(string message) : this(message, Ruby.Runtime.Init.rb_eIndexError) { }
 
-        protected IndexError(string message, Class klass) : base(message, klass) { }
+        public IndexError(Class klass) : base(klass) { }
+
+        public IndexError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class RangeError : StandardError //status: done
+    public class RangeError : StandardError //status: done
     {
-        internal RangeError(string message) : this(message, Ruby.Runtime.Init.rb_eRangeError) { }
+        public RangeError(string message) : this(message, Ruby.Runtime.Init.rb_eRangeError) { }
 
-        protected RangeError(string message, Class klass) : base(message, klass) { }
+        public RangeError(Class klass) : base(klass) { }
+
+        public RangeError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class NameError : StandardError //status: done
+    public class NameError : StandardError //status: done
     {
-        internal NameError() : this(Ruby.Runtime.Init.rb_eNameError) { }
+        public NameError(string message) : this(message, Ruby.Runtime.Init.rb_eNameError) { }
 
-        internal NameError(string message) : this(message, Ruby.Runtime.Init.rb_eNameError) { }
+        public NameError(string name, string message) : this(name, message, Ruby.Runtime.Init.rb_eNameError) { }
 
-        internal NameError(string name, string message) : this(name, message, Ruby.Runtime.Init.rb_eNameError) { }
-
-        internal NameError(string name, string message, Class klass)
+        public NameError(string name, string message, Class klass)
             : base(message, klass)
         {
             Methods.name_err_initialize.singleton.Call2(null, this, null, null, message, name);
         }
 
-        internal NameError(string message, Class klass) : base(message, klass) { }
+        public NameError(string message, Class klass) : base(message, klass) { }
 
-        internal NameError(Class klass) : base(klass) { }
+        public NameError(Class klass) : base(klass) { }
 
     }
 
 
 
-    internal class NoMethodError : NameError
+    public class NoMethodError : NameError
     {
-        internal NoMethodError() : base(Ruby.Runtime.Init.rb_eNoMethodError) { }
+        public NoMethodError(string message) : base(message, Ruby.Runtime.Init.rb_eNoMethodError) { }
 
-        internal NoMethodError(string message) : base(message, Ruby.Runtime.Init.rb_eNoMethodError) { }
+        public NoMethodError(Class klass) : base(klass) { }
 
-        internal NoMethodError(string message, Class klass) : base(message, klass) { }
+        public NoMethodError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class ScriptError : Exception //status: done
+    public class ScriptError : Exception //status: done
     {
-        internal ScriptError(string message) : base(message, Ruby.Runtime.Init.rb_eScriptError) { }
+        public ScriptError(string message) : base(message, Ruby.Runtime.Init.rb_eScriptError) { }
 
-        protected ScriptError(string message, Class klass) : base(message, klass) { }
+        public ScriptError(Class klass) : base(klass) { }
+
+        public ScriptError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class SyntaxError : ScriptError //status: done
+    public class SyntaxError : ScriptError //status: done
     {
-        internal SyntaxError(string message) : this(message, Ruby.Runtime.Init.rb_eSyntaxError) { }
+        public SyntaxError(string message) : this(message, Ruby.Runtime.Init.rb_eSyntaxError) { }
 
-        protected SyntaxError(string message, Class klass) : base(message, klass) { }
+        public SyntaxError(Class klass) : base(klass) { }
+
+        public SyntaxError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class LoadError : ScriptError //status: done
+    public class LoadError : ScriptError //status: done
     {
-        internal LoadError(string message) : base(message, Ruby.Runtime.Init.rb_eLoadError) { }
+        public LoadError(string message) : base(message, Ruby.Runtime.Init.rb_eLoadError) { }
 
-        protected LoadError(string message, Class klass) : base(message, klass) { }
+        public LoadError(Class klass) : base(klass) { }
+
+        public LoadError(string message, Class klass) : base(message, klass) { }
     }
 
 
 
-    internal class NotImplementedError : ScriptError //status: done
+    public class NotImplementedError : ScriptError //status: done
     {
-        internal NotImplementedError(string message) : this(message, Ruby.Runtime.Init.rb_eNotImpError) { }
+        public NotImplementedError(string message) : this(message, Ruby.Runtime.Init.rb_eNotImpError) { }
 
-        protected NotImplementedError(string message, Class klass) : base(message, klass) { }
+        public NotImplementedError(Class klass) : base(klass) { }
 
-        internal static NotImplementedError rb_notimplement(Frame caller, string method)
+        public NotImplementedError(string message, Class klass) : base(message, klass) { }
+
+        public static NotImplementedError rb_notimplement(Frame caller, string method)
         {
             return new NotImplementedError(string.Format(CultureInfo.InvariantCulture, "The {0}() function is unimplemented on this machine", method));
         }
@@ -312,76 +337,84 @@ namespace Ruby
     }
 
 
-    internal class RuntimeError : StandardError //status: done
+    public class RuntimeError : StandardError //status: done
     {
-        internal RuntimeError(string message) : base(message, Ruby.Runtime.Init.rb_eRuntimeError) { }
+        public RuntimeError(string message) : base(message, Ruby.Runtime.Init.rb_eRuntimeError) { }
 
-        protected RuntimeError(string message, Class klass) : base(message, klass) { }
+        public RuntimeError(string message, Class klass) : base(message, klass) { }
+
+        public RuntimeError(Class klass) : base(klass) { }
     }
 
 
 
-    internal class SecurityError : StandardError //status: done 
+    public class SecurityError : StandardError //status: done 
     {
-        internal SecurityError(string message) : base(message, Ruby.Runtime.Init.rb_eSecurityError) { }
+        public SecurityError(string message) : base(message, Ruby.Runtime.Init.rb_eSecurityError) { }
 
-        protected SecurityError(string message, Class klass) : base(message, klass) { }
+        public SecurityError(string message, Class klass) : base(message, klass) { }
+
+        public SecurityError(Class klass) : base(klass) { }
     }
 
 
-    internal class ThreadError : StandardError //status: done 
+    public class ThreadError : StandardError //status: done 
     {
-        internal ThreadError(string message) : base(message, Ruby.Runtime.Init.rb_eThreadError) { }
+        public ThreadError(string message) : base(message, Ruby.Runtime.Init.rb_eThreadError) { }
 
-        protected ThreadError(string message, Class klass) : base(message, klass) { }
+        public ThreadError(string message, Class klass) : base(message, klass) { }
+
+        public ThreadError(Class klass) : base(klass) { }
     }
 
 
-    internal class NoMemoryError : Exception //status: done
+    public class NoMemoryError : Exception //status: done
     {
-        internal NoMemoryError(string message) : base(message, Ruby.Runtime.Init.rb_eNoMemError) { }
+        public NoMemoryError(string message) : base(message, Ruby.Runtime.Init.rb_eNoMemError) { }
 
-        protected NoMemoryError(string message, Class klass) : base(message, klass) { }
+        public NoMemoryError(string message, Class klass) : base(message, klass) { }
+
+        public NoMemoryError(Class klass) : base(klass) { }
     }
 
 
 
-    internal class SystemCallError : StandardError
+    public class SystemCallError : StandardError
     {
         internal int errno;
 
-        internal SystemCallError(int errno)
+        public SystemCallError(int errno)
             : base(Ruby.Runtime.Init.rb_eSystemCallError)
         {
             this.errno = errno;
         }
 
-        internal SystemCallError(string message) : base(message, Ruby.Runtime.Init.rb_eSystemCallError) { }
+        public SystemCallError(string message) : base(message, Ruby.Runtime.Init.rb_eSystemCallError) { }
 
-        internal SystemCallError(string message, Class klass)
+        public SystemCallError(string message, Class klass)
             : base(message, klass)
         {
             this.errno = 0;
         }
 
-        internal SystemCallError(Class klass)
+        public SystemCallError(Class klass)
             : base(null, klass)
         {
             this.errno = 0;
         }
 
-        internal SystemCallError(string message, Class klass, int errno)
+        public SystemCallError(string message, Class klass, int errno)
             : base(message, klass)
         {
             this.errno = errno;
         }
 
-        private static int HResultToPosixErrorCode(int HRESULT)
+        public static int HResultToPosixErrorCode(int HRESULT)
         {
             return HRESULT;
         }
 
-        internal static SystemCallError rb_sys_fail(string mesg, Frame caller)
+        public static SystemCallError rb_sys_fail(string mesg, Frame caller)
         {
             if (Errno.errno == 0)
                 Exception.rb_bug(string.Format(CultureInfo.InvariantCulture, "rb_sys_fail({0}) - errno == 0", (mesg != null ? mesg : "")), caller);
@@ -408,7 +441,7 @@ namespace Ruby
             return error;
         }
 
-        internal static SystemCallError rb_sys_fail(string mesg, System.Exception e, Frame caller)
+        public static SystemCallError rb_sys_fail(string mesg, System.Exception e, Frame caller)
         {
             SystemCallError error = null;
             if (e is System.IO.FileNotFoundException || e is System.IO.DirectoryNotFoundException || e is System.IO.DriveNotFoundException)

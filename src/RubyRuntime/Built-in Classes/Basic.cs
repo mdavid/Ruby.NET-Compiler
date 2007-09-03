@@ -27,7 +27,7 @@ namespace Ruby
 
         // -----------------------------------------------------------------------------
 
-        protected Basic(Class klass)
+        public Basic(Class klass)
         {
             this.my_class = klass;
             this.frozen = false;

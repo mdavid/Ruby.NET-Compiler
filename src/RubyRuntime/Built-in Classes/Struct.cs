@@ -16,7 +16,7 @@ namespace Ruby
 
     public partial class Struct : Object
     {
-        internal Struct(Class klass)
+        public Struct(Class klass)
             : base(klass)
         {
         }

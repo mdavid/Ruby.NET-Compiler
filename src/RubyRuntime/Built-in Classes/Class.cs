@@ -65,7 +65,7 @@ namespace Ruby
             this.super = superclass;
         }
 
-        protected Class(Class klass) : base(klass) 
+        public Class(Class klass) : base(klass) 
         { 
         }
 

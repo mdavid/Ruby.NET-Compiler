@@ -103,7 +103,7 @@ namespace Ruby
         // -----------------------------------------------------------------------------
 
 
-        internal IO(Class klass)
+        public IO(Class klass)
             : base(klass)
         {
         }
@@ -1875,23 +1875,27 @@ namespace Ruby
     // -------------------------------------------------------
     // EXCEPTIONS
 
-    
-    internal class IOError : StandardError
-    {
-        internal IOError(string message) : this(message, Ruby.Runtime.Init.rb_eIOError) { }
 
-        protected IOError(string message, Class klass) : base(message, klass) { }
+    public class IOError : StandardError
+    {
+        public IOError(string message) : this(message, Ruby.Runtime.Init.rb_eIOError) { }
+
+        public IOError(string message, Class klass) : base(message, klass) { }
+
+        public IOError(Class klass) : base(klass) { }
     }
 
 
-    
-    internal class EOFError : IOError
+
+    public class EOFError : IOError
     {
-        internal EOFError(string message) : this(message, Ruby.Runtime.Init.rb_eEOFError) { }
+        public EOFError(string message) : this(message, Ruby.Runtime.Init.rb_eEOFError) { }
 
-        protected EOFError(string message, Class klass) : base(message, klass) { }
+        public EOFError(string message, Class klass) : base(message, klass) { }
 
-        internal static EOFError rb_eof_error()
+        public EOFError(Class klass) : base(klass) { }
+
+        public static EOFError rb_eof_error()
         {
             return new EOFError("End of file reached");
         }

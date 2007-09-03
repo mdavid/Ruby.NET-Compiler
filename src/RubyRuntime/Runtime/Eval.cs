@@ -957,17 +957,21 @@ namespace Ruby
 {    
     internal class LocalJumpError : StandardError
     {
-        internal LocalJumpError(string message) : this(message, Ruby.Runtime.Init.rb_eLocalJumpError) { }
+        public LocalJumpError(string message) : this(message, Ruby.Runtime.Init.rb_eLocalJumpError) { }
 
-        protected LocalJumpError(string message, Class klass) : base(message, klass) { }
+        public LocalJumpError(string message, Class klass) : base(message, klass) { }
+
+        public LocalJumpError(Class klass) : base(klass) { }
     }
 
 
     
     internal class SystemStackError : StandardError
     {
-        internal SystemStackError(string message) : this(message, Ruby.Runtime.Init.rb_eSysStackError) { }
+        public SystemStackError(string message) : this(message, Ruby.Runtime.Init.rb_eSysStackError) { }
 
-        protected SystemStackError(string message, Class klass) : base(message, klass) { }
+        public SystemStackError(string message, Class klass) : base(message, klass) { }
+
+        public SystemStackError(Class klass) : base(klass) { }
     }
 }

@@ -28,7 +28,7 @@ namespace Ruby
 
         //-----------------------------------------------------------------
 
-        internal String(Class klass)
+        public String(Class klass)
             : base(klass) //status: done
         {
             this.value = "";

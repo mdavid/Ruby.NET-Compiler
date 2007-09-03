@@ -54,7 +54,8 @@ namespace Ruby.Compiler.AST
             PERWAPI.Method superClassConstructor = null;
             if (arity == 0)
                 superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
-            else
+            
+            if (superClassConstructor == null)
             {
                 PERWAPI.Method[] constructors = perwapiClass.GetMethodDescs(".ctor");
                 foreach (PERWAPI.Method constructor in constructors)

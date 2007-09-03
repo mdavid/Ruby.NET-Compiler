@@ -16,7 +16,8 @@ namespace Ruby
 
     public abstract partial class Integer : Numeric
     {
-        protected Integer(Class klass): base(klass)
+        public Integer(Class klass)
+            : base(klass)
         {
         }
 

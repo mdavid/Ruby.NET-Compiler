@@ -22,7 +22,7 @@ namespace Ruby
 
         private Bignum() : base(Ruby.Runtime.Init.rb_cBignum) {    }
 
-        protected Bignum(Class klass) : base(klass) { }
+        public Bignum(Class klass) : base(klass) { }
 
         internal Bignum(double value) : this()
         {

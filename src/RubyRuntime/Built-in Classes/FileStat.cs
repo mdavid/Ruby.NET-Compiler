@@ -23,7 +23,7 @@ namespace Ruby
             this.stat = fstat(path);
         }
 
-        internal FileStat(Class klass) : base(klass) { }
+        public FileStat(Class klass) : base(klass) { }
 
         internal Stat stat;
 

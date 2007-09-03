@@ -27,7 +27,8 @@ namespace Ruby
             this.value = value;
         }
 
-        protected Float(Class klass) : base(klass) 
+        public Float(Class klass)
+            : base(klass) 
         { 
         }
 

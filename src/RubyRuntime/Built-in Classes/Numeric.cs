@@ -42,7 +42,8 @@ namespace Ruby
         {
         }
 
-        internal Numeric(Class klass): base(klass)
+        public Numeric(Class klass)
+            : base(klass)
         {
         }
 
@@ -162,28 +163,30 @@ namespace Ruby
     }
 
 
-    
-    internal class FloatDomainError : RangeError // status: done
-    {
-        internal FloatDomainError(string message) : this(message, Ruby.Runtime.Init.rb_eFloatDomainError) { }
 
-        internal FloatDomainError(string message, Class klass) : base(message, klass) { }
+    public class FloatDomainError : RangeError // status: done
+    {
+        public FloatDomainError(string message) : this(message, Ruby.Runtime.Init.rb_eFloatDomainError) { }
+
+        public FloatDomainError(string message, Class klass) : base(message, klass) { }
+
+        public FloatDomainError(Class klass) : base(klass) { }
     }
 
 
 
-    
-    internal class ZeroDivisionError : StandardError // status: done
+
+    public class ZeroDivisionError : StandardError // status: done
     {
-        internal ZeroDivisionError(string message) : this(message, Ruby.Runtime.Init.rb_eZeroDivError) { }
+        public ZeroDivisionError(string message) : this(message, Ruby.Runtime.Init.rb_eZeroDivError) { }
 
-        protected ZeroDivisionError(string message, Class klass) : base(message, klass) { }
+        public ZeroDivisionError(string message, Class klass) : base(message, klass) { }
 
-        internal static ZeroDivisionError rb_num_zerodiv(Frame caller)
+        public ZeroDivisionError(Class klass) : base(klass) { }
+
+        public static ZeroDivisionError rb_num_zerodiv(Frame caller)
         {
             return new ZeroDivisionError("divided by 0");
         }
     }
 }
-
-

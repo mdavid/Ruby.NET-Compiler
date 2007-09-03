@@ -39,7 +39,8 @@ namespace Ruby
         { 
         }
 
-        internal Range(Class klass) : base(klass) 
+        public Range(Class klass)
+            : base(klass) 
         { 
         }
 

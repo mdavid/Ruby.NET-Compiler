@@ -40,7 +40,8 @@ namespace Ruby
             this.id_new = id;
         }
 
-        protected Symbol(Class klass) : base(klass) 
+        public Symbol(Class klass)
+            : base(klass) 
         { 
         }
 

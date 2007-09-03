@@ -21,7 +21,8 @@ namespace Ruby
 
         //-------------------------------------------------------------------------------
 
-        internal Match(Class klass) : base(klass) 
+        public Match(Class klass)
+            : base(klass) 
         {
             this.value = null;
             this.matched = null;

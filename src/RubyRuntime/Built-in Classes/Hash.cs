@@ -34,11 +34,13 @@ namespace Ruby
         {
         }
 
-        internal Hash(Class klass): base(klass) 
+        public Hash(Class klass)
+            : base(klass) 
         {
         }
 
-        internal Hash(Dictionary value): this()
+        internal Hash(Dictionary value)
+            : this()
         {
             this.value = value; // Fixme: should we be cloning here???
         }

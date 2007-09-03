@@ -32,7 +32,7 @@ namespace Ruby
         {
         }
 
-        internal Time(Class klass)
+        public Time(Class klass)
             : base(klass) //status: done
         {
 

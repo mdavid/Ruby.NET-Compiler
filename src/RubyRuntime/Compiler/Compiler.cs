@@ -50,7 +50,6 @@ namespace Ruby.Compiler
                     return new System.IO.FileInfo(absolutePath);
             }
             throw new LoadError("File not found: " + filename).raise(null);
-            return null;
         }
 
         public static void Process(string[] args, TaskLoggingHelper log)

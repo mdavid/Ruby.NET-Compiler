@@ -48,7 +48,7 @@ namespace Ruby
             thGroup = Eval.thgroup_default;
         }
 
-        protected Thread(Class klass)
+        public Thread(Class klass)
             : base(klass)
         {
         }

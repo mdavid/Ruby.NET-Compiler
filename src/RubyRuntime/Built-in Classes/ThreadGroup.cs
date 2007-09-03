@@ -26,7 +26,7 @@ namespace Ruby
 
         }
 
-        internal ThreadGroup(Class klass)
+        public ThreadGroup(Class klass)
             : base(klass)
         {
         }

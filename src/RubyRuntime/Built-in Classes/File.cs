@@ -34,7 +34,7 @@ namespace Ruby
 
         // -------------------------------------------------------
 
-        internal File(Class klass)
+        public File(Class klass)
             : base(klass)
         {
         }

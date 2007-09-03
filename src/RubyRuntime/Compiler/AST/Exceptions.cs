@@ -316,8 +316,10 @@ namespace Ruby.Compiler.AST
             {
                 expr.GenCode(context);
                 if (context.Reachable())
+                {
                     context.stloc(RescueTemp);
-                context.Goto(endLabel);
+                    context.Goto(endLabel);
+                }
             }
             PERWAPI.TryBlock tryBlock = context.EndTryBlock();
 
@@ -326,8 +328,10 @@ namespace Ruby.Compiler.AST
                 context.pop();
                 rescue.GenCode(context);
                 if (context.Reachable())
+                {
                     context.stloc(RescueTemp);
-                context.Goto(endLabel);
+                    context.Goto(endLabel);
+                }
             }
             context.EndCatchBlock(Runtime.RubyExceptionRef, tryBlock);
 

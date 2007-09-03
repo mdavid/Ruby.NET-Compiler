@@ -39,7 +39,7 @@ namespace Ruby
         {
         }
 
-        internal Array(Class klass)
+        public Array(Class klass)
             : base(klass)
         {
             value = new ArrayList();
