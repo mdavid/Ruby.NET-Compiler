@@ -19,28 +19,24 @@ namespace Ruby.Interop
 
         internal override bool get_method(string methodId, out RubyMethod method, out Class klass)
         {
-            method = FindCLRMethod(methodId, clrtype);
-            if (method != null)
+            if (_methods.TryGetValue(methodId, out method))
             {
                 klass = this;
                 return true;
             }
-            else
+
+            if (null != (method = FindCLRMethod(methodId, clrtype)))
             {
-                if (base.get_method(methodId, out method, out klass))
-                    return true;
-
-                if (Init.rb_cClass.get_method(methodId, out method, out klass))
-                    return true;
-
-                if (Init.rb_cModule.get_method(methodId, out method, out klass))
-                    return true;
-
-                if (Init.rb_cObject.get_method(methodId, out method, out klass))
-                    return true;
-
-                return false;
+                klass = this;
+                this._methods[methodId] = method;
+                return true;
             }
+
+            if (super != null && super.get_method(methodId, out method, out klass))
+                return true;
+
+            klass = null;
+            return false;
         }
 
         internal override object const_get(string name, bool recurse, Frame caller)
@@ -123,12 +119,6 @@ namespace Ruby.Interop
                 }
 
                 flags = BindingFlags.Static | BindingFlags.Public;
-            }
-            else
-            {
-                // instance methods
-                if (methodId == "initialize")
-                    return new RubyMethod(Methods.rb_obj_dummy.singleton, 0, Access.Private, this);
             }
 
             bool is_setter = false;
@@ -280,9 +270,36 @@ namespace Ruby.Interop
                     ? null
                     : Load(baseType, caller, makeConstant && baseType.Assembly == type.Assembly);
 
-                klass = klass = new CLRClass(type, baseClass, Type.Class);
-                CLRClass meta = new CLRClass(type, klass.super, Type.IClass);
-                klass.my_class = meta;
+                if (baseClass != null)
+                {
+                    klass = new CLRClass(type, baseClass, Type.Class);
+                    klass.my_class = new CLRClass(type, baseClass.my_class, Type.IClass);
+
+                    System.Type[] inherited = baseType.GetInterfaces();
+                    foreach (System.Type iface in type.GetInterfaces())
+                    {
+                        if (0 > System.Array.IndexOf(inherited, iface))
+                            Class.rb_include_module(caller, klass, Load(iface, caller, false));
+                    }
+                }
+                else
+                {
+                    if (type.IsInterface)
+                    {
+                        klass = new CLRClass(type, null, Type.Module);
+                        klass.my_class = new CLRClass(type, Init.rb_cModule, Type.IClass);
+                    }
+                    else
+                    {
+                        klass = new CLRClass(type, Init.rb_cObject, Type.Class);
+                        klass.my_class = new CLRClass(type, Init.rb_cClass, Type.IClass);
+                    }
+
+                    foreach (System.Type iface in type.GetInterfaces())
+                        Class.rb_include_module(caller, klass, Load(iface, caller, false));
+                }
+
+                Augmentations.Augment(type, klass, caller);
                 klass = Define(type, klass);
             }
 

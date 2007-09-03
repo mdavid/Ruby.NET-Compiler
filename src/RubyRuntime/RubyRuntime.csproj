@@ -105,6 +105,11 @@
     <Compile Include="Compiler\Ruby.cs" />
     <Compile Include="Compiler\Scanner.cs" />
     <Compile Include="Compiler\Terminators.cs" />
+    <Compile Include="Interop\Augmentations\ICollection.cs" />
+    <Compile Include="Interop\Augmentations\ICloneable.cs" />
+    <Compile Include="Interop\Augmentations\IEnumerable.cs" />
+    <Compile Include="Interop\Augmentations\Augmentations.cs" />
+    <Compile Include="Interop\Augmentations\Object.cs" />
     <Compile Include="Interop\Built-in Classes\Array.cs" />
     <Compile Include="Interop\Built-in Classes\Bignum.cs" />
     <Compile Include="Interop\Built-in Classes\Binding.cs" />
