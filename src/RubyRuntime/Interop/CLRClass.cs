@@ -102,9 +102,24 @@ namespace Ruby.Interop
                 {
                     // instantiate a generic type
                     // ruby: type = ns::List[System::Int32]
-                    return new RubyMethod(
-                        new GenericTypeGetter(clrtype.Assembly, clrtype.FullName),
-                        -1, Access.Public, this);
+                    if (clrtype.IsGenericType)
+                    {
+                        // clrtype is Type`n+Inner but we are looking for Type`n+Inner`n
+                        // we need to strip generic arguments from the name, but supply
+                        // them to the GenericTypeGetter
+                        return new RubyMethod(
+                            new GenericTypeGetter(
+                                clrtype.Assembly,
+                                clrtype.GetGenericTypeDefinition().FullName,
+                                clrtype.GetGenericArguments()),
+                            -1, Access.Public, this);
+                    }
+                    else
+                    {
+                        return new RubyMethod(
+                            new GenericTypeGetter(clrtype.Assembly, clrtype.FullName, null),
+                            -1, Access.Public, this);
+                    }
                 }
 
                 flags = BindingFlags.Static | BindingFlags.Public;
@@ -139,8 +154,27 @@ namespace Ruby.Interop
 
             MemberInfo[] members = clrtype.GetMember(methodId, flags);
 
-            if (members == null || members.Length == 0)
+            if (members.Length == 0)
+            {
+                // we didn't find a member with the exact name
+                // but we still need to check for nested types with
+                // additional type parameters
+                string genericNestedId = methodId + "`";
+                foreach (System.Type nested in clrtype.GetNestedTypes(flags))
+                {
+                    if (nested.Name.StartsWith(genericNestedId))
+                    {
+                        return new RubyMethod(
+                            new ValueMethod(
+                                new GenericContainer(
+                                    clrtype.Assembly, clrtype.Name + "+" + methodId,
+                                    clrtype.GetGenericArguments())),
+                            0, Access.Public, this);
+                    }
+                }
+
                 return null;
+            }
 
             if (members[0] is MethodBase)
             {
@@ -288,7 +322,7 @@ namespace Ruby.Interop
                     if (container == null && !context.const_defined(name))
                     {
                         context.define_const(name,
-                            new GenericContainer(type.Assembly, containerName));
+                            new GenericContainer(type.Assembly, containerName, null));
                     }
                 }
                 else
@@ -350,11 +384,13 @@ namespace Ruby.Interop
     {
         private Assembly assembly;
         private string fullname;
+        System.Type[] closedArguments;
 
-        internal GenericTypeGetter(Assembly assembly, string fullname)
+        internal GenericTypeGetter(Assembly assembly, string fullname, System.Type[] closedArguments)
         {
             this.assembly = assembly;
             this.fullname = fullname;
+            this.closedArguments = closedArguments;
         }
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
@@ -368,21 +404,25 @@ namespace Ruby.Interop
             if (type == null)
                 throw new System.TypeLoadException();
 
+            int extra = closedArguments == null ? 0 : closedArguments.Length;
+            System.Type[] typeArguments = new System.Type[extra + args.Length];
 
-            System.Type[] typeArguments = new System.Type[args.Length];
+            if (extra > 0)
+                System.Array.Copy(closedArguments, typeArguments, extra);
+
             for (int i = 0; i < args.Length; i++)
             {
                 System.Type typeArg = args[i] as System.Type;
                 if (typeArg != null)
                 {
-                    typeArguments[i] = typeArg;
+                    typeArguments[extra + i] = typeArg;
                     continue;
                 }
 
                 CLRClass klass = args[i] as CLRClass;
                 if (klass != null)
                 {
-                    typeArguments[i] = klass.clrtype;
+                    typeArguments[extra + i] = klass.clrtype;
                     continue;
                 }
 
@@ -391,6 +431,21 @@ namespace Ruby.Interop
             }
 
             return CLRClass.Load(type.MakeGenericType(typeArguments), caller, false);
+        }
+    }
+
+    internal class ValueMethod : Ruby.Runtime.MethodBody0
+    {
+        public ValueMethod(object value)
+        {
+            this.value = value;
+        }
+
+        object value;
+
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
+        {
+            return value;
         }
     }
 
@@ -601,16 +656,10 @@ namespace Ruby.Interop
     // this is used in the case where there exists a type T`n but no T
     internal class GenericContainer : Class
     {
-        private string name;
-        private Assembly assembly;
-
-        internal GenericContainer(Assembly assembly, string name)
+        internal GenericContainer(Assembly assembly, string name, System.Type[] arguments)
             : base(name, null, Type.Module)
         {
-            this.name = name;
-            this.assembly = assembly;
-
-            this.define_module_function("[]", new GenericTypeGetter(assembly, name), -1, null);
+            this.define_module_function("[]", new GenericTypeGetter(assembly, name, arguments), -1, null);
         }
     }
 }
