@@ -212,7 +212,10 @@ namespace Ruby.Methods
                 return new Array(pair.Key.key, pair.Value);
             }
 
-            return null;
+            if (hash.defaultProc != null)
+                return Proc.rb_yield(hash.defaultProc, caller, hash, null);
+            else
+                return hash.defaultValue;
         }
     }
 
@@ -334,15 +337,17 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            Dictionary dict = ((Hash)recv).value;
-            Dictionary dict2 = Hash.HashValue(param0, caller);
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+            Hash hash2 = Hash.to_hash(param0, caller);
+            Dictionary dict2 = hash2.value;
 
             dict.Clear();
 
             foreach (KeyValuePair pair in dict2)
-            {
                 dict[pair.Key] = pair.Value;
-            }
+            hash.defaultProc = hash2.defaultProc;
+            hash.defaultValue = hash2.defaultValue;
 
             return recv;
         }
@@ -614,7 +619,7 @@ namespace Ruby.Methods
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
             Dictionary dict = ((Hash)recv).value;
-            Dictionary dict2 = Hash.HashValue(param0, caller);
+            Dictionary dict2 = Hash.to_hash(param0, caller).value;
 
             if (block != null)
             {

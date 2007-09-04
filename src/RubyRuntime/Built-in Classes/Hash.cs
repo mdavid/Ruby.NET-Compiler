@@ -77,12 +77,12 @@ namespace Ruby
             return new Hash(value);
         }
 
-        internal static Dictionary HashValue(object obj, Frame caller)
+        internal static Hash to_hash(object obj, Frame caller)
         {
             if (obj is Hash)
-                return ((Hash)obj).value;
+                return (Hash)obj;
 
-            return Object.Convert<Hash>(obj, "to_hash", caller).value;
+            return Object.Convert<Hash>(obj, "to_hash", caller);
         }
 
         internal static void StartInspect(object obj)

@@ -189,7 +189,7 @@ namespace Ruby
             }
             else
             {
-                return Object.Convert<String>(obj, "to_s", caller).value; // BBTAG: most classes don't implement to_str
+                return Object.Convert<String>(obj, "to_str", caller).value;
             }
         }
 
@@ -205,8 +205,20 @@ namespace Ruby
             }
             else
             {
-                return Object.Convert<String>(obj, "to_s", caller); // BBTAG: most classes don't implement to_str
+                return Object.Convert<String>(obj, "to_str", caller);
             }
+        }
+
+        internal static string SafeStringValue(object obj, Frame caller)
+        {
+            return RSafeStringValue(obj, caller).value;
+        }
+
+        internal static String RSafeStringValue(object obj, Frame caller)
+        {
+            String x = RStringValue(obj, caller);
+            Eval.rb_check_safe_obj(caller, x);
+            return x;
         }
 
         internal static bool TryStringValue(object obj, out string value, Frame caller)
@@ -223,7 +235,7 @@ namespace Ruby
             }
             else
             {
-                value = Object.CheckConvert<String>(obj, "to_s", caller).value; // BBTAG: most classes don't implement to_str
+                value = Object.CheckConvert<String>(obj, "to_str", caller).value;
                 return value != null;
             }
         }

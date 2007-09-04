@@ -1463,25 +1463,29 @@ namespace Ruby
         internal static object rb_open_file(IO io, Frame caller, Array rest)
         {
             Class.rb_scan_args(caller, rest, 1, 2, false);
-
-            string fname = String.StringValue(rest[0], caller);
             object vmode = null, perm = null;
             if (rest.Count > 1)
                 vmode = rest[1];
             if (rest.Count > 2)
                 perm = rest[2];
+            string fname = String.SafeStringValue(rest[0], caller);
 
-            string mode = vmode == null ? "r" : String.StringValue(vmode, caller);
-
-            int flags;
-            if (vmode is int)
+            if (vmode is int || perm != null)
             {
-                flags = (int)vmode;
+                int flags;
+                if (vmode is int)
+                    flags = (int)vmode;
+                else
+                    flags = IO.rb_io_mode_modenum(caller, String.SafeStringValue(vmode, caller));
+                // TODO: fmode / perm not used
+                //int fmode = (perm == null) ? 438 /*0666*/ : Integer.rb_num2long(perm);
+
                 io.Init(fname, IO.modenumToFileMode(flags), IO.modenumToFileAccess(flags), IO.rb_io_modenum_flags(flags));
             }
             else
             {
-                flags = IO.rb_io_mode_modenum(caller, mode);
+                string mode = (vmode == null) ? "r" : String.StringValue(vmode, caller);
+                int flags = IO.rb_io_mode_modenum(caller, mode);
                 io.Init(fname, IO.modenumToFileMode(flags), IO.modenumToFileAccess(flags), IO.rb_io_mode_flags(caller, mode));
             }
 

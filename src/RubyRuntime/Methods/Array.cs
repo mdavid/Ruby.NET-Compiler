@@ -1684,16 +1684,19 @@ namespace Ruby.Methods
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
         {
             ArrayList ary = ((Array)recv).value;
+
+            if (ary.Count == 0) // Special case: [].join(arbitrary_object) == ''
+                return new String();
+
             string sep;
 
-            if (p1 == null)
-            {
+            object sep_obj = p1 ?? File.rb_output_fs.value;
+            if (sep_obj == null)
                 sep = string.Empty;
-            }
             else
-            {
-                sep = String.StringValue(p1, caller);
-            }
+                sep = String.StringValue((String)sep_obj, caller);
+
+            // TODO: record & propagate taint
 
             StringBuilder sb = new StringBuilder();
 
