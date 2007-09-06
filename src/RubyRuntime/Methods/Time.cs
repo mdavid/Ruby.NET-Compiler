@@ -577,12 +577,15 @@ namespace Ruby.Methods
 
             if (time2 is Time)
             {
-                Time tobj2;
-                double f;
+                long sec, usec;
+                Time.GetParts(tobj, out sec, out usec);
 
-                tobj2 = (Time)time2; 
-                f = (double)tobj._tv_sec() - (double)tobj2._tv_sec();
-                f += ((double)tobj._tv_usec() - (double)tobj2._tv_usec()) * 1e-6;
+                long sec2, usec2;
+                Time.GetParts((Time)time2, out sec2, out usec2);
+
+                double f; // result, in floating-point seconds
+                f = sec - sec2;
+                f += (usec - usec2) / 1e6;
                 
                 return new Float(f);
             }

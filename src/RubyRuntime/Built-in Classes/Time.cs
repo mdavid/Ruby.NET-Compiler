@@ -56,16 +56,6 @@ namespace Ruby
 
         //-----------------------------------------------------------------
 
-        internal long _tv_sec()
-        {
-            return Time.TicksToSeconds(this.value.Ticks - Time.GetEpoch(this).Ticks);
-        }
-
-        internal int _tv_usec()
-        {
-            return this.value.Millisecond;
-        }
-
         internal override object  Inner()
         {
              return value;
@@ -101,20 +91,23 @@ namespace Ruby
             }
         }
 
-        internal static long GetTicks(long secs, long milli)
+        internal static void GetParts(Time time, out long sec, out long usec)
         {
-            return (long)(secs * 1e7) + milli * 10;
+            long ticks = time.value.Ticks - Time.GetEpoch(time).Ticks;
+            Time.GetParts(ticks, out sec, out usec);
         }
 
-        internal static long TicksToSeconds(long ticks)
+        internal static void GetParts(long ticks, out long sec, out long usec)
         {
-            return (long)(ticks / 1e7);
+            sec = ticks / (long)1e7;
+            usec = (ticks % (long)1e7) / 10;
         }
 
-        internal static long TicksToMilli(long ticks)
+        internal static long GetTicks(long sec, long usec)
         {
-            return ticks / 10;
+            return sec * (long)1e7 + usec * 10;
         }
+
 
         internal static string strftime(string format, System.DateTime dt)
         {
@@ -282,7 +275,7 @@ namespace Ruby
 
             time_timeval(time, out secs, out usec, true, caller);
 
-            return new TimeSpan(secs * 10000000 + usec * 100);
+            return new TimeSpan(Time.GetTicks(secs, usec));
         }
 
         internal static void rb_time_timeval(object time, out long secs, out long usec, Frame caller)
@@ -290,8 +283,7 @@ namespace Ruby
 
             if (time is Time)
             {
-                secs = ((Time)time).value.Ticks / 10000000;
-                usec = (((Time)time).value.Ticks % 10000000) / 10;
+                Time.GetParts((Time)time, out secs, out usec);
                 return;
             }
 
@@ -485,30 +477,27 @@ namespace Ruby
             {
                 throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time {0} {1} out of Time range", sign < 0 ? "-" : "+", v)).raise(caller);
             }
-            
             usec_off = (long)(d * 1e6);
+
+            Time.GetParts(tobj, out sec, out usec);
             if (sign < 0)
             {
-                sec = Time.TicksToSeconds(tobj.value.Ticks - Time.GetEpoch(tobj).Ticks) - sec_off;
-                usec = tobj.value.Millisecond - usec_off;
+                sec -= sec_off;
+                usec -= usec_off;
                 //wartag: C Ruby uses overflows here to test if the subtraction will fail
                 //unfortunately it tests for overflow on a signed 32-bit integer so it won't fail
                 //if time is subtracted less than -2^31 before epoch. Rather it will go on to throw
                 //a different type of error later on from a different location.
                 if (sec < -2147483648)
-                {
                     throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time - {0} out of Time range", v)).raise(caller);
-                }
             }
             else {
-                long tt = new Time(Time.EndTime)._tv_sec();
-                sec = Time.TicksToSeconds(tobj.value.Ticks - Time.GetEpoch(tobj).Ticks) + sec_off;
-                usec = tobj.value.Millisecond + usec_off;
+                //long tt = new Time(Time.EndTime)._tv_sec();
+                sec += sec_off;
+                usec += usec_off;
                 //wartag: simple rangeerror once we get over (2^31-1)
                 if (sec > 2147483647)
-                {
                     throw new RangeError(string.Format(CultureInfo.InvariantCulture, "time - {0} out of Time range", v)).raise(caller);
-                }
             }
             //Time.CheckAddition(tobj.value, Time.GetTicks(sec, usec), caller);
             Time.time_overflow_p(ref sec, ref usec, caller);
