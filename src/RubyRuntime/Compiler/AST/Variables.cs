@@ -491,7 +491,6 @@ namespace Ruby.Compiler.AST
             context.ldstr(vid.ToString());
             value.GenSimple(context);
             context.call(Runtime.Variables.cvar_set);
-            context.ldnull();
 
             context.ReleaseLocal(value, created);
         }

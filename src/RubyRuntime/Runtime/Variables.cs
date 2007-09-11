@@ -106,12 +106,12 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static void cvar_set(Frame caller, Class klass, string cvar_name, object value) //author: Brian, status: done
+        public static object cvar_set(Frame caller, Class klass, string cvar_name, object value) //author: Brian, status: done
         {
-            cvar_set(caller, klass, cvar_name, value, true);
+            return cvar_set(caller, klass, cvar_name, value, true);
         }
 
-        internal static void cvar_set(Frame caller, Class klass, string cvar_name, object value, bool warn) //author: Brian, status: done
+        internal static object cvar_set(Frame caller, Class klass, string cvar_name, object value, bool warn) //author: Brian, status: done
         {
             Class tmp = klass;
             while (tmp != null)
@@ -133,12 +133,12 @@ namespace Ruby.Runtime
                     if (Options.ruby_verbose.value != null)
                         cvar_override_check(cvar_name, tmp);
 
-                    return;
+                    return value;
                 }
                 tmp = tmp.super;
             }
 
-            klass.instance_variable_set(cvar_name, value);
+            return klass.instance_variable_set(cvar_name, value);
         }
 
         [UsedByRubyCompiler]

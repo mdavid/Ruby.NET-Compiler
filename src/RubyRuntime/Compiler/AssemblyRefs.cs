@@ -378,7 +378,7 @@ namespace Ruby.Compiler
             internal static MethodRef alias_variable = AddStaticMethod(VariablesRef, "alias_variable", PrimitiveType.Object, new Type[] { PrimitiveType.String, PrimitiveType.String });
             internal static MethodRef cvar_defined = AddStaticMethod(VariablesRef, "cvar_defined", PrimitiveType.Object, new Type[] { ClassRef, PrimitiveType.String });
             internal static MethodRef cvar_get = AddStaticMethod(VariablesRef, "cvar_get", PrimitiveType.Object, new Type[] { FrameRef, ClassRef, PrimitiveType.String });
-            internal static MethodRef cvar_set = AddStaticMethod(VariablesRef, "cvar_set", PrimitiveType.Void, new Type[] { FrameRef, ClassRef, PrimitiveType.String, PrimitiveType.Object });
+            internal static MethodRef cvar_set = AddStaticMethod(VariablesRef, "cvar_set", PrimitiveType.Object, new Type[] { FrameRef, ClassRef, PrimitiveType.String, PrimitiveType.Object });
             internal static MethodRef gvar_defined = AddStaticMethod(VariablesRef, "gvar_defined", PrimitiveType.Object, new Type[] { PrimitiveType.String });
             internal static MethodRef gvar_get = AddStaticMethod(VariablesRef, "gvar_get", PrimitiveType.Object, new Type[] { PrimitiveType.String, FrameRef });
             internal static MethodRef gvar_set = AddStaticMethod(VariablesRef, "gvar_set", PrimitiveType.Object, new Type[] { PrimitiveType.String, PrimitiveType.Object, FrameRef });
