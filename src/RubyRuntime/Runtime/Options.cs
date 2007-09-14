@@ -59,6 +59,7 @@ namespace Ruby.Runtime
                     break;
                 case "rb_progname":
                     Options.rb_progname.value = new String((string)value);
+                    ((Array)Eval.rb_features.value).Add(value);
                     break;
                 case "require":
                     throw new System.NotImplementedException("require option");

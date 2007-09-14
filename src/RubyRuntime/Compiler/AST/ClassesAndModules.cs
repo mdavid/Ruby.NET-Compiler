@@ -93,7 +93,14 @@ namespace Ruby.Compiler.AST
                 {
                     superClassFound = true;
                     superClassConstructor0 = superClass.GetMethodDesc(".ctor", new Type[0]);
+
+                    if (superClassConstructor0 is MethodDef)
+                        superClassConstructor0 = ((MethodDef)superClassConstructor0).MakeRefOf();
+
                     superClassConstructor1 = superClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+
+                    if (superClassConstructor1 is MethodDef)
+                        superClassConstructor1 = ((MethodDef)superClassConstructor1).MakeRefOf();
                 }
                 else
                     superClass = Runtime.ObjectRef;
