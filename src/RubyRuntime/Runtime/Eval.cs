@@ -606,7 +606,10 @@ namespace Ruby.Runtime
         [UsedByRubyCompiler]
         public static object get_const(object current, string id, Frame caller)
         {
-            return const_get_defined((Class)current, id, caller, true);
+            if (current is Class)
+                return const_get_defined((Class)current, id, caller, true);
+            else
+                throw new TypeError(String.ObjectAsString(current, caller).ToString() + " is not a class/module").raise(caller);
         }
 
         [UsedByRubyCompiler]
