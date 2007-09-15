@@ -166,10 +166,18 @@ namespace Ruby.Runtime
                     element = element.Substring(1, element.Length - 2);
 
                 if (globbing)
-                    throw new System.NotImplementedException("command line globbing");
+                {
+                    List<string> files = Dir.glob(element);
+                    if (files.Count == 0)
+                        args.Add(element);
+                    else
+                        args.AddRange(files);
 
-                if (element != "")
+                }
+                else if (element != "")
+                {
                     args.Add(element);
+                }
             }
 
             return args.ToArray();

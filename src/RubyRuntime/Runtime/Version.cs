@@ -23,7 +23,7 @@ namespace Ruby.Runtime
 
         internal static void ruby_show_version()
         {
-            System.Console.WriteLine("ruby {0} ({1}) [{2}]\n", ruby_version, ruby_release_date, ruby_platform);
+            System.Console.WriteLine("ruby {0} ({1}) [{2}]", ruby_version, ruby_release_date, ruby_platform);
         }
 
         internal static void ruby_show_copyright()

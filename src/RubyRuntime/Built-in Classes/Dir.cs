@@ -155,7 +155,7 @@ namespace Ruby
         }
 
 
-        private static System.Collections.Generic.List<string> glob(string searchString)
+        internal static System.Collections.Generic.List<string> glob(string searchString)
         {
             System.Collections.Generic.List<string> files = new System.Collections.Generic.List<string>();
 

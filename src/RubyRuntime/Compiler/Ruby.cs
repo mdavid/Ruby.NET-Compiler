@@ -111,7 +111,7 @@ namespace Ruby.Compiler
                 if (s == "")
                 {
                     i++;
-                    break;
+                    continue;
                 }
                 switch (s[0])
                 {
@@ -338,13 +338,13 @@ namespace Ruby.Compiler
                         }
                         else
                         {
-                            System.Console.Error.WriteLine("{0}: invalid option --{1} (-h will show valid options)\n", compiler_name, s);
+                            System.Console.Error.WriteLine("{0}: invalid option --{1} (-h will show valid options)", compiler_name, s);
                             return false;
                         }
                         break;
 
                     default:
-                        System.Console.Error.WriteLine("{0}: invalid option -{1} (-h will show valid options)\n", compiler_name, s);
+                        System.Console.Error.WriteLine("{0}: invalid option -{1} (-h will show valid options)", compiler_name, s);
                         return false;
                 }
             }
@@ -404,7 +404,15 @@ namespace Ruby.Compiler
             else
             {
                 List<string> more_options;
-                tree = File.load_file(null, script, xflag, out more_options, null);
+                try
+                {
+                    tree = File.load_file(null, script, xflag, out more_options, null);
+                }
+                catch (System.Exception e)
+                {
+                    System.Console.Error.WriteLine("{0}: {1} -- {2}\n", compiler_name, e.Message, script);
+                    return false;
+                }
                 if (more_options != null)
                     proc_options(0, more_options.ToArray());
             }
