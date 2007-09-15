@@ -20,7 +20,10 @@ namespace Ruby
         internal Frame frame;
         internal object self;
 
-        internal Binding(Frame frame, object self)
+        internal Binding() : base(Ruby.Runtime.Init.rb_cBinding) { }
+        public Binding(Class klass) : base(klass) { }
+
+        internal Binding(Frame frame, object self) : this()
         {
             this.frame = frame;
             this.self = self;
