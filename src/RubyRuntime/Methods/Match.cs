@@ -183,13 +183,15 @@ namespace Ruby.Methods
         {
             object idx, rest = null;
 
-            if (Class.rb_scan_args(caller, args.ToRubyArray(), 1, 1, false) == 2)
+            Array argv = args.ToRubyArray();
+
+            if (Class.rb_scan_args(caller, argv, 1, 1, false) == 2)
                 rest = args[1];
             idx = args[0];
 
             if (rest != null || !(idx is int) || ((int)idx) < 0)
             {
-                return rb_ary_aref.singleton.Call(last_class, match_to_a.singleton.Call0(last_class, recv, caller, null), caller, null, new Array(new object[] { idx, rest }));
+                return rb_ary_aref.singleton.Call(last_class, match_to_a.singleton.Call0(last_class, recv, caller, null), caller, null, argv);
             }
 
             return Regexp.rb_reg_nth_match((int)idx, (Match)recv);
