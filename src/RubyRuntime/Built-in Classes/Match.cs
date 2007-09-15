@@ -90,8 +90,16 @@ namespace Ruby
 
             foreach (System.Text.RegularExpressions.Group group in match.value.Groups)
             {
-                String str = new String(group.Value);
-                str.Tainted = taint;
+                String str;
+                if (group.Success)
+                {
+                    str = new String(group.Value);
+                    str.Tainted = taint;
+                }
+                else
+                {
+                    str = null;
+                }
                 result.Add(str);
             }
 
