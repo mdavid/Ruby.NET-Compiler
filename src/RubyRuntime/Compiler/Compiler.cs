@@ -99,7 +99,10 @@ namespace Ruby.Compiler
             }
 
             if (inputFiles.Count == 0)
-                throw new System.Exception("No inputs specified");
+            {
+                Console.WriteLine("fatal error: No inputs specified");
+                return;
+            }
 
             if (outFile == null)
                 outFile = inputFiles[0]; // defaults to first source file name
