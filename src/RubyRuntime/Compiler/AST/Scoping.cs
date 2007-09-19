@@ -48,11 +48,14 @@ namespace Ruby.Compiler.AST
         internal ClassDef FileClass()
         {
             Scope parent;
-            for (parent = this; parent != null && !(parent is SOURCEFILE); parent = parent.parent_scope);
-            if (parent == null)
-                return null;
-            else
+            for (parent = this; parent != null && !(parent is SOURCEFILE) && !(parent is EVAL); parent = parent.parent_scope);
+            
+            if (parent is SOURCEFILE)
                 return ((SOURCEFILE)parent).fileClass;
+            else if (parent is EVAL)
+                return ((EVAL)parent).evalClass;
+            else
+                return null;
         }
 
         internal Scope(Scope parent_scope, YYLTYPE location)
@@ -168,10 +171,11 @@ namespace Ruby.Compiler.AST
 
             ClassDef fileClass = FileClass();
             string src = "";
-            if (fileClass != null)
+            if (fileClass != null && fileClass.Name().StartsWith("SourceFile_"))
+            {
                 src = fileClass.Name().Substring(11);
-
-            frame_def.AddCustomAttribute(Runtime.FrameAttribute.ctor, new Constant[] { new StringConst(src), new StringConst(className) });
+                frame_def.AddCustomAttribute(Runtime.FrameAttribute.ctor, new Constant[] { new StringConst(src), new StringConst(className) });
+            }
 
             foreach (string local in locals_list)
                 CodeGenContext.AddField(frame_def, PERWAPI.FieldAttr.Public, ID.ToDotNetName(local), PrimitiveType.Object);

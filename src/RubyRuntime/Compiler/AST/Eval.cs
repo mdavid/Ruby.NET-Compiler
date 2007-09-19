@@ -18,6 +18,7 @@ namespace Ruby.Compiler.AST
 
     internal class EVAL : BLOCK
     {
+        public ClassDef evalClass;
         private Frame frame;
         ClassRef block_type;
 
@@ -72,7 +73,7 @@ namespace Ruby.Compiler.AST
         protected new PERWAPI.MethodDef GenerateClassForMethod(CodeGenContext context)
         {
             // public class Eval: IEval {
-            ClassDef evalClass = context.CreateGlobalClass("_Internal", "Eval", Runtime.SystemObjectRef);
+            evalClass = context.CreateGlobalClass("_Internal", "Eval", Runtime.SystemObjectRef);
             evalClass.AddImplementedInterface(Runtime.IEvalRef);
 
             if (context.CurrentRubyClass == null)
