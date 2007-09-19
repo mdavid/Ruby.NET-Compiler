@@ -569,45 +569,49 @@ namespace Ruby.Runtime
             }
         }
 
-        // BBTAG: helper method
-        internal static object const_get_defined(Class current, string id, Frame caller, bool get)
+
+        internal static bool const_defined(Class current, string id, Frame caller)
         {
             if (current.const_defined(id, false))
-            {
-                if (get)
-                    return current.const_get(id, caller);
-                else
-                    return true;
-            }
+                return true;
 
             foreach (Class klass in caller.nesting())
-            {
                 if (klass.const_defined(id, false))
-                {
-                    if (get)
-                        return klass.const_get(id, caller);
-                    else
-                        return true;
-                }
-            }
+                    return true;
 
-            if (get)
-                return current.const_get(id, caller);
-            else
-                return current.const_defined(id, true);
+            return current.const_defined(id, true);
         }
+
+
+        internal static object const_get(Class current, string id, Frame caller)
+        {
+            if (current.const_defined(id, false))
+                return current.const_get(id, caller);
+
+            foreach (Class klass in caller.nesting())
+                if (klass.const_defined(id, false))
+                    return klass.const_get(id, caller);
+
+            return current.const_get(id, caller);
+        }
+
 
         [UsedByRubyCompiler]
         public static object const_defined(object current, string id, Frame caller)
         {
-            return const_get_defined((Class)current, id, caller, false);
+            if (current is Class && const_defined((Class)current, id, caller))
+                return new Ruby.String("constant");
+            else if (Class.rb_method_boundp(Class.CLASS_OF(current), id, false))
+                return new Ruby.String("method");
+            else
+                return null;
         }
 
         [UsedByRubyCompiler]
         public static object get_const(object current, string id, Frame caller)
         {
             if (current is Class)
-                return const_get_defined((Class)current, id, caller, true);
+                return const_get((Class)current, id, caller);
             else
                 throw new TypeError(String.ObjectAsString(current, caller).ToString() + " is not a class/module").raise(caller);
         }

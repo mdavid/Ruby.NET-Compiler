@@ -387,19 +387,54 @@ namespace Ruby.Compiler.AST
             return "constant";
         }
 
-          internal override void Defined(CodeGenContext context)
+         internal override void Defined(CodeGenContext context)
         {
             if (qualified)
                 if (scope != null)
-                    scope.GenCode(context);
-                else
-                    context.ldsfld(Ruby.Compiler.Runtime.Init.rb_cObject);
-            else
-                context.ruby_cbase(parent_scope);
+                {
+                    // object result;
+                    int result = context.CreateLocal("result", PrimitiveType.Object);
+                    PERWAPI.CILLabel endLabel = context.NewLabel();
+                    // try {
+                    context.StartBlock(Clause.Try);
+                    {
+                        // result = Eval.const_defined(scope, vid, caller);
+                        scope.GenCode(context);
+                        context.ldstr(vid.ToString());
+                        context.ldloc(0);
+                        context.call(Runtime.Eval.const_defined);
+                        context.stloc(result);
+                        context.leave(endLabel);
+                    }
+                    TryBlock block = context.EndTryBlock();
+                    // catch (System.Exception) {
+                    context.StartBlock(Clause.Catch);
+                    {
+                        // result = null;
+                        context.ldnull();
+                        context.stloc(result);
+                        context.leave(endLabel);
+                    }
+                    context.EndCatchBlock(Runtime.SystemExceptionRef, block);
 
-            context.ldstr(vid.ToString());
-            context.ldloc(0);
-            context.call(Runtime.Eval.const_defined);
+                    context.CodeLabel(endLabel);
+                    context.ldloc(result);
+                    context.ReleaseLocal(result, true);
+                }
+                else
+                {
+                    context.ldsfld(Ruby.Compiler.Runtime.Init.rb_cObject);
+                    context.ldstr(vid.ToString());
+                    context.ldloc(0);
+                    context.call(Runtime.Eval.const_defined);
+                }
+            else
+            {
+                context.ruby_cbase(parent_scope);
+                context.ldstr(vid.ToString());
+                context.ldloc(0);
+                context.call(Runtime.Eval.const_defined);
+            }
         }
 
 

@@ -139,7 +139,7 @@ namespace Ruby
         }
 
         // In CRuby this is not just a handy abstraction, but does the method caching. (kjg)
-        internal static object rb_method_boundp(Class klass, string name, bool acceptPrivate)
+        internal static bool rb_method_boundp(Class klass, string name, bool acceptPrivate)
         {
             RubyMethod meth = null;
             if (klass.get_method(name, out meth))
