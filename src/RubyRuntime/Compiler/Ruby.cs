@@ -110,7 +110,6 @@ namespace Ruby.Compiler
             reswitch:
                 if (s == "")
                 {
-                    i++;
                     continue;
                 }
                 switch (s[0])
