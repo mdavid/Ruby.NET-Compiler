@@ -18,66 +18,57 @@ namespace Ruby.Compiler
     {
         internal static AssemblyRef System = AssemblyRef.MakeAssemblyRef("mscorlib");
 
-        internal static ClassRef SystemStringRef        = System.AddClass("System", "String");
-        internal static ClassRef SystemObjectRef        = System.AddClass("System", "Object");
-        internal static ClassRef SystemTypeRef          = System.AddClass("System", "Type");
-        internal static ClassRef SystemExceptionRef     = System.AddClass("System", "Exception");
-        internal static ClassRef SystemConsoleRef       = System.AddClass("System", "Console");
-        internal static ClassRef SystemIOTextWriterRef  = System.AddClass("System.IO", "TextWriter");
-        internal static ClassRef ParamArrayAttributeRef = System.AddClass("System", "ParamArrayAttribute");
-        internal static ClassRef RuntimeTypeHandleRef   = System.AddValueClass("System", "RuntimeTypeHandle");
+        internal static ClassRef SystemStringRef        = AddClass(System, "System", "String");
+        internal static ClassRef SystemObjectRef        = AddClass(System, "System", "Object");
+        internal static ClassRef SystemTypeRef          = AddClass(System, "System", "Type");
+        internal static ClassRef SystemExceptionRef     = AddClass(System, "System", "Exception");
+        internal static ClassRef SystemConsoleRef       = AddClass(System, "System", "Console");
+        internal static ClassRef SystemIOTextWriterRef  = AddClass(System, "System.IO", "TextWriter");
+        internal static ClassRef ParamArrayAttributeRef = AddClass(System, "System", "ParamArrayAttribute");
+        internal static ClassRef RuntimeTypeHandleRef   = AddValueClass(System, "System", "RuntimeTypeHandle");
 
         internal static AssemblyRef Assembly = AssemblyRef.MakeAssemblyRef("Ruby.NET.Runtime", 0, 8, 2, 0,  new byte[] {0x83, 0x45, 0x95, 0xCA, 0x80, 0x23, 0xC3, 0x18} );
 
-        internal static ClassRef ArgListRef             = Assembly.AddClass("Ruby.Runtime", "ArgList");
-        internal static ClassRef ProgramRef             = Assembly.AddClass("Ruby.Runtime", "Program");
-        internal static ClassRef ExceptionRef           = Assembly.AddClass("Ruby", "Exception");
-        internal static ClassRef ArgumentErrorRef       = Assembly.AddClass("Ruby", "ArgumentError");
-        internal static ClassRef BreakExceptionRef      = Assembly.AddClass("Ruby.Runtime", "BreakException");
-        internal static ClassRef RetryExceptionRef      = Assembly.AddClass("Ruby.Runtime", "RetryException");
-        internal static ClassRef ReturnExceptionRef     = Assembly.AddClass("Ruby.Runtime", "ReturnException");
-        internal static ClassRef SystemExitRef          = Assembly.AddClass("Ruby.Runtime", "SystemExit");
+        internal static ClassRef ArgListRef             = AddClass(Assembly, "Ruby.Runtime", "ArgList");
+        internal static ClassRef ProgramRef             = AddClass(Assembly, "Ruby.Runtime", "Program");
+        internal static ClassRef ExceptionRef           = AddClass(Assembly, "Ruby", "Exception");
+        internal static ClassRef ArgumentErrorRef       = AddClass(Assembly, "Ruby", "ArgumentError");
+        internal static ClassRef BreakExceptionRef      = AddClass(Assembly, "Ruby.Runtime", "BreakException");
+        internal static ClassRef RetryExceptionRef      = AddClass(Assembly, "Ruby.Runtime", "RetryException");
+        internal static ClassRef ReturnExceptionRef     = AddClass(Assembly, "Ruby.Runtime", "ReturnException");
+        internal static ClassRef SystemExitRef          = AddClass(Assembly, "Ruby.Runtime", "SystemExit");
 
-        internal static ClassRef RubyMethodRef          = Assembly.AddClass("Ruby.Runtime", "RubyMethod");
-        internal static ClassRef EvalRef                = Assembly.AddClass("Ruby.Runtime", "Eval");
-        internal static ClassRef FloatRef               = Assembly.AddClass("Ruby", "Float");
-        internal static ClassRef FrameRef               = Assembly.AddClass("Ruby.Runtime", "Frame");
-        internal static ClassRef HashRef                = Assembly.AddClass("Ruby", "Hash");
-        internal static ClassRef InitRef                = Assembly.AddClass("Ruby.Runtime", "Init");
-        internal static ClassRef MatchRef               = Assembly.AddClass("Ruby", "Match");
-        internal static ClassRef MethodBodyRef          = Assembly.AddClass("Ruby.Runtime", "MethodBody");
-        internal static ClassRef ControlExceptionRef    = Assembly.AddClass("Ruby.Runtime", "ControlException");
-        internal static ClassRef CLRExceptionRef        = Assembly.AddClass("Ruby", "CLRException");
-        internal static ClassRef RubyAttributeRef       = Assembly.AddClass("Ruby.Runtime", "RubyAttribute");
-        internal static ClassRef ArrayRef               = Assembly.AddClass("Ruby", "Array");
-        internal static ClassRef BignumRef              = Assembly.AddClass("Ruby", "Bignum");
-        internal static ClassRef ClassRef               = Assembly.AddClass("Ruby", "Class");
-        internal static ClassRef ObjectRef              = Assembly.AddClass("Ruby", "Object");
-        internal static ClassRef ProcRef                = Assembly.AddClass("Ruby", "Proc");
-        internal static ClassRef RangeRef               = Assembly.AddClass("Ruby", "Range");
-        internal static ClassRef RegexpRef              = Assembly.AddClass("Ruby", "Regexp");
-        internal static ClassRef StringRef              = Assembly.AddClass("Ruby", "String");
-        internal static ClassRef SymbolRef              = Assembly.AddClass("Ruby", "Symbol");
-        internal static ClassRef VariablesRef           = Assembly.AddClass("Ruby.Runtime", "Variables");
-        internal static ClassRef BlockRef               = Assembly.AddClass("Ruby.Runtime", "Block");
-        internal static ClassRef RubyExceptionRef       = Assembly.AddClass("Ruby.Runtime", "RubyException");
-        internal static ClassRef IEvalRef               = Assembly.AddClass("Ruby.Runtime", "IEval");
-        internal static ClassRef errinfo_globalRef      = Assembly.AddClass("Ruby.Runtime", "errinfo_global");
-        internal static ClassRef global_variableRef     = Assembly.AddClass("Ruby.Runtime", "global_variable");
-        internal static ClassRef OptionsRef             = Assembly.AddClass("Ruby.Runtime", "Options");
-        internal static ClassRef IORef                  = Assembly.AddClass("Ruby", "IO");
-        internal static ClassRef InteropMethodAttrRef   = Assembly.AddClass("Ruby.Interop", "InteropMethodAttribute");
-        internal static ClassRef FrameAttributeRef      = Assembly.AddClass("Ruby.Runtime", "FrameAttribute");
+        internal static ClassRef RubyMethodRef          = AddClass(Assembly, "Ruby.Runtime", "RubyMethod");
+        internal static ClassRef EvalRef                = AddClass(Assembly, "Ruby.Runtime", "Eval");
+        internal static ClassRef FloatRef               = AddClass(Assembly, "Ruby", "Float");
+        internal static ClassRef FrameRef               = AddClass(Assembly, "Ruby.Runtime", "Frame");
+        internal static ClassRef HashRef                = AddClass(Assembly, "Ruby", "Hash");
+        internal static ClassRef InitRef                = AddClass(Assembly, "Ruby.Runtime", "Init");
+        internal static ClassRef MatchRef               = AddClass(Assembly, "Ruby", "Match");
+        internal static ClassRef MethodBodyRef          = AddClass(Assembly, "Ruby.Runtime", "MethodBody");
+        internal static ClassRef ControlExceptionRef    = AddClass(Assembly, "Ruby.Runtime", "ControlException");
+        internal static ClassRef CLRExceptionRef        = AddClass(Assembly, "Ruby", "CLRException");
+        internal static ClassRef RubyAttributeRef       = AddClass(Assembly, "Ruby.Runtime", "RubyAttribute");
+        internal static ClassRef ArrayRef               = AddClass(Assembly, "Ruby", "Array");
+        internal static ClassRef BignumRef              = AddClass(Assembly, "Ruby", "Bignum");
+        internal static ClassRef ClassRef               = AddClass(Assembly, "Ruby", "Class");
+        internal static ClassRef ObjectRef              = AddClass(Assembly, "Ruby", "Object");
+        internal static ClassRef ProcRef                = AddClass(Assembly, "Ruby", "Proc");
+        internal static ClassRef RangeRef               = AddClass(Assembly, "Ruby", "Range");
+        internal static ClassRef RegexpRef              = AddClass(Assembly, "Ruby", "Regexp");
+        internal static ClassRef StringRef              = AddClass(Assembly, "Ruby", "String");
+        internal static ClassRef SymbolRef              = AddClass(Assembly, "Ruby", "Symbol");
+        internal static ClassRef VariablesRef           = AddClass(Assembly, "Ruby.Runtime", "Variables");
+        internal static ClassRef BlockRef               = AddClass(Assembly, "Ruby.Runtime", "Block");
+        internal static ClassRef RubyExceptionRef       = AddClass(Assembly, "Ruby.Runtime", "RubyException");
+        internal static ClassRef IEvalRef               = AddClass(Assembly, "Ruby.Runtime", "IEval");
+        internal static ClassRef errinfo_globalRef      = AddClass(Assembly, "Ruby.Runtime", "errinfo_global");
+        internal static ClassRef global_variableRef     = AddClass(Assembly, "Ruby.Runtime", "global_variable");
+        internal static ClassRef OptionsRef             = AddClass(Assembly, "Ruby.Runtime", "Options");
+        internal static ClassRef IORef                  = AddClass(Assembly, "Ruby", "IO");
+        internal static ClassRef InteropMethodAttrRef   = AddClass(Assembly, "Ruby.Interop", "InteropMethodAttribute");
+        internal static ClassRef FrameAttributeRef      = AddClass(Assembly, "Ruby.Runtime", "FrameAttribute");
 
-        /*
-        internal static ClassRef CLRClassRef            = Assembly.AddClass("Ruby.Interop", "CLRClass");
-
-        internal class CLRClass
-        {
-            internal static ClassRef DictionaryRef = System.AddClass("System.Collections.Generic", "Dictionary");
-            internal static FieldRef CLRTypesRef = CLRClassRef.AddField("CLRTypes", DictionaryRef
-        }
-         */
 
         internal static ClassRef MethodBodyNRef(int n)
         {
@@ -85,7 +76,7 @@ namespace Ruby.Compiler
             if (methodBody != null)
                 return methodBody;
             else
-                return Assembly.AddClass("Ruby.Runtime", "MethodBody" + n);
+                return AddClass(Assembly, "Ruby.Runtime", "MethodBody" + n);
         }
 
         internal static MethodRef MethodBodyCtor(ClassRef klass)
@@ -102,18 +93,57 @@ namespace Ruby.Compiler
         }
 
 
+        internal static ClassRef AddClass(AssemblyRef assembly, string ns, string name)
+        {
+            ClassRef klass = assembly.GetClass(ns, name);
+
+            if (klass != null)
+                return klass;
+            else
+                return assembly.AddClass(ns, name);
+        }
+
+        internal static ClassRef AddValueClass(AssemblyRef assembly, string ns, string name)
+        {
+            ClassRef klass = assembly.GetClass(ns, name);
+
+            if (klass != null)
+                return klass;
+            else
+                return assembly.AddValueClass(ns, name);
+        }
+
 
         internal static MethodRef AddInstanceMethod(ClassRef classRef, string name, PERWAPI.Type retType, PERWAPI.Type[] args)
         {
-            MethodRef method = classRef.AddMethod(name, retType, args);
-            method.AddCallConv(CallConv.Instance);
+            MethodRef method = classRef.GetMethod(name, args);
+
+            if (method == null || method.GetCallConv() != CallConv.Instance)
+            {
+                method = classRef.AddMethod(name, retType, args);
+                method.AddCallConv(CallConv.Instance);
+            }
             return method;
         }
 
         internal static MethodRef AddStaticMethod(ClassRef classRef, string name, PERWAPI.Type retType, PERWAPI.Type[] args)
         {
-            MethodRef method = classRef.AddMethod(name, retType, args);
+            MethodRef method = classRef.GetMethod(name, args);
+
+            if (method == null)
+                method = classRef.AddMethod(name, retType, args);
+            
             return method;
+        }
+
+        internal static FieldRef AddField(ClassRef classRef, string name, PERWAPI.Type type)
+        {
+            FieldRef field = classRef.GetField(name);
+
+            if (field == null)
+                field = classRef.AddField(name, type);
+
+            return field;
         }
 
         internal class RubyAttribute
@@ -144,8 +174,8 @@ namespace Ruby.Compiler
             internal static MethodRef ToRubyArray = AddInstanceMethod(ArgListRef, "ToRubyArray", ArrayRef, new Type[0]);
             internal static MethodRef ToRubyObject = AddInstanceMethod(ArgListRef, "ToRubyObject", PrimitiveType.Object, new Type[0]);
 
-            internal static FieldRef block = ArgListRef.AddField("block", ProcRef);
-            internal static FieldRef single_arg = ArgListRef.AddField("single_arg", PrimitiveType.Boolean);
+            internal static FieldRef block = AddField(ArgListRef, "block", ProcRef);
+            internal static FieldRef single_arg = AddField(ArgListRef, "single_arg", PrimitiveType.Boolean);
         }
         
         internal class IO
@@ -168,23 +198,23 @@ namespace Ruby.Compiler
         {
             internal static MethodRef ctor = AddInstanceMethod(BreakExceptionRef, ".ctor", PrimitiveType.Void, new Type[] { PrimitiveType.Object, FrameRef });
 
-            internal static FieldRef scope = BreakExceptionRef.AddField("scope", FrameRef);
-            internal static FieldRef return_value = BreakExceptionRef.AddField("return_value", PrimitiveType.Object);
+            internal static FieldRef scope = AddField(BreakExceptionRef, "scope", FrameRef);
+            internal static FieldRef return_value = AddField(BreakExceptionRef, "return_value", PrimitiveType.Object);
         }
         
         internal class RetryException
         {
             internal static MethodRef ctor = AddInstanceMethod(RetryExceptionRef, ".ctor", PrimitiveType.Void, new Type[] { FrameRef });
 
-            internal static FieldRef scope = RetryExceptionRef.AddField("scope", FrameRef);
+            internal static FieldRef scope = AddField(RetryExceptionRef, "scope", FrameRef);
         }
         
         internal class ReturnException
         {
             internal static MethodRef ctor = AddInstanceMethod(ReturnExceptionRef, ".ctor", PrimitiveType.Void, new Type[] { PrimitiveType.Object, FrameRef });
 
-            internal static FieldRef scope = ReturnExceptionRef.AddField("scope", FrameRef);
-            internal static FieldRef return_value = ReturnExceptionRef.AddField("return_value", PrimitiveType.Object);
+            internal static FieldRef scope = AddField(ReturnExceptionRef, "scope", FrameRef);
+            internal static FieldRef return_value = AddField(ReturnExceptionRef, "return_value", PrimitiveType.Object);
         }
         
         internal class CLRException
@@ -238,7 +268,7 @@ namespace Ruby.Compiler
             internal static MethodRef Test = AddStaticMethod(EvalRef, "Test", PrimitiveType.Boolean, new Type[] { PrimitiveType.Object });
             internal static MethodRef Calln = AddStaticMethod(EvalRef, "Call", PrimitiveType.Object, new Type[] { PrimitiveType.Object, PrimitiveType.String, new PERWAPI.ZeroBasedArray(PrimitiveType.Object) });
 
-            internal static FieldRef ruby_errinfo = EvalRef.AddField("ruby_errinfo", errinfo_globalRef);
+            internal static FieldRef ruby_errinfo = AddField(EvalRef, "ruby_errinfo", errinfo_globalRef);
 
 
             internal static MethodRef Call(string protection, int n)
@@ -293,9 +323,9 @@ namespace Ruby.Compiler
             internal static MethodRef get_Tilde = AddInstanceMethod(FrameRef, "get_Tilde", MatchRef, new Type[0]);
             internal static MethodRef set_Tilde = AddInstanceMethod(FrameRef, "set_Tilde", PrimitiveType.Void, new Type[] { MatchRef });
 
-            internal static FieldRef line = FrameRef.AddField("line", PrimitiveType.Int32);
-            internal static FieldRef block_arg = FrameRef.AddField("block_arg", ProcRef);
-            internal static FieldRef current_block = FrameRef.AddField("current_block", BlockRef);
+            internal static FieldRef line = AddField(FrameRef, "line", PrimitiveType.Int32);
+            internal static FieldRef block_arg = AddField(FrameRef, "block_arg", ProcRef);
+            internal static FieldRef current_block = AddField(FrameRef, "current_block", BlockRef);
         }
         
         internal class Hash
@@ -306,7 +336,7 @@ namespace Ruby.Compiler
         
         internal class Init
         {
-            internal static FieldRef rb_cObject = InitRef.AddField("rb_cObject", ClassRef);
+            internal static FieldRef rb_cObject = AddField(InitRef, "rb_cObject", ClassRef);
         }
         
         internal class Match
@@ -323,7 +353,7 @@ namespace Ruby.Compiler
         {
             internal static MethodRef ctor = AddInstanceMethod(BlockRef, ".ctor", PrimitiveType.Void, new Type[] { FrameRef });
 
-            internal static FieldRef defining_scope = BlockRef.AddField("defining_scope", FrameRef);
+            internal static FieldRef defining_scope = AddField(BlockRef, "defining_scope", FrameRef);
 
         }
         
@@ -332,7 +362,7 @@ namespace Ruby.Compiler
         {
             internal static MethodRef ctor = AddInstanceMethod(ObjectRef, ".ctor", PrimitiveType.Void, new Type[] { ClassRef });
 
-            internal static FieldRef ruby_top_self = ObjectRef.AddField("ruby_top_self", PrimitiveType.Object);
+            internal static FieldRef ruby_top_self = AddField(ObjectRef, "ruby_top_self", PrimitiveType.Object);
         }
         
         internal class Proc
@@ -358,7 +388,7 @@ namespace Ruby.Compiler
             internal static MethodRef ObjectAsString = AddStaticMethod(StringRef, "ObjectAsString", StringRef, new Type[] { PrimitiveType.Object, FrameRef });
             internal static new MethodRef ToString = AddInstanceMethod(StringRef, "ToString", PrimitiveType.String, new Type[0]);
 
-            internal static FieldRef value = StringRef.AddField("value", PrimitiveType.String);
+            internal static FieldRef value = AddField(StringRef, "value", PrimitiveType.String);
         }
         
         internal class Symbol
@@ -386,12 +416,12 @@ namespace Ruby.Compiler
         
         internal class global_variable
         {
-            internal static FieldRef value = global_variableRef.AddField("value", PrimitiveType.Object);
+            internal static FieldRef value = AddField(global_variableRef, "value", PrimitiveType.Object);
         }
 
         internal class RubyException
         {
-            internal static FieldRef parent = RubyExceptionRef.AddField("parent", ExceptionRef);
+            internal static FieldRef parent = AddField(RubyExceptionRef, "parent", ExceptionRef);
         }
         
         internal class Options

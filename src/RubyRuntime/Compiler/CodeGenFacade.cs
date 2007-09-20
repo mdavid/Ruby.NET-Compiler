@@ -678,7 +678,7 @@ namespace Ruby.Compiler
             else
             {
                 AssemblyName name = type.Assembly.GetName();
-                return cached[type.Assembly] = AssemblyRef.MakeAssemblyRef(name.Name, name.Version.Major, name.Version.Minor,name.Version.Build, name.Version.Revision, name.GetPublicKeyToken());
+                return cached[type.Assembly] = AssemblyRef.MakeAssemblyRef(name.Name, (ushort)name.Version.Major, (ushort)name.Version.Minor, (ushort)name.Version.Build, (ushort)name.Version.Revision, name.GetPublicKeyToken());
             }
         }
 

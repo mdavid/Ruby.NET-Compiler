@@ -169,8 +169,13 @@ namespace Ruby.Compiler.AST
                 {
                     CodeGenContext class_constructor0 = newContext.CreateConstructor(interopClass);
                     class_constructor0.ldarg(0);
-                    class_constructor0.ldsfld(singletonField);     
-                    class_constructor0.call(superClassConstructor0);        
+                    if (superClassConstructor0 != null)
+                        class_constructor0.call(superClassConstructor0);
+                    else
+                    {
+                        class_constructor0.ldsfld(singletonField);
+                        class_constructor0.call(superClassConstructor1);
+                    }
                     class_constructor0.ret();
                     class_constructor0.Close();
                 }
