@@ -394,8 +394,7 @@ namespace Ruby.Runtime
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Object obj = (Object)recv;
-            return obj.instance_variable_get(name);
+            return Eval.ivar_get(recv, name);
         }
     }
 
@@ -411,9 +410,7 @@ namespace Ruby.Runtime
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
         {
-            Object obj = (Object)recv;
-            obj.instance_variable_set(name, p1);
-            return null; // is this right?
+            return Eval.ivar_set(caller, recv, name, p1);
         }
     }
 }
