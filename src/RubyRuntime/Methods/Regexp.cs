@@ -232,7 +232,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            return System.Text.RegularExpressions.RegexOptions.None != (((Regexp)recv).value.Options | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            return System.Text.RegularExpressions.RegexOptions.None != (((Regexp)recv).value.Options & System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
     }
 
