@@ -77,7 +77,7 @@ namespace Ruby
         {
             object result = Eval.CallPrivate(x, caller, "<=>", null, y);
             if (result is int)
-                return 0 < (int)result;
+                return 0 > (int)result;
             else
                 return false;
         }
