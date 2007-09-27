@@ -466,7 +466,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            return String.rb_str_to_inum(recv, caller, 8, false);
+            return String.rb_str_to_inum(recv, caller, -8, false);
         }
     }
 

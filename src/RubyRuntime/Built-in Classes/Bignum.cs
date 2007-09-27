@@ -232,29 +232,21 @@ namespace Ruby
             {
                 if (str[0] == '0')
                 {
-                    switch (str[1])
+                    switch (str.Length >= 2 ? str[1] : '\0')
                     {
                         case 'x':
-                            numBase = 16;
-                            break;
                         case 'X':
                             numBase = 16;
                             break;
                         case 'b':
-                            numBase = 2;
-                            break;
                         case 'B':
                             numBase = 2;
                             break;
                         case 'o':
-                            numBase = 8;
-                            break;
                         case 'O':
                             numBase = 8;
                             break;
                         case 'd':
-                            numBase = 10;
-                            break;
                         case 'D':
                             numBase = 10;
                             break;
@@ -278,7 +270,7 @@ namespace Ruby
             {
                 case 2:
                     //len = 1;
-                    if (str[0] == '0' && (str[1] == 'b' || str[1] == 'B'))
+                    if (str.Length >= 2 && str[0] == '0' && (str[1] == 'b' || str[1] == 'B'))
                     {
                         str = str.Remove(0, 2);
                     }
@@ -289,53 +281,37 @@ namespace Ruby
                     break;
 
                 case 8:
-                    if (str[0] == '0' && (str[1] == 'o' || str[1] == 'O'))
+                    if (str.Length >= 2 && str[0] == '0' && (str[1] == 'o' || str[1] == 'O'))
                     {
                         str = str.Remove(0, 2);
                     }
                     //len = 3;
                     break;
                 case 4:
-                    //len = 3;
-                    break;
                 case 5:
-                    //len = 3;
-                    break;
                 case 6:
-                    //len = 3;
-                    break;
                 case 7:
                     //len = 3;
                     break;
 
                 case 10:
-                    if (str[0] == '0' && str.Length > 1 && (str[1] == 'd' || str[1] == 'D'))
+                    if (str.Length >= 2 && str[0] == '0' && str.Length > 1 && (str[1] == 'd' || str[1] == 'D'))
                     {
                         str = str.Remove(0, 2);
                     }
                     //len = 4;
                     break;
                 case 9:
-                    //len = 4;
-                    break;
                 case 11:
-                    //len = 4;
-                    break;
                 case 12:
-                    //len = 4;
-                    break;
                 case 13:
-                    //len = 4;
-                    break;
                 case 14:
-                    //len = 4;
-                    break;
                 case 15:
                     //len = 4;
                     break;
                 case 16:
                     //len = 4;
-                    if (str[0] == '0' && str.Length > 1 && (str[1] == 'x' || str[1] == 'X'))
+                    if (str.Length >= 2 && str[0] == '0' && str.Length > 1 && (str[1] == 'x' || str[1] == 'X'))
                     {
                         str = str.Remove(0, 2);
                     }
