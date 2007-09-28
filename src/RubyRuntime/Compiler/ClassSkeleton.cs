@@ -122,20 +122,6 @@ namespace Ruby.Compiler
                     return classRef;
             }
 
-            dlls.Clear();
-
-            // finally look in mscorlib
-            if (Ruby.Compiler.Compiler.mscorlib == null)
-                Ruby.Compiler.Compiler.mscorlib = PERWAPI.PEFile.ReadExportedInterface(Ruby.Compiler.Compiler.FindFile("mscorlib.dll", Ruby.Compiler.Compiler.GetPath()).FullName);
-
-            if (Ruby.Compiler.Compiler.mscorlib != null)
-            {
-                dlls.Add(Ruby.Compiler.Compiler.mscorlib);
-                ClassRef classRef = GetClassFromPEFile(node, dlls, "");
-                if (classRef != null)
-                    return classRef;
-            }
-
             return null;
         }
 
@@ -188,10 +174,7 @@ namespace Ruby.Compiler
                     peNamespace = "." + peNamespace;
                 peNamespace = nsPrefix + peNamespace;
 
-                if (peNamespace.Length > 0)
-                    peClass = peFile.GetClass(peNamespace, className);
-                else
-                    peClass = peFile.GetClass(className);
+                peClass = peFile.GetClass(peNamespace, className);
 
                 if (peClass != null)
                 {
