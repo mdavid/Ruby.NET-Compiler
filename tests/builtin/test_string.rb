@@ -142,6 +142,13 @@ class TestString < Test::Unit::TestCase
     util_gsub_arity(:gsub)
   end
 
+  def test_gsub_with_block
+    # Test match in the middle of string.
+    s = 'a b c'
+    s1 = s.gsub(/ /) {|s| '' }
+    assert_equal('abc', s1)
+  end
+
   #def test_gsub_bang_cheating_block
   #  util_gsub_cheating_block(:gsub!)
   #end

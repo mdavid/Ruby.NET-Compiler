@@ -1141,6 +1141,8 @@ namespace Ruby
             //rb_str_locktmp(dest);
             while (beg >= 0)
             {
+                dest.Append(str.value.Substring(offset, beg - offset)); /* copy pre-match substr */
+
                 match = Regexp.rb_backref_get(caller);
                 regs = match.value;
                 if (iter)
@@ -1163,7 +1165,6 @@ namespace Ruby
                 {
                     val = Regexp.rb_reg_regsub(repl, str, match);
 
-                    dest.Append(str.value.Substring(offset, beg - offset)); /* copy pre-match substr */
                     dest.Append(val.value.Substring(beg, val.value.Length - str.value.Length + 1));
                 }
 
