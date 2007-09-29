@@ -165,6 +165,15 @@ class TestString < Test::Unit::TestCase
     assert_nothing_raised { @hello.index(ToStrReturnsYes.new, 0) }
   end
 
+  def test_lstrip_all_whitespace
+    # Can't guarantee what whitespace characters are, but this list should be
+    # good enough.
+    "\n\r\t ".each do |c|
+      s = c + " \nfoo"
+      assert_equal('foo', s.lstrip)
+    end
+  end
+
   def test_rindex_invalid_sub
     assert_raise(TypeError) { @hello.rindex(Array.new) }
   end
@@ -198,6 +207,15 @@ class TestString < Test::Unit::TestCase
     assert_nil(res)
     assert_nil($~)
     assert_nil($1)
+  end
+
+  def test_rstrip_all_whitespace
+    # Can't guarantee what whitespace characters are, but this list should be
+    # good enough.
+    "\n\r\t ".each do |c|
+      s = "foo\n " + c
+      assert_equal('foo', s.rstrip)
+    end
   end
 
   def test_slice_arity

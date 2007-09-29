@@ -1962,7 +1962,7 @@ namespace Ruby.Methods
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
             String str = (String)recv; 
-            if (str.value == null || str.value.Length == 0 || (str.value.Length > 0 && str.value[0] != ' '))
+            if (str.value == null || str.value.Length == 0 || (str.value.Length > 0 && !System.Char.IsWhiteSpace(str.value[0])))
             {
                 return null;
             }
@@ -1994,7 +1994,7 @@ namespace Ruby.Methods
         {
 
             String str = (String)recv;
-            if (str.value == null || str.value.Length == 0 || (str.value.Length > 0 && str.value[str.value.Length - 1] != ' '))
+            if (str.value == null || str.value.Length == 0 || (str.value.Length > 0 && !System.Char.IsWhiteSpace(str.value[str.value.Length - 1])))
             {
                 return null;
             }
