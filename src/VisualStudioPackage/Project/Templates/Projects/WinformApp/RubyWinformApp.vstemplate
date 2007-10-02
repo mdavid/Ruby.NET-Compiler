@@ -1,0 +1,21 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>Windows Application</Name>
+    <Description>A project for creating an application with a Windows user interface</Description>
+    <ProjectType>Ruby</ProjectType>
+    <SortOrder>30</SortOrder>
+	<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>WindowsApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>RubyWinformApp.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="RubyWinformApp.rbproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Form1.rb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Program.rb</ProjectItem>      
+    </Project>
+  </TemplateContent>
+</VSTemplate>

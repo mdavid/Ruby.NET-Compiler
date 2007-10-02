@@ -331,9 +331,10 @@ namespace Ruby.Compiler
         // -----------------------------------------------------------------
 
 
-        internal void CreateAssembly(string directory, string fileName, string assemblyName)
+        internal void CreateAssembly(string directory, string fileName, string assemblyName, bool GUI)
         {
             Assembly = new PEFile(fileName, assemblyName);
+            Assembly.SetSubSystem(GUI ? SubSystem.Windows_GUI : SubSystem.Windows_CUI);
             Assembly.SetNetVersion(NetVersion.Version2);
             Assembly.GetThisAssembly().AddCustomAttribute(Runtime.RubyAttribute.ctor, new byte[0]);
             Assembly.SetOutputDirectory(directory);

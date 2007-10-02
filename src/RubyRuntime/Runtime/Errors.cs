@@ -21,7 +21,7 @@ namespace Ruby.Runtime
             if (Options.ruby_verbose.value == null)
                 return;
 
-            System.Console.Error.WriteLine("warning: {0}", message);
+            Compiler.Compiler.LogWarning("warning: " + message);
         }
 
         internal static void rb_warning(object message)
@@ -29,7 +29,7 @@ namespace Ruby.Runtime
             if (!Eval.Test(Options.ruby_verbose.value))
                 return;
 
-            System.Console.Error.WriteLine("warning: {0}", message);
+            Compiler.Compiler.LogWarning("warning: " + message);
         }
     }
 }

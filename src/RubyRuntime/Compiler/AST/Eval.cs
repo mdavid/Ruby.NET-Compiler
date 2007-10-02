@@ -62,7 +62,7 @@ namespace Ruby.Compiler.AST
 
             string name = "Eval_" + System.Guid.NewGuid().ToString("N");
 
-            context.CreateAssembly("./", name + ".dll", name);
+            context.CreateAssembly("./", name + ".dll", name, false);
 
             GenerateClassForMethod(context);
                       

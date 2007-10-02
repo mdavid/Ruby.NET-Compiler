@@ -8,6 +8,7 @@
 		<RubyCompileTask
 		  Sources="@(Compile)"
 		  OutputAssembly="@(IntermediateAssembly)"
+      ReferencedAssemblies="@(ReferencePath)"
 		  MainFile="$(MainFile)" 
 		  TargetType="$(OutputType)"
 		  DebugType="$(DebugType)"

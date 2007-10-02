@@ -134,6 +134,21 @@
     <ZipProject Include="Project\Templates\Projects\ClassLib\RubyClassLib.ico">
       <OutputSubPath>Windows</OutputSubPath>
     </ZipProject>
+    <ZipProject Include="Project\Templates\Projects\WinformApp\RubyWinformApp.rbproj">
+      <OutputSubPath>Windows</OutputSubPath>      
+    </ZipProject>
+    <ZipProject Include="Project\Templates\Projects\WinformApp\Program.rb">
+      <OutputSubPath>Windows</OutputSubPath>      
+    </ZipProject>
+    <ZipProject Include="Project\Templates\Projects\WinformApp\RubyWinformApp.ico">
+      <OutputSubPath>Windows</OutputSubPath>      
+    </ZipProject>
+    <ZipProject Include="Project\Templates\Projects\WinformApp\RubyWinformApp.vstemplate">
+      <OutputSubPath>Windows</OutputSubPath>      
+    </ZipProject>
+    <ZipProject Include="Project\Templates\Projects\WinformApp\Form1.rb">
+      <OutputSubPath>Windows</OutputSubPath>
+    </ZipProject>    
   </ItemGroup>
   <ItemGroup>
     <ZipItem Include="Project\Templates\ProjectItems\Class\Class.rb" />
@@ -145,6 +160,9 @@
     <ZipItem Include="Project\Templates\ProjectItems\Module\Module.ico" />
     <ZipItem Include="Project\Templates\ProjectItems\Module\Module.vstemplate" />
     <ZipItem Include="Project\Templates\ProjectItems\Module\Module.rb" />
+    <ZipItem Include="Project\Templates\ProjectItems\Form\Form.rb" />    
+    <ZipItem Include="Project\Templates\ProjectItems\Form\Form.ico" />
+    <ZipItem Include="Project\Templates\ProjectItems\Form\Form.vstemplate" />  
   </ItemGroup>
   <ItemGroup>
     <None Include="Language\Generated\LineScanner.lex" />

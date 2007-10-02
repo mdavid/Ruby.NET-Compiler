@@ -16,6 +16,7 @@ using System.IO;
 using System.Text;
 using PERWAPI;
 using System.Globalization;
+using Microsoft.Build.Utilities;
 
 
 namespace Ruby.Compiler
@@ -41,7 +42,7 @@ namespace Ruby.Compiler
         {
             if (process_options())
             {
-                PEFile pefile = tree.GenerateCode(script, ".exe", runtime_options);
+                PEFile pefile = tree.GenerateCode(script, ".exe", runtime_options, false);
                 AST.SOURCEFILE.ExecuteMain(pefile, rb_argv.ToArray());
             }
         }
@@ -405,7 +406,7 @@ namespace Ruby.Compiler
                 List<string> more_options;
                 try
                 {
-                    tree = File.load_file(null, script, xflag, out more_options, null);
+                    tree = File.load_file(null, script, xflag, out more_options);
                 }
                 catch (System.Exception e)
                 {

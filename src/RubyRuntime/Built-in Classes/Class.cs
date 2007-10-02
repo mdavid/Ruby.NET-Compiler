@@ -459,7 +459,7 @@ namespace Ruby
                 }
             }
 
-            if (Options.ruby_verbose.value != null && _methods.ContainsKey(newId))
+            if (Eval.Test(Options.ruby_verbose.value) && _methods.ContainsKey(newId))
                 Errors.rb_warning("discarding old " + newId);
 
             _methods[newId] = new MethodAlias(method);

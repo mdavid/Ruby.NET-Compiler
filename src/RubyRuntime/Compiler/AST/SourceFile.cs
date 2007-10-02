@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using PERWAPI;
+using Microsoft.Build.Utilities;
 
 
 namespace Ruby.Compiler.AST
@@ -121,8 +122,7 @@ namespace Ruby.Compiler.AST
                     PERWAPI.MethodDef ctor = postPass.subClassDef.GetMethod(".ctor", new Type[0]);
                     if (!RedefineConstructor(ctor, perwapiClass, 0))
                     {
-                        if (Compiler.RubyCompilerRunning())
-                            System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                        Compiler.InteropWarning("No zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                         context.Assembly.RemoveClass(postPass.subClassDef);
                         RemoveAllocatorDefinition(postPass.subClass);
                         context.Assembly.RemoveClass(postPass.subClass.allocator);
@@ -132,8 +132,7 @@ namespace Ruby.Compiler.AST
                         ctor = postPass.subClassDef.GetMethod(".ctor", new Type[] { Runtime.ClassRef });
                         if (!RedefineConstructor(ctor, perwapiClass, 1))
                         {
-                            if (Compiler.RubyCompilerRunning())
-                                System.Console.WriteLine("Warning: no zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                            Compiler.InteropWarning("No zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                             context.Assembly.RemoveClass(postPass.subClassDef);
                             RemoveAllocatorDefinition(postPass.subClass);
                             context.Assembly.RemoveClass(postPass.subClass.allocator);
@@ -142,13 +141,12 @@ namespace Ruby.Compiler.AST
                 }
                 else
                 {
-                    if (Compiler.RubyCompilerRunning())
-                        System.Console.WriteLine("Warning: superclass not found for " + postPass.subClass.name);
+                    Compiler.InteropWarning("Superclass not found for " + postPass.subClass.name);
                 }
             }
         }
 
-        internal static PERWAPI.PEFile GenerateCode(List<SOURCEFILE> files, List<PERWAPI.ReferenceScope> peFiles, string outfile, List<KeyValuePair<string, object>> options)
+        internal static PERWAPI.PEFile GenerateCode(List<SOURCEFILE> files, List<PERWAPI.ReferenceScope> peFiles, string outfile, List<KeyValuePair<string, object>> options, bool GUI)
         {
             CodeGenContext context = new CodeGenContext();
             context.peFiles = peFiles;
@@ -156,7 +154,7 @@ namespace Ruby.Compiler.AST
             System.IO.FileInfo file = new System.IO.FileInfo(outfile);
             string basename = file.Name.Substring(0, file.Name.Length - file.Extension.Length);
 
-            context.CreateAssembly(file.DirectoryName, file.Name, basename);
+            context.CreateAssembly(file.DirectoryName, file.Name, basename, GUI);
 
             for (int i=1; i<files.Count; i++)
                 files[i].GenerateClassForFile(context, File.stripExtension(files[i].location.file), file.Extension == ".dll", files);
@@ -234,7 +232,7 @@ namespace Ruby.Compiler.AST
             // }
         }
 
-        internal PERWAPI.PEFile GenerateCode(string fullFileName, string dll_or_exe, List<KeyValuePair<string,object>> runtime_options)
+        internal PERWAPI.PEFile GenerateCode(string fullFileName, string dll_or_exe, List<KeyValuePair<string,object>> runtime_options, bool GUI)
         {
             System.IO.FileInfo file = new System.IO.FileInfo(fullFileName);
 
@@ -249,7 +247,7 @@ namespace Ruby.Compiler.AST
             
             CodeGenContext context = new CodeGenContext();
 
-            context.CreateAssembly(file.DirectoryName, fileName + dll_or_exe, fileName);
+            context.CreateAssembly(file.DirectoryName, fileName + dll_or_exe, fileName, GUI);
 
             ClassDef mainClass = GenerateClassForFile(context, fileName, false, new List<SOURCEFILE>());
 

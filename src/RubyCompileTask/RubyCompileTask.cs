@@ -2,38 +2,47 @@ using System.Collections.Generic;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
+
 namespace Ruby.NET
 {
     public class RubyCompileTask : Task
     {
         public override bool Execute()
         {
-            List<string> args = new List<string>();
-
-            args.Add("/target:" + TargetType);
-
-            args.Add("/out:" + OutputAssembly);
-
-            args.Add("/debug:" + DebugType);
-
-            args.Add("/main:" + MainFile);
-
-            foreach (ITaskItem source in sources)
-                args.Add(source.ItemSpec);
+            Ruby.Compiler.Compiler.log = this.Log;
+            Ruby.Compiler.Compiler.InteropWarnings = true;
 
             try
             {
-                Ruby.Compiler.Compiler.Process(args.ToArray(), Log);
+                List<string> args = new List<string>();
+
+                args.Add("/target:" + TargetType);
+
+                args.Add("/out:" + OutputAssembly);
+
+                args.Add("/debug:" + DebugType);
+
+                args.Add("/main:" + MainFile);
+
+                foreach (ITaskItem source in sources)
+                    args.Add(source.ItemSpec);
+
+                foreach (ITaskItem assemblyReference in this.ReferencedAssemblies)
+                    args.Add(assemblyReference.ItemSpec);
+
+                Ruby.Compiler.Compiler.Process(args.ToArray());
+
                 return !Log.HasLoggedErrors;
             }
             catch (System.Exception e)
             {
-                Log.LogErrorFromException(e);
+                Ruby.Compiler.Compiler.LogError("Internal compiler error: " + e.Message + "\n" + e.StackTrace); 
                 return false;
             }
         }
 
         private ITaskItem[] sources;
+        private ITaskItem[] referencedAssemblies = new ITaskItem[0];
         private string targetType;
         private string outputAssembly;
         private string debugType;
@@ -44,6 +53,22 @@ namespace Ruby.NET
         {
             get { return sources; }
             set { sources = value; }
+        }
+
+        public ITaskItem[] ReferencedAssemblies
+        {
+            get { return referencedAssemblies; }
+            set
+            {
+                if (value != null)
+                {
+                    referencedAssemblies = value;
+                }
+                else
+                {
+                    referencedAssemblies = new ITaskItem[0];
+                }
+            }
         }
 
         [Required]

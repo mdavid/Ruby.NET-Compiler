@@ -119,7 +119,7 @@ namespace Ruby.Compiler.AST
             }
             catch (PERWAPI.DescriptorException e)
             {
-                System.Console.WriteLine("Warning: {0}", e.Message);
+                Compiler.LogWarning(e.Message);
             }
         }
 

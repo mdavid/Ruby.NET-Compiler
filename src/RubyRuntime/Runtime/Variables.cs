@@ -125,12 +125,12 @@ namespace Ruby.Runtime
                         throw TypeError.rb_error_frozen(caller, "class/module").raise(caller);
                     if (!tmp.Tainted && Eval.rb_safe_level() >= 4)
                         throw new SecurityError("Insecure: can't modify class variable").raise(caller);
-                    if (warn && Options.ruby_verbose.value != null && klass != tmp)
+                    if (warn && Eval.Test(Options.ruby_verbose.value) && klass != tmp)
                         Methods.rb_warn_m.singleton.Call1(klass, klass, null, null, new String("already initialized class variable " + cvar_name));
 
                     tmp.instance_variable_set(cvar_name, value);
 
-                    if (Options.ruby_verbose.value != null)
+                    if (Eval.Test(Options.ruby_verbose.value))
                         cvar_override_check(cvar_name, tmp);
 
                     return value;
@@ -158,7 +158,7 @@ namespace Ruby.Runtime
 
                 if (value != null)
                 {
-                    if (Options.ruby_verbose.value != null)
+                    if (Eval.Test(Options.ruby_verbose.value))
                         cvar_override_check(cvar_name, tmp);
                     return value;
                 }

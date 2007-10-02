@@ -12,6 +12,7 @@ using Ruby;
 using Ruby.Runtime;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Build.Utilities;
 
 
 namespace Ruby.Methods
@@ -462,8 +463,8 @@ namespace Ruby.Methods
             else
             {
                 List<string> options;
-                Compiler.AST.SOURCEFILE module = File.load_file(caller, path.value, false, out options, null);
-                PERWAPI.PEFile assembly = module.GenerateCode(path.value, ".dll", null);
+                Compiler.AST.SOURCEFILE module = File.load_file(caller, path.value, false, out options);
+                PERWAPI.PEFile assembly = module.GenerateCode(path.value, ".dll", null, false);
                 Compiler.AST.SOURCEFILE.Load(assembly, caller, path.value);
             }
 

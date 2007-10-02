@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<OutputType>WinExe</OutputType>
+		<AssemblyName>$safeprojectname$</AssemblyName>
+		<MainFile>Program.rb</MainFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<DebugType>full</DebugType>
+		<OutputPath>bin\Debug\</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<DebugType>none</DebugType>
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Form1.rb">
+      <SubType>Form</SubType>
+    </Compile>
+		<Compile Include="Program.rb"/>
+	</ItemGroup>
+
+	<Import Project="$(MSBuildExtensionsPath)\Ruby.NET\Ruby.targets" />
+</Project>

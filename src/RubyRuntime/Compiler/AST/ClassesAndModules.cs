@@ -116,8 +116,7 @@ namespace Ruby.Compiler.AST
             // FIXME: this won't work for nested classes
             if (Ruby.Runtime.BuiltinClasses.IsBuiltinClass(basename))
             {
-                if (Compiler.RubyCompilerRunning())
-                    System.Console.WriteLine("Warning: " + basename + " is a Ruby built-in class, interop class not generated");
+                Compiler.InteropWarning(basename + " is a Ruby built-in class, interop class not generated");
                 defineInteropClass = false;
             }
 

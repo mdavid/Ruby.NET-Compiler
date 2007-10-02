@@ -885,7 +885,7 @@ namespace Ruby
         }
 
 
-        internal static Compiler.AST.SOURCEFILE load_file(Frame caller, string fname, bool xflag, out List<string> more_options, TaskLoggingHelper log)
+        internal static Compiler.AST.SOURCEFILE load_file(Frame caller, string fname, bool xflag, out List<string> more_options)
         {
             int line_start;
 
@@ -915,7 +915,7 @@ namespace Ruby
             else
                 more_options = null;
 
-            Compiler.AST.SOURCEFILE AST = Compiler.Parser.ParseFile(fname, f, line_start, log);
+            Compiler.AST.SOURCEFILE AST = Compiler.Parser.ParseFile(fname, f, line_start);
 
             // Fixme: Read DATA after program here
 

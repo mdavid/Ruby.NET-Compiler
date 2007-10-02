@@ -15,16 +15,48 @@ namespace Ruby.Compiler
         public static string RUBY_RUNTIME = "Ruby.NET.Runtime.dll";
         public static PERWAPI.ReferenceScope peRubyRuntime = null;
         public static PERWAPI.ReferenceScope mscorlib = null;
+        public static TaskLoggingHelper log = null;
+        public static bool InteropWarnings;
 
-        public static void Process(string[] args)
+
+        public static void LogWarning(string msg, string sourcefile, int start_line, int start_column, int finish_line, int finish_column)
         {
-            Process(args, null);
+            if (log != null)
+                log.LogWarning("", "RB01", "", sourcefile, start_line, start_column, finish_line, finish_column, msg);
+            else
+                Console.Error.WriteLine("Warning: " + msg + " at column " + start_column + ", line " + start_line + " " + sourcefile);
         }
 
-        public static bool RubyCompilerRunning()
+        public static void LogWarning(string message)
         {
-            return Assembly.GetEntryAssembly().FullName.Contains("RubyCompiler");
+            if (log != null)
+                log.LogWarning(message);
+            else
+                Console.Error.WriteLine("Warning: " + message);
         }
+
+        public static void InteropWarning(string message)
+        {
+            if (InteropWarnings)
+                LogWarning(message);
+        }
+
+        public static void LogError(string msg, string sourcefile, int start_line, int start_column, int finish_line, int finish_column)
+        {
+            if (log != null)
+                log.LogError("", "RB01", "", sourcefile, start_line, start_column, finish_line, finish_column, msg);
+            else
+                Console.Error.WriteLine("Error: " + msg + " at column " + start_column + ", line " + start_line + " " + sourcefile);
+        }
+
+        public static void LogError(string message)
+        {
+            if (log != null)
+                log.LogError(message);
+            else
+                Console.Error.WriteLine("Error: " + message);
+        }
+
 
         public static List<string> GetPath()
         {
@@ -52,7 +84,7 @@ namespace Ruby.Compiler
             throw new LoadError("File not found: " + filename).raise(null);
         }
 
-        public static void Process(string[] args, TaskLoggingHelper log)
+        public static void Process(string[] args)
         {
             List<string> inputFiles = new List<string>();
 
@@ -118,12 +150,12 @@ namespace Ruby.Compiler
             // Remove any file extension
             outFile = file.Directory + @"\" + file.Name.Substring(0, file.Name.Length - file.Extension.Length);
 
-            if (target == "exe")
+            if (target == "exe" || target == "winexe")
                 outFile += ".exe";
             else if (target == "library")
                 outFile += ".dll";
             else
-                throw new System.Exception("Invalid target type for /target: must specify 'exe' or 'library'");
+                throw new System.Exception("Invalid target type for /target: must specify 'exe', 'winexe' or 'library'");
 
             List<Ruby.Compiler.AST.SOURCEFILE> files = new List<Ruby.Compiler.AST.SOURCEFILE>();
             List<PERWAPI.ReferenceScope> peFiles = new List<PERWAPI.ReferenceScope>();
@@ -133,7 +165,7 @@ namespace Ruby.Compiler
             if (main != null)
             {
                 List<string> options;
-                files.Add(File.load_file(null, main, false, out options, log));
+                files.Add(File.load_file(null, main, false, out options));
             }
 
             foreach (string input in inputFiles)
@@ -152,7 +184,7 @@ namespace Ruby.Compiler
                     List<string> options;
                     if (input != main)
                     {
-                        files.Add(File.load_file(null, input, false, out options, log));
+                        files.Add(File.load_file(null, input, false, out options));
                     }
                 }
             }
@@ -163,7 +195,7 @@ namespace Ruby.Compiler
             List<KeyValuePair<string,object>> name = new List<KeyValuePair<string,object>>();
             name.Add(new KeyValuePair<string, object>("rb_progname", main));
 
-            PERWAPI.PEFile assembly = Ruby.Compiler.AST.SOURCEFILE.GenerateCode(files, peFiles, outFile, name);
+            PERWAPI.PEFile assembly = Ruby.Compiler.AST.SOURCEFILE.GenerateCode(files, peFiles, outFile, name, target == "winexe");
             assembly.MakeDebuggable(true, true);
             assembly.WritePEFile(debug!="none");
         }

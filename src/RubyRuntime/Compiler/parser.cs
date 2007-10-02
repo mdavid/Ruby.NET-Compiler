@@ -73,10 +73,10 @@ namespace Ruby.Compiler
         internal Scope eval_tree_begin;
 
 
-        internal static SOURCEFILE ParseFile(string f, IO file, int start, TaskLoggingHelper log)
+        internal static SOURCEFILE ParseFile(string f, IO file, int start)
         {
             Parser parser = new Parser();
-            parser.scanner = new Scanner(parser, file, log);
+            parser.scanner = new Scanner(parser, file);
             SOURCEFILE tree = (SOURCEFILE)parser.ParseInput(f, start);
             return tree;
         }

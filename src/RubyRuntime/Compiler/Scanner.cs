@@ -59,14 +59,12 @@ namespace Ruby.Compiler
         private Parser parser;
         internal int start_line = 1;
         private int start_column = 0;
-        private TaskLoggingHelper log;
 
-        internal Scanner(Parser parser, IO file, TaskLoggingHelper log)
+        internal Scanner(Parser parser, IO file)
         {
             this.parser = parser;
             this.lex_gets = IO.rb_io_gets;
             this.lex_input = file;
-            this.log = log;
         }
 
         internal Scanner(Parser parser, String s)
@@ -2329,8 +2327,8 @@ namespace Ruby.Compiler
 
         internal void yyerror(string msg)
         {
-            if (log != null)
-                log.LogError(string.Empty, "RB01", string.Empty, sourcefile, start_line, start_column, sourceline, lex_p, msg);
+            if (Compiler.log != null)
+                Compiler.LogError(msg, sourcefile, start_line, start_column, sourceline, lex_p);
             else
                 throw new SyntaxError(msg + " at column " + start_column + ", line " + start_line + " " + sourcefile).raise(null);
         }
@@ -2344,8 +2342,8 @@ namespace Ruby.Compiler
         internal void yywarn(string msg)
         {
             warnings++;
-            if (log != null)
-                log.LogWarning(string.Empty, "RB100", string.Empty, sourcefile, start_line, start_column, sourceline, lex_p, msg);
+            if (Ruby.Runtime.Eval.Test(Ruby.Runtime.Options.ruby_verbose.value))
+                Compiler.LogWarning(msg, sourcefile, start_line, start_column, sourceline, lex_p);
         }
 
         internal void yywarn(string fmt, params object[] args)
