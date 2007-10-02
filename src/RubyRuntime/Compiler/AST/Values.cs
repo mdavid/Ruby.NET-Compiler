@@ -46,7 +46,7 @@ namespace Ruby.Compiler.AST
                 context.ReleaseLocal(list, created);
             }
             else
-                context.call(Runtime.Array.ctor);
+                context.newobj(Runtime.Array.ctor);
         }
     }
 
