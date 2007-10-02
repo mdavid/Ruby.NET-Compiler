@@ -125,7 +125,10 @@ namespace Ruby.Compiler.AST
             ClassDef interopClass = null;
             if (defineInteropClass)
             {
-                interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, superClass); // BBTAG
+                if (superClass is PERWAPI.ClassDef)
+                    interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, ((PERWAPI.ClassDef)superClass).MakeRefOf()); // BBTAG
+                else
+                    interopClass = newContext.CreateNestedClass(CurrentInteropClass(), basename, superClass); // BBTAG
                 interopClasses.Push(interopClass);
                 classRef = interopClass;
             }
