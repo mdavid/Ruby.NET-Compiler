@@ -860,7 +860,7 @@ namespace Ruby
             f = dln_find(f, (Array)Eval.rb_load_path.value, try_add_ext);
 
             if (f != null && file_load_ok(f))
-                if (f.EndsWith(".rb") && needs_compiling(f, ".dll"))
+                if (!f.EndsWith(".dll") && needs_compiling(f, ".dll"))
                     return new String(f);
                 else
                     return new String(basename(f) + ".dll");
