@@ -282,13 +282,16 @@ namespace Ruby.Methods
             object clone = rb_obj_alloc.singleton.Call0(last_class, rb_obj_class.singleton.Call0(last_class, obj, caller, null), caller, null);
             ((Basic)clone).my_class = Class.rb_singleton_class_clone(obj);
 
-            ((Basic)clone).Frozen = ((Basic)obj).Frozen;
-            ((Basic)clone).Tainted = ((Basic)obj).Tainted;
-
             if (obj is Object)
                 ((Object)clone).instance_vars = new Dictionary<string, object>(((Object)obj).instance_vars);
 
-            return Eval.CallPrivate(clone, caller, "initialize_copy", null, obj);
+            ((Basic)clone).Tainted = ((Basic)obj).Tainted;
+
+            clone = Eval.CallPrivate(clone, caller, "initialize_copy", null, obj);
+
+            ((Basic)clone).Frozen = ((Basic)obj).Frozen;
+
+            return clone;
         }
     }
 
