@@ -73,4 +73,58 @@ namespace Ruby.Runtime
         }
     }
 
+    internal class alias_global : global_variable
+    {
+        internal string aliased;
+
+        public alias_global(string aliased)
+        {
+            this.aliased = aliased;
+        }
+
+        internal override object getter(string id, Frame caller)
+        {
+            Match tilde;
+            switch (aliased)
+            {
+                case "$&":
+                    tilde = caller.Tilde;
+                    if (tilde != null)
+                        return tilde.last_match(caller);
+                    else
+                        return null;
+                case "$`":
+                    tilde = caller.Tilde;
+                    if (tilde != null)
+                        return tilde.match_pre(caller);
+                    else
+                        return null;
+                case "$'":
+                    tilde = caller.Tilde;
+                    if (tilde != null)
+                        return tilde.match_post(caller);
+                    else
+                        return null;
+                case "$+":
+                    tilde = caller.Tilde;
+                    if (tilde != null)
+                        return tilde.match_last(caller);
+                    else
+                        return null;
+                default:
+                    break;
+            }
+            return Variables.gvar_get(aliased, caller);
+        }
+
+        internal override void setter(string id, object val, Frame caller)
+        {
+            if (aliased != "$&" && aliased != "$`" && aliased != "$'" && aliased != "$+")
+                Variables.gvar_set(aliased, val, caller);
+            else
+            {
+                throw new NameError(id + " is a read-only variable").raise(caller);
+            }
+        }
+    }
 }

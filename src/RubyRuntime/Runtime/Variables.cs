@@ -85,7 +85,8 @@ namespace Ruby.Runtime
         [UsedByRubyCompiler]
         public static object alias_variable(string name1, string name2)
         {
-            throw new System.NotImplementedException("alias_variable");
+            global_vars[name1] = new alias_global(name2);
+            return null;
         }
 
         internal static void cvar_override_check(string id, Class klass) // author: Brian, status: done
