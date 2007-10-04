@@ -111,6 +111,11 @@ namespace Ruby
             return (path.Length > 1 && char.IsLetter(path[0]) && path[1] == ':');
         }
 
+        internal static bool has_drive_letter(System.Text.StringBuilder path)
+        {
+            return (path.Length > 1 && char.IsLetter(path[0]) && path[1] == ':');
+        }
+
         internal static bool isdirsep(char c)
         {
             return (c == '\\' || c == '/');
@@ -125,18 +130,30 @@ namespace Ruby
         {
             if (path.Length > 2 && has_drive_letter(path) && isdirsep(path[2]))
                 return true;
-            if (isdirsep(path[0]) && path.Length > 1 && isdirsep(path[1]))
+            if (path.Length > 1 && isdirsep(path[0]) && isdirsep(path[1]))
                 return true;
             return false;
         }
 
+        private static int skiproot_i(string path)
+        {
+            int ipath = 0;
+            if (has_drive_letter(path)) ipath += 2;
+            while (ipath < path.Length && isdirsep(path[ipath])) ipath++;
+            return ipath;
+        }
+
+        private static int skiproot_i(System.Text.StringBuilder path)
+        {
+            int ipath = 0;
+            if (has_drive_letter(path)) ipath += 2;
+            while (ipath < path.Length && isdirsep(path[ipath])) ipath++;
+            return ipath;
+        }
+
         internal static string skiproot(string path)
         {
-            if (has_drive_letter(path))
-                path = path.Substring(2);
-            while (isdirsep(path))
-                path = path.Substring(1);
-            return path;
+            return path.Substring(skiproot_i(path));
         }
 
         internal static string skipprefix(string path)
@@ -220,23 +237,18 @@ namespace Ruby
             return rb_path_end(path);
         }
 
+        /// <summary>
+        /// If path ends with dirseps, return the position of the leftmost.
+        /// Otherwise return length of path.
+        /// </summary>
         internal static int rb_path_end(string path)
         {
-            int i = 0;
-            while (path != null && i < path.Length)
+            for (int i = path.Length - 1; i >= 0; i--)
             {
-                if (isdirsep(path.Substring(i)))
-                {
-                    int last = i;
-                    while (isdirsep(path.Substring(i)))
-                        i++;
-                    if (i >= path.Length)
-                        return last;
-                }
-                else
-                    i++;
+                if (!isdirsep(path[i]))
+                    return i + 1;
             }
-            return i;
+            return 0;
         }
 
         internal static int rmext(string p, string e)
@@ -273,65 +285,35 @@ namespace Ruby
         internal static String file_expand_path(Frame caller, object fname, object dname, System.Text.StringBuilder result)
         {
             string s, b, root;
-            int buf, p, pend;
-            int buflen, dirlen, bdiff;
+            int p;
             bool tainted;
 
+            // Some of the code below assumes this.
+            System.Diagnostics.Debug.Assert(result.Length == 0);
+            
             String Fname = String.RStringValue(fname, caller);
 
             s = Fname.value;
-            p = buf = 0;
-            buflen = result.Capacity;
-            pend = p + buflen;
+            p = 0;
             tainted = Fname.Tainted;
 
-            if (s[0] == '~')
+            if (s.Length >= 1 && s[0] == '~')
             {
-                if (isdirsep(s[1]) || s[1] == '\0')
+                if (s.Length >= 2 && (isdirsep(s[1]) || s[1] == '\0'))
                 {
                     string dir = System.Environment.GetEnvironmentVariable("HOME");
 
                     if (dir == null)
-                    {
                         throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "couldn't find HOME environment -- expanding `{0}'", s)).raise(caller);
-                    }
-                    dirlen = dir.Length;
-                    //BUFCHECK(dirlen > buflen);
-                    bdiff = p - buf;
-                    while (dirlen > buflen)
-                    {
-                        buflen *= 2;
-                    }
-                    result.Capacity = buflen;
-                    buf = 0;
-                    p = buf + bdiff;
-                    pend = buf + buflen;
-
                     result.Append(dir);
-                    for (p = buf; p < result.Length; p++)
-                    {
-                        if (result[p] == '\\')
-                        {
-                            result[p] = '/';
-                        }
-                    }
+                    result.Replace('\\', '/');
+                    p = result.Length;
                     s = s.Substring(1);
                     tainted = true;
                 }
                 else
                 {
                     s = nextdirsep(b = s);
-                    //BUFCHECK(bdiff + (s - b) >= buflen);
-                    bdiff = p - buf;
-                    while (bdiff + (s.Length - b.Length) >= buflen)
-                    {
-                        buflen *= 2;
-                    }
-                    result.Capacity = buflen;
-                    buf = 0;
-                    p = buf + bdiff;
-                    pend = buf + buflen;
-
                     result.Append(b, 0, s.Length - b.Length);
                     p += s.Length - b.Length;
                 }
@@ -343,17 +325,6 @@ namespace Ruby
                 {
                     /* specified drive letter, and full path */
                     /* skip drive letter */
-                    //BUFCHECK(bdiff + 2 >= buflen);
-                    bdiff = p - buf;
-                    while (bdiff + 2 >= buflen)
-                    {
-                        buflen *= 2;
-                    }
-                    result.Capacity = buflen;
-                    buf = 0;
-                    p = buf + bdiff;
-                    pend = buf + buflen;
-
                     result.Append(s, 0, 2);
                     p += 2;
                     s = s.Substring(2);
@@ -365,10 +336,8 @@ namespace Ruby
                     if (dname != null)
                     {
                         file_expand_path(caller, dname, null, result);
-                        p = buf = 0;
-                        buflen = result.Capacity;
-                        pend = p + buflen;
-                        if (has_drive_letter(result.ToString()) && (result[0] == s[0]))
+                        p = 0;
+                        if (has_drive_letter(result) && (result[0] == s[0]))
                         {
                             /* ok, same drive */
                             same = true;
@@ -379,21 +348,10 @@ namespace Ruby
                         string dir = new System.IO.DriveInfo(s).RootDirectory.FullName;
 
                         tainted = true;
-                        dirlen = dir.Length;
-                        //BUFCHECK(dirlen > buflen);
-                        bdiff = p - buf;
-                        while (dirlen > buflen)
-                        {
-                            buflen *= 2;
-                        }
-                        result.Capacity = buflen;
-                        buf = 0;
-                        p = buf + bdiff;
-                        pend = buf + buflen;
-
                         result.Append(dir);
                     }
-                    p = chompdirsep(skiproot(result.ToString()));
+                    string tmp = skiproot(result.ToString());
+                    p = chompdirsep(tmp) + result.Length - tmp.Length;
                     s = s.Substring(2);
                 }
             }
@@ -402,34 +360,22 @@ namespace Ruby
                 if (dname != null)
                 {
                     file_expand_path(caller, dname, null, result);
-                    p = buf = 0;
-                    buflen = result.Capacity;
-                    pend = p + buflen;
+                    p = 0;
                 }
                 else
                 {
                     string dir = System.Environment.CurrentDirectory;
+                    dir = dir.Replace('\\', '/');
 
                     tainted = true;
-                    dirlen = dir.Length;
-                    //BUFCHECK(dirlen > buflen);
-                    bdiff = p - buf;
-                    while (dirlen > buflen)
-                    {
-                        buflen *= 2;
-                    }
-                    result.Capacity = buflen;
-                    buf = 0;
-                    p = buf + bdiff;
-                    pend = buf + buflen;
-
                     result.Append(dir);
                 }
                 if (isdirsep(s))
                 {
                     /* specified full path, but not drive letter nor UNC */
                     /* we need to get the drive letter or UNC share name */
-                    p = result.ToString().IndexOf(skipprefix(result.ToString()));
+                    string tmp = result.ToString();
+                    p = tmp.IndexOf(skipprefix(tmp));
                 }
                 else
                 {
@@ -443,111 +389,86 @@ namespace Ruby
                 do
                     i++;
                 while (i < s.Length && isdirsep(s[i]));
-                p = buf + i;
-                //BUFCHECK(bdiff >= buflen);
-                bdiff = p - buf;
-                while (bdiff >= buflen)
+                p = i;
+                //memset(buf, '/', p - buf);
+                for (i = 0; i < p; i++)
                 {
-                    buflen *= 2;
+                    if (i < result.Length)
+                        result[i] = '/';
+                    else
+                    {
+                        System.Diagnostics.Debug.Assert(i == result.Length);
+                        result.Append('/');
+                    }
                 }
-                result.Capacity = buflen;
-                buf = 0;
-                p = buf + bdiff;
-                pend = buf + buflen;
-
-                if (result.Length < p - buf)
-                    result.Append('/');
-                else
-                    result[p - buf] = '/';
             }
 
-            if (p < result.Length)
-                result.Remove(p, result.Length - p);
-
-            if (p > buf)
-                if (p - 1 > result.Length - 1)
-                {
-                    result.Append('/');
-                    p++;
-                }
-                else if (result[p - 1] == '/')
-                { }
-                else
-                {
-                    result.Append('/');
-                    p++;
-                }
+            if (p > 0 && (p - 1 < result.Length && result[p - 1] == '/'))
+                --p;
             else
             {
-                result.Append('/');
-                p++;
+                if (p < result.Length)
+                    result[p] = '/';
+                else
+                {
+                    System.Diagnostics.Debug.Assert(p == result.Length);
+                    result.Append('/');
+                }
             }
+
+            //p[1] = 0;
+            result.Length = p + 1;
 
             root = skipprefix(result.ToString());
 
             b = s;
-            while (s != null && s.Length > 0)
+            while (s.Length >= 1)
             {
                 switch (s[0])
                 {
                     case '.':
-                        if (b.Equals(s))
-                        {    /* beginning of path element */
-                            s = s.Substring(1);
-                            if (s.Length > 0)
-                                switch (s[0])
-                                {
-                                    case '\0':
-                                        b = s;
-                                        break;
-                                    case '.':
-                                        if (s[1] == '\0' || isdirsep(s[1]))
+                        bool cond = b == s;
+                        s = s.Substring(1);
+                        if (cond)    /* beginning of path element */
+                        {
+                            switch (s.Length >= 1 ? s[0] : '\0')
+                            {
+                                case '\0':
+                                    b = s;
+                                    break;
+                                case '.':
+                                    if ((s.Length < 2 || s[1] == '\0') || isdirsep(s[1]))
+                                    {
+                                        /* We must go back to the parent */
+                                        if ((b = strrdirsep(root)) == null)
                                         {
-                                            /* We must go back to the parent */
-                                            if ((b = strrdirsep(root)) == null)
-                                            {
-                                                result[p] = '/';
-                                            }
-                                            else
-                                            {
-                                                p = s.IndexOf(b);
-                                            }
-                                            s = s.Substring(1);
-                                            b = s;
+                                            result[p] = '/';
                                         }
-                                        break;
-                                    case '/':
-                                    case '\\':
+                                        else
+                                        {
+                                            result.Length = p;
+                                            p = result.Length - b.Length + 1;
+                                        }
                                         s = s.Substring(1);
                                         b = s;
-                                        break;
-                                    default:
-                                        /* ordinary path element, beginning don't move */
-                                        break;
-                                }
-                            else
-                                b = s;
+                                    }
+                                    break;
+                                case '/':
+                                case '\\':
+                                    s = s.Substring(1);
+                                    b = s;
+                                    break;
+                                default:
+                                    /* ordinary path element, beginning don't move */
+                                    break;
+                            }
                         }
-                        else
-                            s = s.Substring(1);
                         break;
                     case '/':
                     case '\\':
                         if (b.Length > s.Length)
                         {
-                            int rootdiff = root.Length - buf;
-                            //BUFCHECK(bdiff + (s - b + 1) >= buflen);
-                            bdiff = p - buf;
-                            while (bdiff + (b.Length - s.Length + 1) >= buflen)
-                            {
-                                buflen *= 2;
-                            }
-                            result.Capacity = buflen;
-                            buf = 0;
-                            p = buf + bdiff;
-                            pend = buf + buflen;
-
-                            root = result.ToString().Substring(buf + rootdiff);
+                            root = result.ToString(result.Length - root.Length, root.Length);
                             result.Append(b, 0, b.Length - s.Length);
                             p += b.Length - s.Length + 1;
                             result.Append('/');
@@ -563,25 +484,17 @@ namespace Ruby
 
             if (b.Length > s.Length)
             {
-                //BUFCHECK(bdiff + (s - b) >= buflen);
-                bdiff = p - buf;
-                while (bdiff + (b.Length - s.Length) >= buflen)
-                {
-                    buflen *= 2;
-                }
-                result.Capacity = buflen;
-                buf = 0;
-                p = buf + bdiff;
-                pend = buf + buflen;
-
+                //memcpy(++p, b, s-b);
+                // Actually this should not truncate result, but it will be
+                // truncated later anyway.
+                result.Length = ++p;
                 result.Append(b, 0, b.Length - s.Length);
                 p += b.Length - s.Length;
             }
-            if (result.Length > 3 && result[result.Length - 1] == '/')
-                result.Remove(result.Length - 1, 1);
+            if (p == skiproot_i(result) - 1) p++;
 
-            if (result.Length > p - buf)
-                result.Remove(p - buf, result.Length - (p - buf));
+            if (result.Length > p)
+                result.Length = p;
 
             String res = new String(result.ToString());
             res.Tainted = tainted;
