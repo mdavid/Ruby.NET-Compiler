@@ -563,6 +563,10 @@ namespace Ruby.Compiler.AST
         {
             context.ldloc(0);
             context.call(Runtime.Frame.get_Tilde);
+            PERWAPI.CILLabel label1 = context.NewLabel();
+            context.brfalse(label1);
+            context.ldloc(0);
+            context.call(Runtime.Frame.get_Tilde);
             context.ldloc(0);
 
             switch (ch)
@@ -582,6 +586,11 @@ namespace Ruby.Compiler.AST
                 default:
                     throw new NotImplementedException("BACK_REF $" + ch);
             }
+            PERWAPI.CILLabel label2 = context.NewLabel();
+            context.br(label2);
+            context.CodeLabel(label1);
+            context.ldnull();
+            context.CodeLabel(label2);
         }
     }
 
