@@ -21,8 +21,12 @@ namespace Ruby
     public partial class Time : Basic
     {
         internal System.DateTime value;
-        internal bool gmt;
         internal bool tm_got;
+
+        internal bool gmt
+        {
+            get { return this.value.Kind == DateTimeKind.Utc; }
+        }
 
         //-----------------------------------------------------------------
 
@@ -35,7 +39,6 @@ namespace Ruby
         public Time(Class klass)
             : base(klass) //status: done
         {
-
         }
 
 
@@ -44,12 +47,12 @@ namespace Ruby
         {
             this.value = value;
             this.tm_got = true;
-            this.gmt = value.Kind == DateTimeKind.Utc;
         }
 
         //-----------------------------------------------------------------
 
         private static readonly System.DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly System.DateTime LocalEpoch = Epoch.ToLocalTime();
         private static readonly System.DateTime EndTime = new DateTime(2038, 1, 19, 3, 14, 7, DateTimeKind.Utc);
         internal static string[] months = {"jan", "feb", "mar", "apr", "may", "jun",
                 "jul", "aug", "sep", "oct", "nov", "dec"};
@@ -116,7 +119,7 @@ namespace Ruby
 
             foreach (char c in format)
             {
-                if (c == '%')
+                if (!printFormat && c == '%')
                 {
                     printFormat = true;
                     continue;
@@ -185,7 +188,7 @@ namespace Ruby
                                 {
                                     weekOfYear--;
                                 }
-                                result.Append(weekOfYear.ToString(CultureInfo.InvariantCulture));
+                                result.Append(weekOfYear.ToString("00", CultureInfo.InvariantCulture));
                             }
                             break;
                         case 'W':
@@ -196,7 +199,7 @@ namespace Ruby
                                 {
                                     weekOfYear--;
                                 }
-                                result.Append(weekOfYear.ToString(CultureInfo.InvariantCulture));
+                                result.Append(weekOfYear.ToString("00", CultureInfo.InvariantCulture));
                             }
                             break;
                         case 'w':
@@ -209,7 +212,7 @@ namespace Ruby
                             result.Append(dt.ToString("t", CultureInfo.InvariantCulture));
                             break;
                         case 'y':
-                            result.Append(dt.ToString("t", CultureInfo.InvariantCulture));
+                            result.Append(dt.ToString("yy", CultureInfo.InvariantCulture));
                             break;
                         case 'Y':
                             result.Append(dt.ToString("yyyy", CultureInfo.InvariantCulture));
@@ -221,7 +224,7 @@ namespace Ruby
                             }
                             break;
                         case '%':
-                            result.Append(dt.ToString("%", CultureInfo.InvariantCulture));
+                            result.Append('%');
                             break;
                         default:
                             //invalid format - do nothing
@@ -259,14 +262,20 @@ namespace Ruby
             return dup;
         }
 
-        internal static Time time_new_internal(long secs, long usec, Frame caller)
+        internal static Time time_new_internal(long secs, long usec, bool utc_p, Frame caller)
         {           
             Time.time_overflow_p(ref secs, ref usec, caller);
 
             long ticks = 0;
             ticks = secs * 10000000;
             ticks += usec * 10;
-            return new Time(Epoch.AddTicks(ticks));
+
+            DateTime datetime;
+            if (utc_p)
+                datetime = Time.Epoch.AddTicks(ticks);
+            else
+                datetime = Time.LocalEpoch.AddTicks(ticks);
+            return new Time(datetime);
         }
 
         internal static System.TimeSpan rb_time_interval(object time, Frame caller)
@@ -592,7 +601,7 @@ namespace Ruby
             tm.tm_year = year;
             if (v[1] == null)
             {
-                tm.tm_mon = 1;
+                tm.tm_mon = 0;
             }
             else
             {
@@ -719,4 +728,3 @@ namespace Ruby
         }
     }
 }
-

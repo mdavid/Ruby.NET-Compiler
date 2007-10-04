@@ -75,14 +75,14 @@ namespace Ruby.Methods
                 Time.rb_time_timeval(rest[0], out seconds, out uSeconds, caller);
             }
 
-            t = Time.time_new_internal(seconds, uSeconds, caller);
             if (time is Time)
             {
-                ((Time)t).gmt = ((Time)time).gmt;
+                bool gmt = ((Time)time).gmt;
+                t = Time.time_new_internal(seconds, uSeconds, gmt, caller);
             }
             else
             {
-                ((Time)t).gmt = false;
+                t = Time.time_new_internal(seconds, uSeconds, false, caller);
                 ((Time)t).value = ((Time)t).value.ToLocalTime();
             }
 
@@ -403,7 +403,6 @@ namespace Ruby.Methods
             System.DateTime time = ((Time)recv).value;
             time = time.ToUniversalTime();
             ((Time)recv).value = time;
-            ((Time)recv).gmt = true;
             ((Time)recv).tm_got = true;
             return recv;
         }
@@ -433,7 +432,6 @@ namespace Ruby.Methods
             System.DateTime time = ((Time)recv).value;
             time = time.ToLocalTime();
             ((Time)recv).value = time;
-            ((Time)recv).gmt = false;
             ((Time)recv).tm_got = true;
             return recv;
         }
@@ -455,7 +453,6 @@ namespace Ruby.Methods
             }
             ((Time)copy).value = ((Time)time).value;
             ((Time)copy).tm_got = ((Time)time).tm_got;
-            ((Time)copy).gmt = ((Time)time).gmt;
             return copy;
         }
     }
@@ -492,8 +489,8 @@ namespace Ruby.Methods
                 //The DateTime class precision is 100 nanoseconds (100x10^-9 = 1x10^-7)
                 time1 = ((Time)recv).value;
                 time2 = ((Time)param0).value;
-                time1Ticks = time1.Ticks;
-                time2Ticks = time2.Ticks;
+                time1Ticks = time1.ToUniversalTime().Ticks;
+                time2Ticks = time2.ToUniversalTime().Ticks;
                 //Losing precision on purpose for comparison
                 time1MicroSeconds = time1Ticks / 10;
                 time2MicroSeconds = time2Ticks / 10;
@@ -533,8 +530,8 @@ namespace Ruby.Methods
                 //The DateTime class precision is 100 nanoseconds (100x10^-9 = 1x10^-7)
                 time1 = ((Time)recv).value;
                 time2 = ((Time)param0).value;
-                time1Ticks = time1.Ticks;
-                time2Ticks = time2.Ticks;
+                time1Ticks = time1.ToUniversalTime().Ticks;
+                time2Ticks = time2.ToUniversalTime().Ticks;
                 //Losing precision on purpose for comparison
                 time1MicroSeconds = time1Ticks / 10;
                 time2MicroSeconds = time2Ticks / 10;
