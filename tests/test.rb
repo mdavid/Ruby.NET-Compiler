@@ -23,3 +23,7 @@ test_ok(1.quo(2) * 2 == 1)
 require 'uri/generic'
 uri = 'http://example.com/'
 test_ok(URI.parse(uri).to_s == uri)
+
+require 'cgi'
+string = 'Hello, world!'
+test_ok(CGI.unescape(CGI.escape(string)) == string)
