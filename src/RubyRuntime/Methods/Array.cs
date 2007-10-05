@@ -593,7 +593,7 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Array ary = new Array(((Array)recv).value);
+            Array ary = new Array(((Basic)recv).my_class, ((Array)recv).value);
             rb_ary_compact_bang.singleton.Call0(last_class, ary, caller, block);
 
             return ary;
