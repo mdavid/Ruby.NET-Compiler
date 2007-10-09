@@ -29,7 +29,7 @@ namespace Ruby.Compiler.AST
         }
 
         internal string method_id;
-        protected FORMALS formals;    // optional
+        internal FORMALS formals;    // optional
 
 
         internal override void Init(YYLTYPE location, params object[] inputs)
