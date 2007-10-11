@@ -13,7 +13,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System.Collections.Generic;
 
 
-namespace Ruby.NET.ParserGenerator
+namespace VSRuby.NET.ParserGenerator
 {
     public class State
     {

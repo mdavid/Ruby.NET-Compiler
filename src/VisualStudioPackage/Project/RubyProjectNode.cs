@@ -5,11 +5,12 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.Shell;
 
 
-namespace Ruby.NET //Microsoft.Samples.VisualStudio.IDE.Project
+namespace VSRuby.NET //Microsoft.Samples.VisualStudio.IDE.Project
 {
     [GuidAttribute("07E91719-6969-4d9a-A2CF-79CE562F1D99")]
     public class RubyProjectNode : ProjectNode
@@ -26,11 +27,47 @@ namespace Ruby.NET //Microsoft.Samples.VisualStudio.IDE.Project
 
         public RubyProjectNode()
         {
+            this.OleServiceProvider.AddService(typeof(VSLangProj.VSProject), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
             this.SupportsProjectDesigner = true;
 
             ImageOffset = this.ImageHandler.ImageList.Images.Count;
             foreach (Image img in RubyImageList.Images)
                 this.ImageHandler.AddImage(img);
+
+            InitializeCATIDs();
+        }
+
+        private void InitializeCATIDs()
+        {
+            this.AddCATIDMapping(typeof(RubyProjectNodeProperties), typeof(RubyProjectNodeProperties).GUID);
+            this.AddCATIDMapping(typeof(RubyFileNodeProperties), typeof(RubyFileNodeProperties).GUID);
+            this.AddCATIDMapping(typeof(RubyFileNodeAutomation), typeof(RubyFileNodeAutomation).GUID);
+            this.AddCATIDMapping(typeof(FolderNodeProperties), new Guid("DD3E8FBF-46E5-4e01-9488-FF4254633549"));
+            this.AddCATIDMapping(typeof(FileNodeProperties), typeof(RubyFileNodeProperties).GUID);
+        }
+
+
+
+
+        public string OutputFileName
+        {
+            get
+            {
+                string assemblyName = this.ProjectMgr.GetProjectProperty("AssemblyName", true);
+
+                string outputTypeAsString = this.ProjectMgr.GetProjectProperty("OutputType", false);
+                OutputType outputType = (OutputType)Enum.Parse(typeof(OutputType), outputTypeAsString);
+
+                return assemblyName + GetOuputExtension(outputType);
+            }
+        }
+
+        public static string GetOuputExtension(OutputType outputType)
+        {
+            if (outputType == OutputType.Library)
+                return ".dll";
+            else
+                return ".exe";
         }
 
         public override string ProjectType
@@ -63,6 +100,11 @@ namespace Ruby.NET //Microsoft.Samples.VisualStudio.IDE.Project
             return VSConstants.S_OK;
         }
 
+        protected override NodeProperties CreatePropertiesObject()
+        {
+            return new RubyProjectNodeProperties(this);
+        }
+
         public override int Close()
         {
             if (listener != null)
@@ -74,9 +116,50 @@ namespace Ruby.NET //Microsoft.Samples.VisualStudio.IDE.Project
             return base.Close();
         }
 
+
+        private VSLangProj.VSProject vsProject = null;
+
+        protected internal VSLangProj.VSProject VSProject
+        {
+            get
+            {
+                if (vsProject == null)
+                    vsProject = new Microsoft.VisualStudio.Package.Automation.OAVSProject(this);
+                return vsProject;
+            }
+        }
+
+
+        private object CreateServices(Type serviceType)
+        {
+            if (typeof(VSLangProj.VSProject) == serviceType)
+            {
+                return VSProject;
+            }
+            else if (typeof(EnvDTE.Project) == serviceType)
+            {
+                return GetAutomationObject();
+            }
+            else
+                return null;
+        }
+
+
         public override FileNode CreateFileNode(ProjectElement item)
         {
-            return new RubyFileNode(this, item);
+            RubyFileNode newNode = new RubyFileNode(this, item);
+
+            string include = item.GetMetadata(ProjectFileConstants.Include);
+
+            newNode.OleServiceProvider.AddService(typeof(EnvDTE.Project), new OleServiceProvider.ServiceCreatorCallback(CreateServices), false);
+            newNode.OleServiceProvider.AddService(typeof(EnvDTE.ProjectItem), newNode.ServiceCreator, false);
+            newNode.OleServiceProvider.AddService(typeof(VSLangProj.VSProject), new OleServiceProvider.ServiceCreatorCallback(CreateServices), false);
+
+            if (IsCodeFile(include))
+                newNode.OleServiceProvider.AddService(typeof(SVSMDCodeDomProvider), newNode.ServiceCreator, false);
+                // new OleServiceProvider.ServiceCreatorCallback(CreateServices), false);
+
+            return newNode;
         }
 
         public override bool IsCodeFile(string strFileName)

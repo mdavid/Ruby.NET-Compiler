@@ -15,7 +15,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Package;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public class BabelLanguageService : Microsoft.VisualStudio.Package.LanguageService
     {
@@ -47,7 +47,7 @@ namespace Ruby.NET
             if (this.preferences == null)
             {
                 this.preferences = new LanguagePreferences(this.Site,
-                                                        typeof(Ruby.NET.LanguageService).GUID,
+                                                        typeof(VSRuby.NET.LanguageService).GUID,
                                                         this.Name);
                 this.preferences.Init();
             }
@@ -90,8 +90,8 @@ namespace Ruby.NET
 
             if (req.Reason == ParseReason.Check)
             {
-                Ruby.NET.Parser.ErrorHandler handler = new Ruby.NET.Parser.ErrorHandler();
-                Ruby.NET.Parser.Scanner scanner = new Ruby.NET.Parser.Scanner(); // string interface
+                VSRuby.NET.Parser.ErrorHandler handler = new VSRuby.NET.Parser.ErrorHandler();
+                VSRuby.NET.Parser.Scanner scanner = new VSRuby.NET.Parser.Scanner(); // string interface
                 Parser.Parser parser = new Parser.Parser();  // use noarg constructor
 
                 parser.scanner = scanner;
@@ -110,7 +110,7 @@ namespace Ruby.NET
                 // for the time being, just pull errors back from the error handler
                 if (handler.ErrNum > 0)
                 {
-                    foreach (Ruby.NET.Parser.Error error in handler.SortedErrorList())
+                    foreach (VSRuby.NET.Parser.Error error in handler.SortedErrorList())
                     {
                         TextSpan span = new TextSpan();
                         span.iStartLine = span.iEndLine = error.line - 1;

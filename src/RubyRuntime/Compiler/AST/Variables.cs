@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +41,11 @@ namespace Ruby.Compiler.AST
         protected string Name
         {
             get { return ID.ToDotNetName(vid); }
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeVariableReferenceExpression(vid);
         }
     }
 
@@ -319,7 +324,7 @@ namespace Ruby.Compiler.AST
 
     internal class IVAR : VAR, ISimple      // Instance Variable
     {
-        internal IVAR(string vid, YYLTYPE location) : base(vid, location) { }
+        internal IVAR(string vid, YYLTYPE location) : base(vid.Substring(1), location) { }
 
 
         internal override string DefinedName()
@@ -358,6 +363,11 @@ namespace Ruby.Compiler.AST
 
             context.ReleaseLocal(value, created);
         }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), vid);
+        }
     }
 
 
@@ -379,6 +389,17 @@ namespace Ruby.Compiler.AST
             this.scope = scope;
             this.parent_scope = parent_scope;
             qualified = true;
+        }
+
+        public override string ToString()
+        {
+            if (qualified)
+                if (scope != null)
+                    return scope.ToString() + "::" + vid;
+                else
+                    return ":::" + vid;
+            else
+                return vid;
         }
 
 
@@ -592,6 +613,11 @@ namespace Ruby.Compiler.AST
             context.ldnull();
             context.CodeLabel(label2);
         }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeVariableReferenceExpression("$" + ch);
+        }
     }
 
 
@@ -638,6 +664,11 @@ namespace Ruby.Compiler.AST
         {
             return "$" + nth;
         }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeVariableReferenceExpression("$" + nth.ToString());
+        }
     }
 
 
@@ -651,13 +682,17 @@ namespace Ruby.Compiler.AST
         internal ATTRIBUTE(Node attr_scope, string vid, YYLTYPE location)
             : base(vid, location)
         {
-            this.vid += "=";
             this.attr_scope = attr_scope;
         }
 
         internal override void Assign(CodeGenContext context, Node rhs)
         {
-            new METHOD_CALL(attr_scope, vid, rhs, location).GenCode(context);
+            new METHOD_CALL(attr_scope, vid+"=", rhs, location).GenCode(context);
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeFieldReferenceExpression(attr_scope.ToCodeExpression(), vid);
         }
 
         internal override string  DefinedName()
@@ -749,6 +784,17 @@ namespace Ruby.Compiler.AST
             context.ReleaseLocal(value, value_created);
 
             return temp;
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            CodeArrayIndexerExpression access = new CodeArrayIndexerExpression();
+            access.TargetObject = array.ToCodeExpression();
+
+            for (Node n = args; n != null; n = n.nd_next)
+                access.Indices.Add(n.ToCodeExpression());
+
+            return access;
         }
     }
 }

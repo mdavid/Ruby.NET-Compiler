@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,6 +38,11 @@ namespace Ruby.Compiler.AST
         {
             return "self";
         }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodeThisReferenceExpression();
+        }
     }
 
 
@@ -65,6 +70,11 @@ namespace Ruby.Compiler.AST
         internal override string DefinedName()
         {
             return "nil";
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodePrimitiveExpression(null);
         }
     }
 
@@ -95,6 +105,11 @@ namespace Ruby.Compiler.AST
         {
             return "true";
         }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodePrimitiveExpression(true);
+        }
     }
 
 
@@ -123,6 +138,11 @@ namespace Ruby.Compiler.AST
         internal override string DefinedName()
         {
             return "false";
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodePrimitiveExpression(false);
         }
     }
 }

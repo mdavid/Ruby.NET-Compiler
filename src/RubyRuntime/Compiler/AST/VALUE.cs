@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
 using PERWAPI;
@@ -67,6 +67,11 @@ namespace Ruby.Compiler.AST
             }
 
             throw new System.NotImplementedException("VALUE " + value.GetType().ToString());
+        }
+
+        public override CodeExpression ToCodeExpression()
+        {
+            return new CodePrimitiveExpression(value);
         }
 
 

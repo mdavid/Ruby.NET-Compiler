@@ -14,7 +14,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     [Guid("1be19140-e6ab-4387-937c-d9746098c461")]
     class LanguageService : BabelLanguageService

@@ -11,7 +11,7 @@ using Ruby.Compiler.AST;
 
 namespace Ruby.Compiler
 {
-internal enum Tokens {error=127,EOF=128,
+public enum Tokens {error=127,EOF=128,
     kCLASS=129,kMODULE=130,kDEF=131,kUNDEF=132,kBEGIN=133,kRESCUE=134,kENSURE=135,kEND=136,
     kIF=137,kUNLESS=138,kTHEN=139,kELSIF=140,kELSE=141,kCASE=142,kWHEN=143,kWHILE=144,
     kUNTIL=145,kFOR=146,kBREAK=147,kNEXT=148,kREDO=149,kRETRY=150,kIN=151,kDO=152,
@@ -26,16 +26,15 @@ internal enum Tokens {error=127,EOF=128,
     tNTH_REF=217,tBACK_REF=218,tREGEXP_END=219,tSTRING_BEG=220,tREGEXP_BEG=221,tXSTRING_BEG=222,tWORDS_BEG=223,tQWORDS_BEG=224,
     tSTRING_DBEG=225,tSYMBEG=226,tLOWEST=227,tUMINUS_NUM=228,tLAST_TOKEN=229};
 
-internal partial struct ValueType
-#line 6 "parser.y"
-            {
+public partial struct ValueType
+{
     internal Node node;
     internal LVALUE lval;
     internal string id;
     internal int num;
     internal Terminator term;
 }
-internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
+public partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
 {
   protected override void Initialize()
   {
@@ -1474,8 +1473,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
     switch (action)
     {
       case 2: // @1 -> 
-#line 75 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_BEG;
                 if (CurrentScope == null)
                     eval_tree = enter_scope(new SOURCEFILE(null));    
@@ -1484,14 +1482,12 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 3: // PROGRAM -> @1 compstmt 
-#line 83 "parser.y"
-            {
+{
                 leave_scope(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].node);
             }
         break;
       case 4: // bodystmt -> compstmt opt_rescue opt_else opt_ensure 
-#line 92 "parser.y"
-            {
+{
                 if (value_stack.array[value_stack.top-3].node != null || value_stack.array[value_stack.top-2].node != null || value_stack.array[value_stack.top-1].node != null)
                     yyval.node = new TRY_BLOCK(CurrentScope, value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 else
@@ -1499,75 +1495,63 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 5: // compstmt -> stmts opt_terms 
-#line 101 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-2].node;
             }
         break;
       case 8: // stmts -> stmts terms stmt 
-#line 109 "parser.y"
-            {
+{
                 yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 9: // stmts -> error stmt 
-#line 113 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 10: // @2 -> 
-#line 119 "parser.y"
-            {
+{
                 scanner.lex_state =    Lex_State.EXPR_FNAME;
             }
         break;
       case 11: // stmt -> kALIAS fitem @2 fitem 
-#line 123 "parser.y"
-            {
+{
                 yyval.node = new ALIAS(CurrentScope, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-4]);
             }
         break;
       case 12: // stmt -> kALIAS tGVAR tGVAR 
-#line 127 "parser.y"
-            {
+{
                 yyval.node = new VALIAS(value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-3]);
             }
         break;
       case 13: // stmt -> kALIAS tGVAR tBACK_REF 
-#line 131 "parser.y"
-            {
+{
                 yyval.node = new VALIAS(value_stack.array[value_stack.top-2].id, ID.intern("$" + ((BACK_REF)value_stack.array[value_stack.top-1].node).ch), location_stack.array[location_stack.top-3]);
             }
         break;
       case 14: // stmt -> kALIAS tGVAR tNTH_REF 
-#line 135 "parser.y"
-            {
+{
                 scanner.yyerror("cant make alias for the number variable");
                 yyval.node = null;
             }
         break;
       case 15: // stmt -> kUNDEF undef_list 
-#line 140 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 16: // stmt -> stmt kIF_MOD expr_value 
-#line 144 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-1].node, value_stack.array[value_stack.top-3].node, null, yyloc);
             }
         break;
       case 17: // stmt -> stmt kUNLESS_MOD expr_value 
-#line 148 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-1].node, null, value_stack.array[value_stack.top-3].node, yyloc);
             }
         break;
       case 18: // stmt -> stmt kWHILE_MOD expr_value 
-#line 152 "parser.y"
-            {
+{
                 if (value_stack.array[value_stack.top-3].node is begin)
                     yyval.node = new PostTestLoop(CurrentScope, value_stack.array[value_stack.top-1].node, true, value_stack.array[value_stack.top-3].node, yyloc);
                 else 
@@ -1575,8 +1559,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 19: // stmt -> stmt kUNTIL_MOD expr_value 
-#line 159 "parser.y"
-            {
+{
                 if (value_stack.array[value_stack.top-3].node is begin)
                     yyval.node = new PostTestLoop(CurrentScope, value_stack.array[value_stack.top-1].node, false, value_stack.array[value_stack.top-3].node, yyloc);
                 else
@@ -1584,14 +1567,12 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 20: // stmt -> stmt kRESCUE_MOD stmt 
-#line 166 "parser.y"
-            {
+{
                 yyval.node = new RESCUE_EXPR(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 21: // @3 -> 
-#line 170 "parser.y"
-            {
+{
                 if (in_def != 0 || in_single != 0)
                     scanner.yyerror("BEGIN in method");
                             
@@ -1599,1807 +1580,1504 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 22: // stmt -> klBEGIN @3 '{' compstmt '}' 
-#line 177 "parser.y"
-            {
+{
                 leave_scope(location_stack.array[location_stack.top-5], value_stack.array[value_stack.top-2].node);
                 yyval.node = null;
             }
         break;
       case 23: // @4 -> 
-#line 182 "parser.y"
-            {
+{
                 enter_scope(new END(CurrentScope, location_stack.array[location_stack.top-1]));
             }
         break;
       case 24: // stmt -> klEND @4 '{' compstmt '}' 
-#line 186 "parser.y"
-            {                    
+{                    
                 yyval.node = leave_scope(location_stack.array[location_stack.top-5], value_stack.array[value_stack.top-2].node);
             }
         break;
       case 25: // stmt -> lhs '=' command_call 
-#line 190 "parser.y"
-            {
+{
                 yyval.node =  new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 26: // stmt -> mlhs '=' command_call 
-#line 194 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 27: // stmt -> var_lhs tOP_ASGN command_call 
-#line 198 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 28: // stmt -> primary_value '[' aref_args ']' tOP_ASGN command_call 
-#line 202 "parser.y"
-            {                
+{                
                 yyval.node = new OP_ASGN(new ARRAY_ACCESS(value_stack.array[value_stack.top-6].node, value_stack.array[value_stack.top-4].node, location_stack.array[location_stack.top-5]), value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 29: // stmt -> primary_value '.' tIDENTIFIER tOP_ASGN command_call 
-#line 206 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 30: // stmt -> primary_value '.' tCONSTANT tOP_ASGN command_call 
-#line 210 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 31: // stmt -> primary_value tCOLON2 tIDENTIFIER tOP_ASGN command_call 
-#line 214 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 32: // stmt -> backref tOP_ASGN command_call 
-#line 218 "parser.y"
-            {
+{
                 backref_error(value_stack.array[value_stack.top-3].node);
                 yyval.node = null;
             }
         break;
       case 33: // stmt -> lhs '=' mrhs 
-#line 223 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 34: // stmt -> mlhs '=' arg_value 
-#line 227 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 35: // stmt -> mlhs '=' mrhs 
-#line 231 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 38: // expr -> expr kAND expr 
-#line 239 "parser.y"
-            {
+{
                 yyval.node = new AND(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 39: // expr -> expr kOR expr 
-#line 243 "parser.y"
-            {
+{
                 yyval.node = new OR(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 40: // expr -> kNOT expr 
-#line 247 "parser.y"
-            {
+{
                 yyval.node = new NOT(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 41: // expr -> '!' command_call 
-#line 251 "parser.y"
-            {
+{
                 yyval.node = new NOT(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 44: // command_call -> command 
-#line 261 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-1].node;
                 }
         break;
       case 45: // command_call -> block_command 
-#line 265 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-1].node;
                 }
         break;
       case 46: // command_call -> kRETURN call_args 
-#line 269 "parser.y"
-            {
+{
                     yyval.node = new RETURN(CurrentScope, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 47: // command_call -> kBREAK call_args 
-#line 273 "parser.y"
-            {
+{
                     yyval.node = new BREAK(CurrentScope, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 48: // command_call -> kNEXT call_args 
-#line 277 "parser.y"
-            {
+{
                     yyval.node = new NEXT(CurrentScope, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 49: // block_command -> block_call 
-#line 283 "parser.y"
-            {
+{
                         yyval.node = value_stack.array[value_stack.top-1].node;
                     }
         break;
       case 50: // block_command -> block_call '.' operation2 command_args 
-#line 287 "parser.y"
-            {
+{
                         yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                     }
         break;
       case 51: // block_command -> block_call tCOLON2 operation2 command_args 
-#line 291 "parser.y"
-            {
+{
                         yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                     }
         break;
       case 52: // @5 -> 
-#line 297 "parser.y"
-            {
+{
                         enter_scope(new BLOCK(CurrentScope, location_stack.array[location_stack.top-1]));                    
                     }
         break;
       case 53: // @6 -> 
-#line 301 "parser.y"
-            {
+{
                     }
         break;
       case 54: // cmd_brace_block -> tLBRACE_ARG @5 opt_block_var @6 compstmt '}' 
-#line 305 "parser.y"
-            {
+{
                         yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-4].lval, value_stack.array[value_stack.top-2].node);
                     }
         break;
       case 55: // command -> operation command_args 
-#line 311 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 56: // command -> operation command_args cmd_brace_block 
-#line 315 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 57: // command -> primary_value '.' operation2 command_args 
-#line 319 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 58: // command -> primary_value '.' operation2 command_args cmd_brace_block 
-#line 323 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 59: // command -> primary_value tCOLON2 operation2 command_args 
-#line 327 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 60: // command -> primary_value tCOLON2 operation2 command_args cmd_brace_block 
-#line 331 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 61: // command -> kSUPER command_args 
-#line 335 "parser.y"
-            {
+{
                 yyval.node = new SUPER(CurrentScope, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 62: // command -> kYIELD command_args 
-#line 339 "parser.y"
-            {
+{
                 yyval.node = new YIELD(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 63: // mlhs -> mlhs_basic 
-#line 346 "parser.y"
-            {
+{
                 yyval.lval = value_stack.array[value_stack.top-1].lval;
             }
         break;
       case 64: // mlhs -> tLPAREN mlhs_entry ')' 
-#line 350 "parser.y"
-            {
+{
                 yyval.lval = value_stack.array[value_stack.top-2].lval;
             }
         break;
       case 66: // mlhs_entry -> tLPAREN mlhs_entry ')' 
-#line 357 "parser.y"
-            {
+{
                     yyval.lval = value_stack.array[value_stack.top-2].lval;
                 }
         break;
       case 67: // mlhs_basic -> mlhs_head 
-#line 364 "parser.y"
-            {
+{
                     yyval.lval = value_stack.array[value_stack.top-1].lval;
                 }
         break;
       case 68: // mlhs_basic -> mlhs_head mlhs_item 
-#line 368 "parser.y"
-            {
+{
                     yyval.lval = ((MLHS)value_stack.array[value_stack.top-2].lval).append(value_stack.array[value_stack.top-1].lval);
                 }
         break;
       case 69: // mlhs_basic -> mlhs_head tSTAR mlhs_node 
-#line 372 "parser.y"
-            {
+{
                     yyval.lval = ((MLHS)value_stack.array[value_stack.top-3].lval).append(new LHS_STAR(value_stack.array[value_stack.top-1].lval, location_stack.array[location_stack.top-1]));
                 }
         break;
       case 70: // mlhs_basic -> mlhs_head tSTAR 
-#line 376 "parser.y"
-            {
+{
                     yyval.lval = ((MLHS)value_stack.array[value_stack.top-2].lval).append(new LHS_STAR(null, location_stack.array[location_stack.top-1]));
                 }
         break;
       case 71: // mlhs_basic -> tSTAR mlhs_node 
-#line 380 "parser.y"
-            {
+{
                     yyval.lval = new LHS_STAR(value_stack.array[value_stack.top-1].lval, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 72: // mlhs_basic -> tSTAR 
-#line 384 "parser.y"
-            {
+{
                     yyval.lval = new LHS_STAR(null, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 73: // mlhs_item -> mlhs_node 
-#line 390 "parser.y"
-            {
+{
                     yyval.lval = value_stack.array[value_stack.top-1].lval;
                 }
         break;
       case 74: // mlhs_item -> tLPAREN mlhs_entry ')' 
-#line 394 "parser.y"
-            {
+{
                     yyval.lval = value_stack.array[value_stack.top-2].lval;
                 }
         break;
       case 75: // mlhs_head -> mlhs_item ',' 
-#line 400 "parser.y"
-            {
+{
                     yyval.lval = new MLHS(value_stack.array[value_stack.top-2].lval, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 76: // mlhs_head -> mlhs_head mlhs_item ',' 
-#line 404 "parser.y"
-            {
+{
                     yyval.lval = ((MLHS)value_stack.array[value_stack.top-3].lval).append(value_stack.array[value_stack.top-2].lval);
                 }
         break;
       case 77: // mlhs_node -> variable 
-#line 410 "parser.y"
-            {
+{
                     yyval.lval = assignable(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 78: // mlhs_node -> primary_value '[' aref_args ']' 
-#line 414 "parser.y"
-            {
+{
                     yyval.lval = new ARRAY_ACCESS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
                 }
         break;
       case 79: // mlhs_node -> primary_value '.' tIDENTIFIER 
-#line 418 "parser.y"
-            {
+{
                     yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 80: // mlhs_node -> primary_value tCOLON2 tIDENTIFIER 
-#line 422 "parser.y"
-            {
+{
                     yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 81: // mlhs_node -> primary_value '.' tCONSTANT 
-#line 426 "parser.y"
-            {
+{
                     yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 82: // mlhs_node -> primary_value tCOLON2 tCONSTANT 
-#line 430 "parser.y"
-            {
+{
                     yyval.lval = new CONST(CurrentScope, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 83: // mlhs_node -> tCOLON3 tCONSTANT 
-#line 434 "parser.y"
-            {
+{
                     yyval.lval = new CONST(CurrentScope, null, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 84: // mlhs_node -> backref 
-#line 438 "parser.y"
-            {
+{
                     backref_error(value_stack.array[value_stack.top-1].node);
                     yyval.lval = null;
                 }
         break;
       case 85: // lhs -> variable 
-#line 445 "parser.y"
-            {
+{
             yyval.lval = assignable(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 86: // lhs -> primary_value '[' aref_args ']' 
-#line 449 "parser.y"
-            {
+{
             yyval.lval = new ARRAY_ACCESS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
         }
         break;
       case 87: // lhs -> primary_value '.' tIDENTIFIER 
-#line 453 "parser.y"
-            {
+{
             yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 88: // lhs -> primary_value tCOLON2 tIDENTIFIER 
-#line 457 "parser.y"
-            {
+{
             yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 89: // lhs -> primary_value '.' tCONSTANT 
-#line 461 "parser.y"
-            {
+{
             yyval.lval = new ATTRIBUTE(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 90: // lhs -> primary_value tCOLON2 tCONSTANT 
-#line 465 "parser.y"
-            {
+{
             yyval.lval = new CONST(CurrentScope, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 91: // lhs -> tCOLON3 tCONSTANT 
-#line 469 "parser.y"
-            {
+{
             yyval.lval = new CONST(CurrentScope, null, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
         }
         break;
       case 92: // lhs -> backref 
-#line 473 "parser.y"
-            {
+{
             backref_error(value_stack.array[value_stack.top-1].node);
             yyval.lval = null;
         }
         break;
       case 93: // cname -> tIDENTIFIER 
-#line 480 "parser.y"
-            {
+{
                 scanner.yyerror("class/module name must be CONSTANT");
             }
         break;
       case 95: // cpath -> tCOLON3 cname 
-#line 487 "parser.y"
-            {
+{
                 yyval.node = new CONST(CurrentScope, null, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 96: // cpath -> cname 
-#line 491 "parser.y"
-            {
+{
                 yyval.node = new CONST(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 97: // cpath -> primary_value tCOLON2 cname 
-#line 495 "parser.y"
-            {
+{
                 yyval.node = new CONST(CurrentScope, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 98: // fname -> tIDENTIFIER 
-#line 501 "parser.y"
-            {
+{
                 yyval.id = value_stack.array[value_stack.top-1].id;    
             }
         break;
       case 99: // fname -> tCONSTANT 
-#line 505 "parser.y"
-            {
+{
                 yyval.id = value_stack.array[value_stack.top-1].id;    
             }
         break;
       case 100: // fname -> tFID 
-#line 509 "parser.y"
-            {
+{
                 yyval.id = value_stack.array[value_stack.top-1].id;    
             }
         break;
       case 101: // fname -> op 
-#line 513 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_END;
                 yyval.id = value_stack.array[value_stack.top-1].id;
             }
         break;
       case 102: // fname -> reswords 
-#line 518 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_END;
                 yyval.id = value_stack.array[value_stack.top-1].id;
             }
         break;
       case 103: // fitem -> fname 
-#line 525 "parser.y"
-            {
+{
                 yyval.id = value_stack.array[value_stack.top-1].id;
             }
         break;
       case 104: // fitem -> symbol 
-#line 529 "parser.y"
-            {
+{
                 yyval.id = value_stack.array[value_stack.top-1].id;
             }
         break;
       case 105: // undef_list -> fitem 
-#line 535 "parser.y"
-            {
+{
                     yyval.node = new UNDEF(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 106: // @7 -> 
-#line 539 "parser.y"
-            {
+{
                     scanner.lex_state = Lex_State.EXPR_FNAME;
                 }
         break;
       case 107: // undef_list -> undef_list ',' @7 fitem 
-#line 543 "parser.y"
-            {
+{
                     yyval.node = append(value_stack.array[value_stack.top-4].node, new UNDEF(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]));
                 }
         break;
       case 108: // op -> '|' 
-#line 548 "parser.y"
-            { yyval.id = ID.intern('|');    }
+{ yyval.id = ID.intern('|');    }
         break;
       case 109: // op -> '^' 
-#line 549 "parser.y"
-            { yyval.id = ID.intern('^'); }
+{ yyval.id = ID.intern('^'); }
         break;
       case 110: // op -> '&' 
-#line 550 "parser.y"
-            { yyval.id = ID.intern('&'); }
+{ yyval.id = ID.intern('&'); }
         break;
       case 111: // op -> tCMP 
-#line 551 "parser.y"
-            { yyval.id = ID.intern(Tokens.tCMP); }
+{ yyval.id = ID.intern(Tokens.tCMP); }
         break;
       case 112: // op -> tEQ 
-#line 552 "parser.y"
-            { yyval.id = ID.intern(Tokens.tEQ); }
+{ yyval.id = ID.intern(Tokens.tEQ); }
         break;
       case 113: // op -> tEQQ 
-#line 553 "parser.y"
-            { yyval.id = ID.intern(Tokens.tEQQ); }
+{ yyval.id = ID.intern(Tokens.tEQQ); }
         break;
       case 114: // op -> tMATCH 
-#line 554 "parser.y"
-            { yyval.id = ID.intern(Tokens.tMATCH); }
+{ yyval.id = ID.intern(Tokens.tMATCH); }
         break;
       case 115: // op -> '>' 
-#line 555 "parser.y"
-            { yyval.id = ID.intern('>'); }
+{ yyval.id = ID.intern('>'); }
         break;
       case 116: // op -> tGEQ 
-#line 556 "parser.y"
-            { yyval.id = ID.intern(Tokens.tGEQ); }
+{ yyval.id = ID.intern(Tokens.tGEQ); }
         break;
       case 117: // op -> '<' 
-#line 557 "parser.y"
-            { yyval.id = ID.intern('<'); }
+{ yyval.id = ID.intern('<'); }
         break;
       case 118: // op -> tLEQ 
-#line 558 "parser.y"
-            { yyval.id = ID.intern(Tokens.tLEQ); }
+{ yyval.id = ID.intern(Tokens.tLEQ); }
         break;
       case 119: // op -> tLSHFT 
-#line 559 "parser.y"
-            { yyval.id = ID.intern(Tokens.tLSHFT); }
+{ yyval.id = ID.intern(Tokens.tLSHFT); }
         break;
       case 120: // op -> tRSHFT 
-#line 560 "parser.y"
-            { yyval.id = ID.intern(Tokens.tRSHFT); }
+{ yyval.id = ID.intern(Tokens.tRSHFT); }
         break;
       case 121: // op -> '+' 
-#line 561 "parser.y"
-            { yyval.id = ID.intern('+'); }
+{ yyval.id = ID.intern('+'); }
         break;
       case 122: // op -> '-' 
-#line 562 "parser.y"
-            { yyval.id = ID.intern('-'); }
+{ yyval.id = ID.intern('-'); }
         break;
       case 123: // op -> '*' 
-#line 563 "parser.y"
-            { yyval.id = ID.intern('*'); }
+{ yyval.id = ID.intern('*'); }
         break;
       case 124: // op -> tSTAR 
-#line 564 "parser.y"
-            { yyval.id = ID.intern('*'); }
+{ yyval.id = ID.intern('*'); }
         break;
       case 125: // op -> '/' 
-#line 565 "parser.y"
-            { yyval.id = ID.intern('/'); }
+{ yyval.id = ID.intern('/'); }
         break;
       case 126: // op -> '%' 
-#line 566 "parser.y"
-            { yyval.id = ID.intern('%'); }
+{ yyval.id = ID.intern('%'); }
         break;
       case 127: // op -> tPOW 
-#line 567 "parser.y"
-            { yyval.id = ID.intern(Tokens.tPOW); }
+{ yyval.id = ID.intern(Tokens.tPOW); }
         break;
       case 128: // op -> '~' 
-#line 568 "parser.y"
-            { yyval.id = ID.intern('~'); }
+{ yyval.id = ID.intern('~'); }
         break;
       case 129: // op -> tUPLUS 
-#line 569 "parser.y"
-            { yyval.id = ID.intern(Tokens.tUPLUS); }
+{ yyval.id = ID.intern(Tokens.tUPLUS); }
         break;
       case 130: // op -> tUMINUS 
-#line 570 "parser.y"
-            { yyval.id = ID.intern(Tokens.tUMINUS); }
+{ yyval.id = ID.intern(Tokens.tUMINUS); }
         break;
       case 131: // op -> tAREF 
-#line 571 "parser.y"
-            { yyval.id = ID.intern(Tokens.tAREF); }
+{ yyval.id = ID.intern(Tokens.tAREF); }
         break;
       case 132: // op -> tASET 
-#line 572 "parser.y"
-            { yyval.id = ID.intern(Tokens.tASET); }
+{ yyval.id = ID.intern(Tokens.tASET); }
         break;
       case 133: // op -> '`' 
-#line 573 "parser.y"
-            { yyval.id = ID.intern('`'); }
+{ yyval.id = ID.intern('`'); }
         break;
       case 175: // arg -> lhs '=' arg 
-#line 586 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 176: // arg -> lhs '=' arg kRESCUE_MOD arg 
-#line 590 "parser.y"
-            {
+{
                 yyval.node = new ASSIGNMENT(value_stack.array[value_stack.top-5].lval, new RESCUE_EXPR(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]), yyloc);
             }
         break;
       case 177: // arg -> var_lhs tOP_ASGN arg 
-#line 594 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN(value_stack.array[value_stack.top-3].lval, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 178: // arg -> primary_value '[' aref_args ']' tOP_ASGN arg 
-#line 598 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN(new ARRAY_ACCESS(value_stack.array[value_stack.top-6].node, value_stack.array[value_stack.top-4].node, location_stack.array[location_stack.top-5]), value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 179: // arg -> primary_value '.' tIDENTIFIER tOP_ASGN arg 
-#line 602 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 180: // arg -> primary_value '.' tCONSTANT tOP_ASGN arg 
-#line 606 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 181: // arg -> primary_value tCOLON2 tIDENTIFIER tOP_ASGN arg 
-#line 610 "parser.y"
-            {
+{
                 yyval.node = new OP_ASGN2(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].id, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 182: // arg -> primary_value tCOLON2 tCONSTANT tOP_ASGN arg 
-#line 614 "parser.y"
-            {
+{
                 scanner.yyerror("constant re-assignment");
                 yyval.node = null;
             }
         break;
       case 183: // arg -> tCOLON3 tCONSTANT tOP_ASGN arg 
-#line 619 "parser.y"
-            {
+{
                 scanner.yyerror("constant re-assignment");
                 yyval.node = null;
             }
         break;
       case 184: // arg -> backref tOP_ASGN arg 
-#line 624 "parser.y"
-            {
+{
                 backref_error(value_stack.array[value_stack.top-3].node);
                 yyval.node = null;
             }
         break;
       case 185: // arg -> arg tDOT2 arg 
-#line 629 "parser.y"
-            {
+{
                 yyval.node = new DOT2(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 186: // arg -> arg tDOT3 arg 
-#line 633 "parser.y"
-            {
+{
                 yyval.node = new DOT3(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 187: // arg -> arg '+' arg 
-#line 637 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('+'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 188: // arg -> arg '-' arg 
-#line 641 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('-'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 189: // arg -> arg '*' arg 
-#line 645 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('*'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 190: // arg -> arg '/' arg 
-#line 649 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('/'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 191: // arg -> arg '%' arg 
-#line 653 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('%'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 192: // arg -> arg tPOW arg 
-#line 657 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tPOW), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 193: // arg -> tUMINUS_NUM tINTEGER tPOW arg 
-#line 661 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tPOW), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]), ID.intern(Tokens.tUMINUS), new ARGS(location_stack.array[location_stack.top-4]), location_stack.array[location_stack.top-4]);
             }
         break;
       case 194: // arg -> tUMINUS_NUM tFLOAT tPOW arg 
-#line 665 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tPOW), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]), ID.intern(Tokens.tUMINUS), new ARGS(location_stack.array[location_stack.top-4]), location_stack.array[location_stack.top-4]);
             }
         break;
       case 195: // arg -> tUPLUS arg 
-#line 669 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-1].node, ID.intern(Tokens.tUPLUS), new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-2]);
             }
         break;
       case 196: // arg -> tUMINUS arg 
-#line 673 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-1].node, ID.intern(Tokens.tUMINUS), new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-2]);
             }
         break;
       case 197: // arg -> arg '|' arg 
-#line 677 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('|'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 198: // arg -> arg '^' arg 
-#line 681 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('^'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 199: // arg -> arg '&' arg 
-#line 685 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('&'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 200: // arg -> arg tCMP arg 
-#line 689 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tCMP), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 201: // arg -> arg '>' arg 
-#line 693 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('>'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 202: // arg -> arg tGEQ arg 
-#line 697 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tGEQ), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 203: // arg -> arg '<' arg 
-#line 701 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern('<'), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 204: // arg -> arg tLEQ arg 
-#line 705 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tLEQ), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 205: // arg -> arg tEQ arg 
-#line 709 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tEQ), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 206: // arg -> arg tEQQ arg 
-#line 713 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tEQQ), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 207: // arg -> arg tNEQ arg 
-#line 717 "parser.y"
-            {
+{
                 yyval.node = new NOT(new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tEQ), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]), location_stack.array[location_stack.top-2]);
             }
         break;
       case 208: // arg -> arg tMATCH arg 
-#line 721 "parser.y"
-            {
+{
                 yyval.node = new MATCH(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 209: // arg -> arg tNMATCH arg 
-#line 725 "parser.y"
-            {
+{
                 yyval.node = new NOT(new MATCH(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]), location_stack.array[location_stack.top-2]);
             }
         break;
       case 210: // arg -> '!' arg 
-#line 729 "parser.y"
-            {
+{
                 yyval.node = new NOT(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 211: // arg -> '~' arg 
-#line 733 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-1].node, ID.intern('~'), new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-2]);
             }
         break;
       case 212: // arg -> arg tLSHFT arg 
-#line 737 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tLSHFT), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 213: // arg -> arg tRSHFT arg 
-#line 741 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, ID.intern(Tokens.tRSHFT), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 214: // arg -> arg tANDOP arg 
-#line 745 "parser.y"
-            {
+{
                 yyval.node = new AND(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 215: // arg -> arg tOROP arg 
-#line 749 "parser.y"
-            {
+{
                 yyval.node = new OR(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 216: // @8 -> 
-#line 753 "parser.y"
-            {
+{
                 // Empty placeholder
             }
         break;
       case 217: // arg -> kDEFINED opt_nl @8 arg 
-#line 757 "parser.y"
-            {
+{
                 yyval.node = new DEFINED(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-4]);
             }
         break;
       case 218: // arg -> arg '?' arg ':' arg 
-#line 761 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-4]);
             }
         break;
       case 219: // arg -> primary 
-#line 765 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 220: // arg_value -> arg 
-#line 771 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-1].node;
                 }
         break;
       case 221: // aref_args -> none 
-#line 777 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, null, null, yyloc);
                 }
         break;
       case 222: // aref_args -> command opt_nl 
-#line 781 "parser.y"
-            {
+{
                     scanner.yywarn("parenthesize argument(s) for future version");
                     yyval.node = new ARGS(value_stack.array[value_stack.top-2].node, null, null, null, yyloc);
                 }
         break;
       case 223: // aref_args -> args trailer 
-#line 786 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-2].node, null, null, null, yyloc);
                 }
         break;
       case 224: // aref_args -> args ',' tSTAR arg opt_nl 
-#line 790 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-5].node, null, value_stack.array[value_stack.top-2].node, null, yyloc);
                 }
         break;
       case 225: // aref_args -> assocs trailer 
-#line 794 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, value_stack.array[value_stack.top-2].node, null, null, yyloc);
                 }
         break;
       case 226: // aref_args -> tSTAR arg opt_nl 
-#line 798 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, value_stack.array[value_stack.top-2].node, null, yyloc);
                 }
         break;
       case 227: // paren_args -> '(' none ')' 
-#line 804 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, null, null, yyloc);
                 }
         break;
       case 228: // paren_args -> '(' call_args opt_nl ')' 
-#line 808 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-3].node;
                 }
         break;
       case 229: // paren_args -> '(' block_call opt_nl ')' 
-#line 812 "parser.y"
-            {
+{
                     scanner.yywarn("parenthesize argument for future version");
                     yyval.node = value_stack.array[value_stack.top-3].node;
                 }
         break;
       case 230: // paren_args -> '(' args ',' block_call opt_nl ')' 
-#line 817 "parser.y"
-            {
+{
                     scanner.yywarn("parenthesize argument for future version");    
                     yyval.node = new ARGS(value_stack.array[value_stack.top-5].node, null, null, value_stack.array[value_stack.top-3].node, yyloc);
                 }
         break;
       case 231: // opt_paren_args -> none 
-#line 824 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, null, null, yyloc);
                 }
         break;
       case 233: // call_args -> command 
-#line 832 "parser.y"
-            {
+{
                     scanner.yywarn("parenthesize argument(s) for future version");                
                     yyval.node = new ARGS(value_stack.array[value_stack.top-1].node, null, null, null, yyloc);
                 }
         break;
       case 234: // call_args -> args opt_block_arg 
-#line 837 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-2].node, null, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 235: // call_args -> args ',' tSTAR arg_value opt_block_arg 
-#line 841 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-5].node, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 236: // call_args -> assocs opt_block_arg 
-#line 845 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 237: // call_args -> assocs ',' tSTAR arg_value opt_block_arg 
-#line 849 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 238: // call_args -> args ',' assocs opt_block_arg 
-#line 853 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 239: // call_args -> args ',' assocs ',' tSTAR arg opt_block_arg 
-#line 857 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-7].node, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 240: // call_args -> tSTAR arg_value opt_block_arg 
-#line 861 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 241: // call_args -> block_arg 
-#line 865 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 242: // call_args2 -> arg_value ',' args opt_block_arg 
-#line 871 "parser.y"
-            {
+{
                     yyval.node = new ARGS(append(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node), null, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 243: // call_args2 -> arg_value ',' block_arg 
-#line 875 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-3].node, null, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 244: // call_args2 -> arg_value ',' tSTAR arg_value opt_block_arg 
-#line 879 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-5].node, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 245: // call_args2 -> arg_value ',' args ',' tSTAR arg_value opt_block_arg 
-#line 883 "parser.y"
-            {
+{
                     yyval.node = new ARGS(append(value_stack.array[value_stack.top-7].node, value_stack.array[value_stack.top-5].node), null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 246: // call_args2 -> assocs opt_block_arg 
-#line 887 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 247: // call_args2 -> assocs ',' tSTAR arg_value opt_block_arg 
-#line 891 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 248: // call_args2 -> arg_value ',' assocs opt_block_arg 
-#line 895 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 249: // call_args2 -> arg_value ',' args ',' assocs opt_block_arg 
-#line 899 "parser.y"
-            {
+{
                     yyval.node = new ARGS(append(value_stack.array[value_stack.top-6].node, value_stack.array[value_stack.top-4].node), value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 250: // call_args2 -> arg_value ',' assocs ',' tSTAR arg_value opt_block_arg 
-#line 903 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-7].node, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 251: // call_args2 -> arg_value ',' args ',' assocs ',' tSTAR arg_value opt_block_arg 
-#line 907 "parser.y"
-            {
+{
                     yyval.node = new ARGS(append(value_stack.array[value_stack.top-9].node, value_stack.array[value_stack.top-7].node), value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 252: // call_args2 -> tSTAR arg_value opt_block_arg 
-#line 911 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 253: // call_args2 -> block_arg 
-#line 915 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, null, value_stack.array[value_stack.top-1].node, yyloc);
                 }
         break;
       case 254: // @9 -> 
-#line 921 "parser.y"
-            {
+{
                     scanner.CMDARG_PUSH(1);
                 }
         break;
       case 255: // command_args -> @9 open_args 
-#line 925 "parser.y"
-            {
+{
                     scanner.CMDARG_POP();
                     yyval.node = value_stack.array[value_stack.top-1].node;
                 }
         break;
       case 257: // @10 -> 
-#line 933 "parser.y"
-            {
+{
                     scanner.lex_state = Lex_State.EXPR_ENDARG;
                 }
         break;
       case 258: // open_args -> tLPAREN_ARG @10 ')' 
-#line 937 "parser.y"
-            {
+{
                     scanner.yywarn("dont put space before argument parentheses");    
                     yyval.node = null;
                 }
         break;
       case 259: // @11 -> 
-#line 942 "parser.y"
-            {
+{
                     scanner.lex_state = Lex_State.EXPR_ENDARG;
                 }
         break;
       case 260: // open_args -> tLPAREN_ARG call_args2 @11 ')' 
-#line 946 "parser.y"
-            {
+{
                     scanner.yywarn("dont put space before argument parentheses");    
                     yyval.node = value_stack.array[value_stack.top-3].node;
                 }
         break;
       case 261: // block_arg -> tAMPER arg_value 
-#line 953 "parser.y"
-            {
+{
                     yyval.node = new AMPER(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 262: // opt_block_arg -> ',' block_arg 
-#line 959 "parser.y"
-            {
+{
                         yyval.node = value_stack.array[value_stack.top-1].node;
                     }
         break;
       case 263: // opt_block_arg -> none 
-#line 963 "parser.y"
-            {
+{
                         yyval.node = null;
                     }
         break;
       case 264: // args -> arg_value 
-#line 969 "parser.y"
-            {
+{
             yyval.node = value_stack.array[value_stack.top-1].node;
         }
         break;
       case 265: // args -> args ',' arg_value 
-#line 973 "parser.y"
-            {
+{
             yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
         }
         break;
       case 266: // mrhs -> args ',' arg_value 
-#line 979 "parser.y"
-            {
+{
             yyval.node = new ARGS(append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node), null, null, null, yyloc);
         }
         break;
       case 267: // mrhs -> args ',' tSTAR arg_value 
-#line 983 "parser.y"
-            {
+{
             yyval.node = new ARGS(value_stack.array[value_stack.top-4].node, null, value_stack.array[value_stack.top-1].node, null, yyloc);
         }
         break;
       case 268: // mrhs -> tSTAR arg_value 
-#line 987 "parser.y"
-            {
+{
             yyval.node = new ARGS(null, null, value_stack.array[value_stack.top-1].node, null, yyloc);
         }
         break;
       case 277: // primary -> tFID 
-#line 1001 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-1].id, new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-1]);
             }
         break;
       case 278: // @12 -> 
-#line 1005 "parser.y"
-            {
+{
                 // Empty placeholder
             }
         break;
       case 279: // primary -> kBEGIN @12 bodystmt kEND 
-#line 1009 "parser.y"
-            {
+{
                 yyval.node = new begin(value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 280: // @13 -> 
-#line 1013 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_ENDARG;
             }
         break;
       case 281: // primary -> tLPAREN_ARG expr @13 opt_nl ')' 
-#line 1017 "parser.y"
-            {
+{
                 scanner.yywarn("(...) interpreted as grouped expression");            
                 yyval.node = value_stack.array[value_stack.top-4].node;
             }
         break;
       case 282: // primary -> tLPAREN compstmt ')' 
-#line 1022 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-2].node;
             }
         break;
       case 283: // primary -> primary_value tCOLON2 tCONSTANT 
-#line 1026 "parser.y"
-            {
+{
                 yyval.node = new CONST(CurrentScope, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 284: // primary -> tCOLON3 tCONSTANT 
-#line 1030 "parser.y"
-            {
+{
                 yyval.node = new CONST(CurrentScope, null, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 285: // primary -> primary_value '[' aref_args ']' 
-#line 1034 "parser.y"
-            {
+{
                 yyval.node = new ARRAY_ACCESS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 286: // primary -> tLBRACK aref_args ']' 
-#line 1038 "parser.y"
-            {
+{
                 yyval.node = new ARRAY(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 287: // primary -> tLBRACE assoc_list '}' 
-#line 1042 "parser.y"
-            {
+{
                 yyval.node = new HASH(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 288: // primary -> kRETURN 
-#line 1046 "parser.y"
-            {
+{
                 yyval.node = new RETURN(CurrentScope, null, location_stack.array[location_stack.top-1]);
             }
         break;
       case 289: // primary -> kYIELD '(' call_args ')' 
-#line 1050 "parser.y"
-            {
+{
                 yyval.node = new YIELD(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-4]);
             }
         break;
       case 290: // primary -> kYIELD '(' ')' 
-#line 1054 "parser.y"
-            {
+{
                 yyval.node = new YIELD(new ARGS(location_stack.array[location_stack.top-3]), location_stack.array[location_stack.top-3]);
             }
         break;
       case 291: // primary -> kYIELD 
-#line 1058 "parser.y"
-            {
+{
                 yyval.node = new YIELD(new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-1]);
             }
         break;
       case 292: // @14 -> 
-#line 1062 "parser.y"
-            {
+{
                 // Empty placeholder
             }
         break;
       case 293: // primary -> kDEFINED opt_nl '(' @14 expr ')' 
-#line 1066 "parser.y"
-            {
+{
                 yyval.node = new DEFINED(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-6]);
             }
         break;
       case 294: // primary -> operation brace_block 
-#line 1070 "parser.y"
-            {
+{
                 yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-2].id, new ARGS(location_stack.array[location_stack.top-2]), value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
             }
         break;
       case 296: // primary -> method_call brace_block 
-#line 1075 "parser.y"
-            {    
+{    
                 yyval.node = value_stack.array[value_stack.top-2].node;    
                 ((CALL)value_stack.array[value_stack.top-2].node).block = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 297: // primary -> kIF expr_value then compstmt if_tail kEND 
-#line 1080 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 298: // primary -> kUNLESS expr_value then compstmt opt_else kEND 
-#line 1084 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-3].node, yyloc);
             }
         break;
       case 299: // @15 -> 
-#line 1088 "parser.y"
-            {
+{
                 scanner.COND_PUSH(1);
             }
         break;
       case 300: // @16 -> 
-#line 1092 "parser.y"
-            {
+{
                 scanner.COND_POP();
             }
         break;
       case 301: // primary -> kWHILE @15 expr_value do @16 compstmt kEND 
-#line 1096 "parser.y"
-            {
+{
                 yyval.node = new PreTestLoop(CurrentScope, value_stack.array[value_stack.top-5].node, true, value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 302: // @17 -> 
-#line 1100 "parser.y"
-            {
+{
                 scanner.COND_PUSH(1);
             }
         break;
       case 303: // @18 -> 
-#line 1104 "parser.y"
-            {
+{
                 scanner.COND_POP();
             }
         break;
       case 304: // primary -> kUNTIL @17 expr_value do @18 compstmt kEND 
-#line 1108 "parser.y"
-            {
+{
                 yyval.node = new PreTestLoop(CurrentScope, value_stack.array[value_stack.top-5].node, false, value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 305: // primary -> kCASE expr_value opt_terms case_body kEND 
-#line 1112 "parser.y"
-            {
+{
                 yyval.node = new CASE(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 306: // primary -> kCASE opt_terms case_body kEND 
-#line 1116 "parser.y"
-            {
+{
                 yyval.node = new CASE(null, value_stack.array[value_stack.top-2].node, yyloc);
             }
         break;
       case 307: // primary -> kCASE opt_terms kELSE compstmt kEND 
-#line 1120 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-2].node; // fixme???
             }
         break;
       case 308: // @19 -> 
-#line 1124 "parser.y"
-            {
+{
                 yyval.node = new FORBODY(CurrentScope, location_stack.array[location_stack.top-1]);
                 enter_scope((Scope)(yyval.node));
             }
         break;
       case 309: // @20 -> 
-#line 1129 "parser.y"
-            {
+{
                 leave_scope(location_stack.array[location_stack.top-4]);            
                 scanner.COND_PUSH(1);
             }
         break;
       case 310: // @21 -> 
-#line 1134 "parser.y"
-            {
+{
                 scanner.COND_POP();
                 enter_scope((Scope)(value_stack.array[value_stack.top-6].node));
             }
         break;
       case 311: // primary -> kFOR @19 block_var kIN @20 expr_value do @21 compstmt kEND 
-#line 1139 "parser.y"
-            {
+{
                 yyval.node = new FOR(value_stack.array[value_stack.top-5].node, leave_scope(location_stack.array[location_stack.top-4], value_stack.array[value_stack.top-8].lval, value_stack.array[value_stack.top-2].node), yyloc);
             }
         break;
       case 312: // @22 -> 
-#line 1143 "parser.y"
-            {                
+{                
                 enter_scope(new CLASS(CurrentScope, location_stack.array[location_stack.top-3]));
             }
         break;
       case 313: // primary -> kCLASS cpath superclass @22 bodystmt kEND 
-#line 1147 "parser.y"
-            {
+{
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 314: // @23 -> 
-#line 1151 "parser.y"
-            {
+{
                 yyval.num = in_def;
                 in_def = 0;
             }
         break;
       case 315: // @24 -> 
-#line 1156 "parser.y"
-            {
+{
                 yyval.num = in_single;
                 in_single = 0;
                 enter_scope(new SCLASS(CurrentScope, location_stack.array[location_stack.top-5]));
             }
         break;
       case 316: // primary -> kCLASS tLSHFT expr @23 term @24 bodystmt kEND 
-#line 1162 "parser.y"
-            {
+{
                 in_def = value_stack.array[value_stack.top-5].num;
                 in_single = value_stack.array[value_stack.top-3].num;
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-6].node, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 317: // @25 -> 
-#line 1168 "parser.y"
-            {
+{
                 enter_scope(new MODULE(CurrentScope, location_stack.array[location_stack.top-2]));
             }
         break;
       case 318: // primary -> kMODULE cpath @25 bodystmt kEND 
-#line 1172 "parser.y"
-            {
+{
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 319: // @26 -> 
-#line 1176 "parser.y"
-            {
+{
                 in_def++;
-                enter_scope(new DEFN(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-2]));
+                enter_scope(new DEFN(CurrentScope, value_stack.array[value_stack.top - 1].id, location_stack.array[location_stack.top - 2], location_stack.array[location_stack.top - 1]));
             }
         break;
       case 320: // primary -> kDEF fname @26 f_arglist bodystmt kEND 
-#line 1181 "parser.y"
-            {
+{
 
                 in_def--;
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 321: // @27 -> 
-#line 1187 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_FNAME;
             }
         break;
       case 322: // @28 -> 
-#line 1191 "parser.y"
-            {
+{
                 in_single++;
                 scanner.lex_state = Lex_State.EXPR_END;
-                enter_scope(new DEFS(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-5]));                
+                enter_scope(new DEFS(CurrentScope, value_stack.array[value_stack.top - 1].id, location_stack.array[location_stack.top - 5], location_stack.array[location_stack.top - 1]));                
             }
         break;
       case 323: // primary -> kDEF singleton dot_or_colon @27 fname @28 f_arglist bodystmt kEND 
-#line 1197 "parser.y"
-            {
+{
 
                 in_single--;
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-8].node, value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 324: // primary -> kBREAK 
-#line 1203 "parser.y"
-            {
+{
                 yyval.node = new BREAK(CurrentScope, null, location_stack.array[location_stack.top-1]);
             }
         break;
       case 325: // primary -> kNEXT 
-#line 1207 "parser.y"
-            {
+{
                 yyval.node = new NEXT(CurrentScope, null, location_stack.array[location_stack.top-1]);
             }
         break;
       case 326: // primary -> kREDO 
-#line 1211 "parser.y"
-            {
+{
                 yyval.node = new REDO(CurrentScope, location_stack.array[location_stack.top-1]);
             }
         break;
       case 327: // primary -> kRETRY 
-#line 1215 "parser.y"
-            {
+{
                 yyval.node = new RETRY(CurrentScope, location_stack.array[location_stack.top-1]);
             }
         break;
       case 328: // primary_value -> primary 
-#line 1221 "parser.y"
-            {
+{
                         yyval.node = value_stack.array[value_stack.top-1].node;
                     }
         break;
       case 337: // if_tail -> kELSIF expr_value then compstmt if_tail 
-#line 1240 "parser.y"
-            {
+{
                 yyval.node = new IF(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 339: // opt_else -> kELSE compstmt 
-#line 1247 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 343: // opt_block_var -> '|' '|' 
-#line 1258 "parser.y"
-            {
+{
                         yyval.lval = new MLHS(null, location_stack.array[location_stack.top-2]);
                     }
         break;
       case 344: // opt_block_var -> tOROP 
-#line 1262 "parser.y"
-            {
+{
                         yyval.lval = new MLHS(null, location_stack.array[location_stack.top-1]);
                     }
         break;
       case 345: // opt_block_var -> '|' block_var '|' 
-#line 1266 "parser.y"
-            {
+{
                         yyval.lval = value_stack.array[value_stack.top-2].lval;
                     }
         break;
       case 346: // @29 -> 
-#line 1272 "parser.y"
-            {
+{
                 enter_scope(new BLOCK(CurrentScope, location_stack.array[location_stack.top-1]));
             }
         break;
       case 347: // @30 -> 
-#line 1276 "parser.y"
-            {
+{
                 // Empty placeholder
             }
         break;
       case 348: // do_block -> kDO_BLOCK @29 opt_block_var @30 compstmt kEND 
-#line 1280 "parser.y"
-            {
+{
 
                 yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-4].lval, value_stack.array[value_stack.top-2].node);
             }
         break;
       case 349: // block_call -> command do_block 
-#line 1287 "parser.y"
-            {                            
+{                            
                     ((CALL)value_stack.array[value_stack.top-2].node).block = value_stack.array[value_stack.top-1].node;
                     yyval.node = value_stack.array[value_stack.top-2].node;
                 }
         break;
       case 350: // block_call -> block_call '.' operation2 opt_paren_args 
-#line 1292 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 351: // block_call -> block_call tCOLON2 operation2 opt_paren_args 
-#line 1296 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 352: // method_call -> operation paren_args 
-#line 1302 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 353: // method_call -> primary_value '.' operation2 opt_paren_args 
-#line 1306 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 354: // method_call -> primary_value tCOLON2 operation2 paren_args 
-#line 1310 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].id, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 355: // method_call -> primary_value tCOLON2 operation3 
-#line 1314 "parser.y"
-            {
+{
                     yyval.node = new METHOD_CALL(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].id, new ARGS(location_stack.array[location_stack.top-1]), location_stack.array[location_stack.top-1]);
                 }
         break;
       case 356: // method_call -> kSUPER paren_args 
-#line 1318 "parser.y"
-            {
+{
                     yyval.node = new SUPER(CurrentScope, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-2]);
                 }
         break;
       case 357: // method_call -> kSUPER 
-#line 1322 "parser.y"
-            {
+{
                     yyval.node = new SUPER(CurrentScope, null, location_stack.array[location_stack.top-1]);
                 }
         break;
       case 358: // @31 -> 
-#line 1328 "parser.y"
-            {
+{
                     enter_scope(new BLOCK(CurrentScope, location_stack.array[location_stack.top-1]));
                 }
         break;
       case 359: // @32 -> 
-#line 1332 "parser.y"
-            {
+{
                     // Empty placeholder                
                 }
         break;
       case 360: // brace_block -> '{' @31 opt_block_var @32 compstmt '}' 
-#line 1336 "parser.y"
-            {
+{
 
                     yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-4].lval, value_stack.array[value_stack.top-2].node);
                 }
         break;
       case 361: // @33 -> 
-#line 1341 "parser.y"
-            {
+{
                     enter_scope(new BLOCK(CurrentScope, location_stack.array[location_stack.top-1]));        
                 }
         break;
       case 362: // @34 -> 
-#line 1345 "parser.y"
-            {
+{
                     // Empty placeholder
                 }
         break;
       case 363: // brace_block -> kDO @33 opt_block_var @34 compstmt kEND 
-#line 1349 "parser.y"
-            {
+{
             
                     yyval.node = leave_scope(yyloc, value_stack.array[value_stack.top-4].lval, value_stack.array[value_stack.top-2].node);
                 }
         break;
       case 364: // case_body -> kWHEN when_args then compstmt cases 
-#line 1356 "parser.y"
-            {
+{
                     yyval.node = new WHEN(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-5]);
                 }
         break;
       case 365: // when_args -> args 
-#line 1362 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-1].node, null, null, null, yyloc);
                 }
         break;
       case 366: // when_args -> args ',' tSTAR arg_value 
-#line 1366 "parser.y"
-            {
+{
                     yyval.node = new ARGS(value_stack.array[value_stack.top-4].node, null, value_stack.array[value_stack.top-1].node, null, yyloc);
                 }
         break;
       case 367: // when_args -> tSTAR arg_value 
-#line 1370 "parser.y"
-            {
+{
                     yyval.node = new ARGS(null, null, value_stack.array[value_stack.top-1].node, null, yyloc);
                 }
         break;
       case 370: // opt_rescue -> kRESCUE exc_list exc_var then compstmt opt_rescue 
-#line 1380 "parser.y"
-            {
+{
                     yyval.node = new RESCUE_CLAUSE(CurrentScope, value_stack.array[value_stack.top-5].node, value_stack.array[value_stack.top-4].lval, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-6]);        
                 }
         break;
       case 372: // exc_list -> arg_value 
-#line 1387 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 373: // exc_list -> mrhs 
-#line 1391 "parser.y"
-            {
+{
                 yyval.node = ((ARGS)value_stack.array[value_stack.top-1].node).parameters;
             }
         break;
       case 375: // exc_var -> tASSOC lhs 
-#line 1398 "parser.y"
-            {
+{
                 yyval.lval = value_stack.array[value_stack.top-1].lval;
             }
         break;
       case 377: // opt_ensure -> kENSURE compstmt 
-#line 1405 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-1].node;
                 }
         break;
       case 380: // literal -> symbol 
-#line 1413 "parser.y"
-            {
+{
                 yyval.node = new SYMBOL(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 384: // string -> string string1 
-#line 1424 "parser.y"
-            {
+{
                 yyval.node = Concat(value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 385: // string1 -> tSTRING_BEG string_contents tSTRING_END 
-#line 1430 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-2].node;    
             }
         break;
       case 386: // xstring -> tXSTRING_BEG xstring_contents tSTRING_END 
-#line 1436 "parser.y"
-            {
+{
                 yyval.node = new XSTRING(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 387: // regexp -> tREGEXP_BEG xstring_contents tREGEXP_END 
-#line 1442 "parser.y"
-            {
+{
                 yyval.node = new REGEXP(value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].num, location_stack.array[location_stack.top-3]);
             }
         break;
       case 388: // words -> tWORDS_BEG ' ' tSTRING_END 
-#line 1448 "parser.y"
-            {
+{
                 yyval.node = new ARRAY(location_stack.array[location_stack.top-3]);
             }
         break;
       case 389: // words -> tWORDS_BEG word_list tSTRING_END 
-#line 1452 "parser.y"
-            {
+{
                 yyval.node = new ARRAY(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 390: // word_list -> 
-#line 1458 "parser.y"
-            {
+{
                     yyval.node = null;
                 }
         break;
       case 391: // word_list -> word_list word ' ' 
-#line 1462 "parser.y"
-            {
+{
                     yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node);
                 }
         break;
       case 393: // word -> word string_content 
-#line 1469 "parser.y"
-            {
+{
                 yyval.node = Concat(value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 394: // qwords -> tQWORDS_BEG ' ' tSTRING_END 
-#line 1475 "parser.y"
-            {
+{
                 yyval.node = new ARRAY(location_stack.array[location_stack.top-3]);
             }
         break;
       case 395: // qwords -> tQWORDS_BEG qword_list tSTRING_END 
-#line 1479 "parser.y"
-            {
+{
                 yyval.node = new ARRAY(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
             }
         break;
       case 396: // qword_list -> 
-#line 1485 "parser.y"
-            {
+{
                     yyval.node = null;
                 }
         break;
       case 397: // qword_list -> qword_list tSTRING_CONTENT ' ' 
-#line 1489 "parser.y"
-            {
+{
                     yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-2].node);
                 }
         break;
       case 398: // string_contents -> 
-#line 1495 "parser.y"
-            {
+{
                         yyval.node = new VALUE("", yyloc);
                     }
         break;
       case 399: // string_contents -> string_contents string_content 
-#line 1499 "parser.y"
-            {
+{
                         yyval.node = Concat(value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node);
                     }
         break;
       case 400: // xstring_contents -> 
-#line 1505 "parser.y"
-            {
+{
                         yyval.node = new VALUE("", yyloc);
                     }
         break;
       case 401: // xstring_contents -> xstring_contents string_content 
-#line 1509 "parser.y"
-            {
+{
                         yyval.node = Concat(value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node);
                     }
         break;
       case 402: // string_content -> tSTRING_CONTENT 
-#line 1516 "parser.y"
-            {
+{
                         yyval.node = value_stack.array[value_stack.top-1].node;
                     }
         break;
       case 403: // @35 -> 
-#line 1520 "parser.y"
-            {
+{
                         yyval.term = scanner.lex_strterm;
                         scanner.lex_strterm = null;
                         scanner.lex_state = Lex_State.EXPR_BEG;
                     }
         break;
       case 404: // string_content -> tSTRING_DVAR @35 string_dvar 
-#line 1526 "parser.y"
-            {
+{
                         scanner.lex_strterm = value_stack.array[value_stack.top-2].term;
                         yyval.node = new EVAL_CODE(value_stack.array[value_stack.top-1].node, location_stack.array[location_stack.top-3]);
                     }
         break;
       case 405: // @36 -> 
-#line 1531 "parser.y"
-            {
+{
                         yyval.term = scanner.lex_strterm;
                         scanner.lex_strterm = null;
                         scanner.lex_state = Lex_State.EXPR_BEG;
@@ -3408,8 +3086,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
                     }
         break;
       case 406: // string_content -> tSTRING_DBEG @36 compstmt '}' 
-#line 1539 "parser.y"
-            {
+{
                         scanner.lex_strterm = value_stack.array[value_stack.top-3].term;
                         scanner.COND_LEXPOP();
                         scanner.CMDARG_LEXPOP();
@@ -3417,201 +3094,165 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
                     }
         break;
       case 407: // string_dvar -> tGVAR 
-#line 1547 "parser.y"
-            {yyval.node = new GVAR(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
+{yyval.node = new GVAR(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
         break;
       case 408: // string_dvar -> tIVAR 
-#line 1548 "parser.y"
-            {yyval.node = new IVAR(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
+{yyval.node = new IVAR(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
         break;
       case 409: // string_dvar -> tCVAR 
-#line 1549 "parser.y"
-            {yyval.node = new CVAR(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
+{yyval.node = new CVAR(CurrentScope, value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);}
         break;
       case 411: // symbol -> tSYMBEG sym 
-#line 1554 "parser.y"
-            {
+{
                 scanner.lex_state = Lex_State.EXPR_END;
                 yyval.id = value_stack.array[value_stack.top-1].id;
             }
         break;
       case 416: // dsym -> tSYMBEG xstring_contents tSTRING_END 
-#line 1567 "parser.y"
-            {
+{
             yyval.node = new SYMBOL(value_stack.array[value_stack.top-2].node, location_stack.array[location_stack.top-3]);
         }
         break;
       case 419: // numeric -> tUMINUS_NUM tINTEGER 
-#line 1575 "parser.y"
-            {
+{
                 yyval.node = negate_lit((VALUE)value_stack.array[value_stack.top-1].node);
             }
         break;
       case 420: // numeric -> tUMINUS_NUM tFLOAT 
-#line 1579 "parser.y"
-            {
+{
                 yyval.node = negate_lit((VALUE)value_stack.array[value_stack.top-1].node);
             }
         break;
       case 421: // variable -> tIDENTIFIER 
-#line 1584 "parser.y"
-            { yyval.id = value_stack.array[value_stack.top-1].id; }
+{ yyval.id = value_stack.array[value_stack.top-1].id; }
         break;
       case 426: // variable -> kNIL 
-#line 1589 "parser.y"
-            {yyval.id = ID.intern(Tokens.kNIL);}
+{yyval.id = ID.intern(Tokens.kNIL);}
         break;
       case 427: // variable -> kSELF 
-#line 1590 "parser.y"
-            {yyval.id = ID.intern(Tokens.kSELF);}
+{yyval.id = ID.intern(Tokens.kSELF);}
         break;
       case 428: // variable -> kTRUE 
-#line 1591 "parser.y"
-            {yyval.id = ID.intern(Tokens.kTRUE);}
+{yyval.id = ID.intern(Tokens.kTRUE);}
         break;
       case 429: // variable -> kFALSE 
-#line 1592 "parser.y"
-            {yyval.id = ID.intern(Tokens.kFALSE);}
+{yyval.id = ID.intern(Tokens.kFALSE);}
         break;
       case 430: // variable -> k__FILE__ 
-#line 1593 "parser.y"
-            {yyval.id = ID.intern(Tokens.k__FILE__);}
+{yyval.id = ID.intern(Tokens.k__FILE__);}
         break;
       case 431: // variable -> k__LINE__ 
-#line 1594 "parser.y"
-            {yyval.id = ID.intern(Tokens.k__LINE__);}
+{yyval.id = ID.intern(Tokens.k__LINE__);}
         break;
       case 432: // var_ref -> variable 
-#line 1598 "parser.y"
-            {
+{
                 yyval.node = gettable(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 433: // var_lhs -> variable 
-#line 1604 "parser.y"
-            {
+{
                 yyval.lval = assignable(value_stack.array[value_stack.top-1].id, location_stack.array[location_stack.top-1]);
             }
         break;
       case 436: // superclass -> term 
-#line 1614 "parser.y"
-            {
+{
                     yyval.node = null;
                 }
         break;
       case 437: // @37 -> 
-#line 1618 "parser.y"
-            {
+{
                     scanner.lex_state = Lex_State.EXPR_BEG;
                 }
         break;
       case 438: // superclass -> '<' @37 expr_value term 
-#line 1622 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-2].node;
                 }
         break;
       case 439: // superclass -> error term 
-#line 1626 "parser.y"
-            {
+{
                     yyerrok();
                      yyval.node = null;
                 }
         break;
       case 440: // f_arglist -> '(' f_args opt_nl ')' 
-#line 1633 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-3].node;
                     scanner.lex_state = Lex_State.EXPR_BEG;
                 }
         break;
       case 441: // f_arglist -> f_args term 
-#line 1638 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-2].node;
                 }
         break;
       case 442: // f_args -> f_arg ',' f_optarg ',' f_rest_arg opt_f_block_arg 
-#line 1644 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(value_stack.array[value_stack.top-6].node, value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 443: // f_args -> f_arg ',' f_optarg opt_f_block_arg 
-#line 1648 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 444: // f_args -> f_arg ',' f_rest_arg opt_f_block_arg 
-#line 1652 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(value_stack.array[value_stack.top-4].node, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 445: // f_args -> f_arg opt_f_block_arg 
-#line 1656 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(value_stack.array[value_stack.top-2].node, null, null, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 446: // f_args -> f_optarg ',' f_rest_arg opt_f_block_arg 
-#line 1660 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(null, value_stack.array[value_stack.top-4].node, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 447: // f_args -> f_optarg opt_f_block_arg 
-#line 1664 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(null, value_stack.array[value_stack.top-2].node, null, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 448: // f_args -> f_rest_arg opt_f_block_arg 
-#line 1668 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(null, null, value_stack.array[value_stack.top-2].node, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 449: // f_args -> f_block_arg 
-#line 1672 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(null, null, null, value_stack.array[value_stack.top-1].node, yyloc);
             }
         break;
       case 450: // f_args -> 
-#line 1676 "parser.y"
-            {
+{
                 yyval.node = new FORMALS(null, null, null, null, yyloc);
             }
         break;
       case 451: // f_norm_arg -> tCONSTANT 
-#line 1682 "parser.y"
-            {    
+{    
                     scanner.yyerror("formal argument cannot be a constant");
                 }
         break;
       case 452: // f_norm_arg -> tIVAR 
-#line 1686 "parser.y"
-            {
+{
                     scanner.yyerror("formal argument cannot be an instance variable");                
                 }
         break;
       case 453: // f_norm_arg -> tGVAR 
-#line 1690 "parser.y"
-            {
+{
                     scanner.yyerror("formal argument cannot be a global variable");
                 }
         break;
       case 454: // f_norm_arg -> tCVAR 
-#line 1694 "parser.y"
-            {
+{
                     scanner.yyerror("formal argument cannot be a class variable");
                 }
         break;
       case 455: // f_norm_arg -> tIDENTIFIER 
-#line 1698 "parser.y"
-            {           
+{           
                     if (ID.Scope(value_stack.array[value_stack.top-1].id) != ID_Scope.LOCAL)
                         scanner.yyerror("formal argument must be a local variable");
                     else if (CurrentScope.has_local(value_stack.array[value_stack.top-1].id))
@@ -3621,20 +3262,17 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
                 }
         break;
       case 456: // f_arg -> f_norm_arg 
-#line 1709 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 457: // f_arg -> f_arg ',' f_norm_arg 
-#line 1713 "parser.y"
-            {
+{
                 yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 458: // f_opt -> tIDENTIFIER '=' arg_value 
-#line 1719 "parser.y"
-            {        
+{        
                 if (ID.Scope(value_stack.array[value_stack.top-3].id) != ID_Scope.LOCAL)
                     scanner.yyerror("formal argument must be local variable");
                 else if (CurrentScope.has_local(value_stack.array[value_stack.top-3].id))
@@ -3644,20 +3282,17 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
             }
         break;
       case 459: // f_optarg -> f_opt 
-#line 1730 "parser.y"
-            {
+{
                 yyval.node = value_stack.array[value_stack.top-1].node;
             }
         break;
       case 460: // f_optarg -> f_optarg ',' f_opt 
-#line 1734 "parser.y"
-            {
+{
                 yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 463: // f_rest_arg -> restarg_mark tIDENTIFIER 
-#line 1744 "parser.y"
-            {    
+{    
                     if (ID.Scope(value_stack.array[value_stack.top-1].id) != ID_Scope.LOCAL)
                         scanner.yyerror("rest argument must be local variable");
                     else if (CurrentScope.has_local(value_stack.array[value_stack.top-1].id))
@@ -3667,14 +3302,12 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
                 }
         break;
       case 464: // f_rest_arg -> restarg_mark 
-#line 1753 "parser.y"
-            {
+{
                     yyval.node = CurrentScope.add_local("?rest?", location_stack.array[location_stack.top-1]);
                 }
         break;
       case 467: // f_block_arg -> blkarg_mark tIDENTIFIER 
-#line 1763 "parser.y"
-            {        
+{        
                     if (ID.Scope(value_stack.array[value_stack.top-1].id) != ID_Scope.LOCAL)
                         scanner.yyerror("block argument must be a local variable");
                     else if (CurrentScope.has_local(value_stack.array[value_stack.top-1].id))
@@ -3684,59 +3317,49 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
                 }
         break;
       case 468: // opt_f_block_arg -> ',' f_block_arg 
-#line 1774 "parser.y"
-            {
+{
                         yyval.node = value_stack.array[value_stack.top-1].node;
                     }
         break;
       case 471: // @38 -> 
-#line 1782 "parser.y"
-            {
+{
                     scanner.lex_state = Lex_State.EXPR_BEG;
                 }
         break;
       case 472: // singleton -> '(' @38 expr opt_nl ')' 
-#line 1786 "parser.y"
-            {                        
+{                        
                     yyval.node = value_stack.array[value_stack.top-3].node;
                 }
         break;
       case 474: // assoc_list -> assocs trailer 
-#line 1793 "parser.y"
-            {
+{
                     yyval.node = value_stack.array[value_stack.top-2].node;
                 }
         break;
       case 475: // assoc_list -> args trailer 
-#line 1797 "parser.y"
-            {                                    
+{                                    
                     yyval.node = value_stack.array[value_stack.top-2].node;
                 }
         break;
       case 477: // assocs -> assocs ',' assoc 
-#line 1804 "parser.y"
-            {
+{
                 yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 478: // assoc -> arg_value tASSOC arg_value 
-#line 1810 "parser.y"
-            {
+{
                 // Fixme: should be a Hash???
                 yyval.node = append(value_stack.array[value_stack.top-3].node, value_stack.array[value_stack.top-1].node);
             }
         break;
       case 498: // term -> ';' 
-#line 1849 "parser.y"
-            { yyerrok(); }
+{ yyerrok(); }
         break;
       case 501: // terms -> terms ';' 
-#line 1854 "parser.y"
-            { yyerrok(); }
+{ yyerrok(); }
         break;
       case 502: // none -> 
-#line 1857 "parser.y"
-            { yyval.node = null; }
+{ yyval.node = null; }
         break;
     }
   }
@@ -3749,7 +3372,6 @@ internal partial class Parser: ShiftReduceParser<ValueType, YYLTYPE>
       return CharToString((char)terminal);
   }
 
-#line 1860 "parser.y"
 
 }
 }

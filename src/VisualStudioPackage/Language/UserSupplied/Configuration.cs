@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.Package;
-using Ruby.NET.Lexer;
+using VSRuby.NET.Lexer;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public static partial class Configuration
     {

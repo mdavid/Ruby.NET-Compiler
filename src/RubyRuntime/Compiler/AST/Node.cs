@@ -5,6 +5,7 @@
  
 **********************************************************************/
 
+using System.CodeDom;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ using System.Diagnostics;
 namespace Ruby.Compiler.AST
 {
 
-    internal abstract class Node
+    public abstract class Node
     {
         internal YYLTYPE location;
         internal Node nd_next;
@@ -63,11 +64,16 @@ namespace Ruby.Compiler.AST
         }
 
 
+        public virtual CodeExpression ToCodeExpression()
+        {
+            throw new System.NotImplementedException("Ruby Code DOM for " + GetType().ToString());
+        }
+
+
         internal virtual string DefinedName()
         {
             return "expression";
         }
-
 
         internal virtual void Defined(CodeGenContext context)
         {

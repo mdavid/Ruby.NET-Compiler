@@ -1,6 +1,6 @@
 /**********************************************************************
 
-  Ruby.NET Runtime Library
+  VSRuby.NET Runtime Library
   Originally developed at Queensland University of Technology
  
   Some sections of this C# code mirror the structure of the C code in the
@@ -12,12 +12,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Ruby.NET.ParserGenerator;
-using Ruby.NET.Parser;
+using VSRuby.NET.ParserGenerator;
+using VSRuby.NET.Parser;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Ruby.NET.Parser
+namespace VSRuby.NET.Parser
 {
     public enum Lex_State
     {
@@ -33,7 +33,7 @@ namespace Ruby.NET.Parser
     };
 
 
-    public class Scanner : AScanner<Ruby.NET.Parser.ValueType, LexLocation>
+    public class Scanner : AScanner<VSRuby.NET.Parser.ValueType, LexLocation>
     {
         private int start_line = 1, start_column = 0;
         public int sourceline;

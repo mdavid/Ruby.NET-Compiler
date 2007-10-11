@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace Ruby.NET.ParserGenerator
+namespace VSRuby.NET.ParserGenerator
 {
     /// <summary>
     /// Classes implementing this interface must supply a

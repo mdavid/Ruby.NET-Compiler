@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,15 +22,53 @@ namespace Ruby.Compiler.AST
         //        body
         //    end
 
-        internal DEFN(Scope parent, string method_id, YYLTYPE location)
+        YYLTYPE name_location; // used by codeDOM for replacing names
+
+
+        internal DEFN(Scope parent, string method_id, YYLTYPE location, YYLTYPE name_location)
             : base(parent, location)
         {
             this.method_id = method_id;
+            this.name_location = name_location;
         }
 
         internal string method_id;
         internal FORMALS formals;    // optional
 
+
+        public CodeMemberMethod ToCodeMemberMethod()
+        {
+            CodeMemberMethod method;
+
+            if (method_id == "initialize")
+                method = new CodeConstructor();
+            else
+                method = new CodeMemberMethod();
+
+            method.Name = method_id;
+            method.ReturnType = new CodeTypeReference(typeof(object));
+
+            method.Parameters.AddRange(formals.ToCodeParameterDeclarationExpressionCollection());
+
+            if (method_id == "InitializeComponent")
+                for (Node n = body; n != null; n = n.nd_next)
+                {
+                    if (n is ASSIGNMENT)
+                        method.Statements.Add(((ASSIGNMENT)n).ToCodeStatement());
+                    else if (n is METHOD_CALL)
+                        method.Statements.Add(n.ToCodeExpression());
+                    else
+                        throw new System.NotImplementedException(n.GetType().ToString());
+                }
+            else if (body != null)
+                method.Statements.Add(new CodeCommentStatement("Dummy statement so that it doesn't appear empty to the designer"));
+
+            method.UserData["original_name"] = method.Name;
+            method.UserData["name_location"] = name_location;
+            method.UserData["location"] = this.location;
+
+            return method;
+        }
 
         internal override void Init(YYLTYPE location, params object[] inputs)
         {
@@ -235,7 +273,7 @@ namespace Ruby.Compiler.AST
         //		body
         //	end
 
-        internal DEFS(Scope parent, string method_id, YYLTYPE location): base(parent, method_id, location)
+        internal DEFS(Scope parent, string method_id, YYLTYPE location, YYLTYPE name_location): base(parent, method_id, location, name_location)
         {
         }
 

@@ -11,7 +11,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 
 
-namespace Ruby.NET.ParserGenerator
+namespace VSRuby.NET.ParserGenerator
 {
     public class Rule
     {

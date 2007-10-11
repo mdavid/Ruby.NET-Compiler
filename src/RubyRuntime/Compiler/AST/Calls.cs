@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -149,9 +149,56 @@ namespace Ruby.Compiler.AST
     {
         // receiver.method_id(args)
 
-        protected string method_id;
+        public string method_id;
         private Node receiver;
 
+        public override CodeExpression ToCodeExpression()
+        {
+            if (method_id == "new")
+            {
+                CodeObjectCreateExpression call = new CodeObjectCreateExpression();
+                call.CreateType = new CodeTypeReference(((CONST)receiver).ToString().Replace("::", "."));
+
+                if (args is ARGS)
+                {
+                    ARGS a = (ARGS)args;
+                    for (Node n = a.parameters; n != null; n = n.nd_next)
+                        call.Parameters.Add(n.ToCodeExpression());
+
+                    if (a.block != null)    // delegate constructor
+                    {
+                        CodeDelegateCreateExpression @delegate = new CodeDelegateCreateExpression();
+                        @delegate.DelegateType = call.CreateType;
+                        BLOCK block = (BLOCK)a.block;
+                        if (block.body is METHOD_CALL)
+                        {
+                            METHOD_CALL invoke = (METHOD_CALL)block.body;
+                            @delegate.MethodName = invoke.method_id;
+                            @delegate.TargetObject = invoke.receiver.ToCodeExpression();
+                            return @delegate;
+                        }
+                    }
+                }
+                
+                return call;
+            }
+            else
+            {
+                CodeMethodInvokeExpression call = new CodeMethodInvokeExpression();
+                call.Method = new CodeMethodReferenceExpression(receiver.ToCodeExpression(), method_id);
+
+                if (args is ARGS)
+                {
+                    ARGS a = (ARGS)args;
+                    for (Node n = a.parameters; n != null; n = n.nd_next)
+                        call.Parameters.Add(n.ToCodeExpression());
+                    if (a.block != null)
+                        call.Parameters.Add(a.block.ToCodeExpression());
+                }
+
+                return call;
+            }
+        }
 
         internal static Node Create(Node receiver, string method_id, Node args, YYLTYPE location)
         {

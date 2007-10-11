@@ -6,8 +6,10 @@
 **********************************************************************/
 
 
+using System.CodeDom;
 using System.Collections;
 using PERWAPI;
+
 
 namespace Ruby.Compiler.AST
 {
@@ -49,6 +51,18 @@ namespace Ruby.Compiler.AST
 
                 return min_args;
             }
+        }
+
+        public CodeParameterDeclarationExpressionCollection ToCodeParameterDeclarationExpressionCollection()
+        {
+            CodeParameterDeclarationExpressionCollection collection = new CodeParameterDeclarationExpressionCollection();
+
+            for (Node n = normal; n != null; n = n.nd_next)
+                collection.Add(new CodeParameterDeclarationExpression(typeof(object), ((StaticLocalVar)n).vid));
+
+            // Fixme: add other parameters here
+
+            return collection;
         }
 
         internal bool ShortAndSimple()

@@ -9,9 +9,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Ruby.NET.ParserGenerator;
+using VSRuby.NET.ParserGenerator;
 
-namespace Ruby.NET.Parser
+namespace VSRuby.NET.Parser
 {
 public enum Tokens {error=127,EOF=128,
     kCLASS=129,kMODULE=130,kDEF=131,kUNDEF=132,kBEGIN=133,kRESCUE=134,kENSURE=135,kEND=136,

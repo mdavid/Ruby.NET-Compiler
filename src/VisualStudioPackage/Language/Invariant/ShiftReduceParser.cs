@@ -15,7 +15,7 @@ using System.Text;
 using System.Diagnostics;
 
 
-namespace Ruby.NET.ParserGenerator
+namespace VSRuby.NET.ParserGenerator
 {
     public abstract class ShiftReduceParser<YYSTYPE,YYLTYPE> 
         where YYSTYPE : struct

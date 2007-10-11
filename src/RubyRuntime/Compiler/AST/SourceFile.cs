@@ -5,6 +5,7 @@
  
 **********************************************************************/
 
+using System.CodeDom;
 using Ruby.Runtime;
 using Ruby;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ using Microsoft.Build.Utilities;
 namespace Ruby.Compiler.AST
 {
 
-    internal class SOURCEFILE : Scope
+    public class SOURCEFILE : Scope
     {
         internal ClassDef fileClass;
         static internal CodeGenContext LoadMethod;
@@ -445,6 +446,24 @@ namespace Ruby.Compiler.AST
             {
                 throw exception.InnerException;
             }
+        }
+
+        public CodeCompileUnit ToCodeCompileUnit()
+        {
+            CodeCompileUnit unit = new CodeCompileUnit();
+            
+            CodeNamespace defaultNS = new CodeNamespace();
+
+            unit.Namespaces.Add(defaultNS);
+
+            for (Node n = body; n != null; n = n.nd_next)
+                if (n is CLASS)
+                {
+                    defaultNS.Types.Add(((CLASS)n).ToCodeTypeDeclaration());
+                    break; // only care about the first class
+                }
+
+            return unit;
         }
     }
 }

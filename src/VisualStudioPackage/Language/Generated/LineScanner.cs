@@ -27,12 +27,12 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 #if !STANDALONE
-using Ruby.NET.ParserGenerator;
+using VSRuby.NET.ParserGenerator;
 #endif
 
-using Ruby.NET.Parser;
+using VSRuby.NET.Parser;
 
-namespace Ruby.NET.Lexer
+namespace VSRuby.NET.Lexer
 {   
     /// <summary>
     /// Summary Canonical example of GPLEX automaton

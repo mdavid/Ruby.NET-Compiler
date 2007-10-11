@@ -10,10 +10,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using Ruby.NET.Lexer;
+using VSRuby.NET.Lexer;
 using Microsoft.VisualStudio.Package;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     /// <summary>
     /// LineScanner wraps the GPLEX scanner to provide the IScanner interface
@@ -22,12 +22,12 @@ namespace Ruby.NET
     /// </summary>
     public class LineScanner : IScanner
     {
-        Ruby.NET.Parser.IColorScan lex = null;
+        VSRuby.NET.Parser.IColorScan lex = null;
         
 
         public LineScanner()
         {
-            this.lex = new Ruby.NET.Lexer.Scanner();
+            this.lex = new VSRuby.NET.Lexer.Scanner();
         }
 
         public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)

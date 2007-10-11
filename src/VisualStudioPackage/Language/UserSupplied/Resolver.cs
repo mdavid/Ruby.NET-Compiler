@@ -13,21 +13,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
-    public class Resolver : Ruby.NET.IASTResolver
+    public class Resolver : VSRuby.NET.IASTResolver
     {
         #region IASTResolver Members
 
-        public IList<Ruby.NET.Declaration> FindCompletions(object result, int line, int col)
+        public IList<VSRuby.NET.Declaration> FindCompletions(object result, int line, int col)
         {
-            return new List<Ruby.NET.Declaration>();
+            return new List<VSRuby.NET.Declaration>();
         }
 
-        public IList<Ruby.NET.Declaration> FindMembers(object result, int line, int col)
+        public IList<VSRuby.NET.Declaration> FindMembers(object result, int line, int col)
         {
             // ManagedMyC.Parser.AAST aast = result as ManagedMyC.Parser.AAST;
-            List<Ruby.NET.Declaration> members = new List<Ruby.NET.Declaration>();
+            List<VSRuby.NET.Declaration> members = new List<VSRuby.NET.Declaration>();
 
             //foreach (string state in aast.startStates.Keys)
             //    members.Add(new Declaration(state, state, 0, state));
@@ -40,9 +40,9 @@ namespace Ruby.NET
             return "unknown";
         }
 
-        public IList<Ruby.NET.Method> FindMethods(object result, int line, int col, string name)
+        public IList<VSRuby.NET.Method> FindMethods(object result, int line, int col, string name)
         {
-            return new List<Ruby.NET.Method>();
+            return new List<VSRuby.NET.Method>();
         }
 
         #endregion

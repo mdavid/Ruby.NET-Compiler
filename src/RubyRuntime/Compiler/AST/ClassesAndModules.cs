@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -366,7 +366,58 @@ namespace Ruby.Compiler.AST
             staticConstructor.Close();
 
             return singleton;
-        }     
+        }
+
+        public CodeTypeDeclaration ToCodeTypeDeclaration()
+        {
+            CodeTypeDeclaration type = new CodeTypeDeclaration(this.name.vid);
+
+            if (super_class != null)
+                type.BaseTypes.Add(super_class.ToString().Replace("::", "."));
+
+            Dictionary<string, YYLTYPE> fields = new Dictionary<string, YYLTYPE>();
+            Dictionary<string, YYLTYPE> methods = new Dictionary<string, YYLTYPE>();
+
+            for (Node n = body; n != null; n = n.nd_next)
+            {
+                // fields ...
+                if (n is METHOD_CALL)
+                {
+                    METHOD_CALL call = (METHOD_CALL)n;
+                    if (call.method_id == "attr_accessor" && call.args is ARGS)
+                    {
+                        ARGS args = (ARGS)call.args;
+                        if (args.parameters is SYMBOL)
+                        {
+                            SYMBOL attr = (SYMBOL)args.parameters;
+                            if (attr.id is string)
+                            {
+                                CodeMemberField field = new CodeMemberField(typeof(object), (string)attr.id);
+                                field.UserData["original_name"] = field.Name;
+                                field.UserData["name_location"] = attr.location;
+                                field.UserData["location"] = call.location;
+                                fields[field.Name] = call.location;
+                                type.Members.Add(field);
+                            }
+                        }
+                    }
+                }
+
+                // methods ...
+                if (n is DEFN)
+                {
+                    CodeMemberMethod method = ((DEFN)n).ToCodeMemberMethod();
+                    methods[method.Name] = n.location;
+                    type.Members.Add(method);
+                }
+            }
+
+            type.UserData["fields"] = fields;
+            type.UserData["methods"] = methods;
+            type.UserData["body_location"] = body.location;
+
+            return type;
+        }
     }
 
 

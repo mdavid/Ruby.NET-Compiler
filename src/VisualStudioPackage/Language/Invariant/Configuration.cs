@@ -12,10 +12,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.Package;
-using Ruby.NET.Parser;
+using VSRuby.NET.Parser;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public static partial class Configuration
     {

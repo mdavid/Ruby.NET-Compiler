@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.Design;
 
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public sealed class RubyMenus
     {

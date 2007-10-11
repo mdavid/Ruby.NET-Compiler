@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     class ProjectDocumentsListenerForMainFileUpdates : ProjectDocumentsListener
     {

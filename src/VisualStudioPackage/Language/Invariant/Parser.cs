@@ -15,7 +15,7 @@ using System.Text;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Package;
 
-namespace Ruby.NET.Parser
+namespace VSRuby.NET.Parser
 {
     public partial class Parser
     {

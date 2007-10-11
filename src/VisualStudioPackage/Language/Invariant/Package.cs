@@ -17,7 +17,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using MPF = Microsoft.VisualStudio.Package;
 using System.ComponentModel.Design;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public class BabelPackage : Microsoft.VisualStudio.Package.ProjectPackage, IOleComponent
     {
@@ -27,9 +27,9 @@ namespace Ruby.NET
             ServiceCreatorCallback callback = new ServiceCreatorCallback(
                 delegate(IServiceContainer container, Type serviceType)
                 {
-                    if (typeof(Ruby.NET.LanguageService) == serviceType)
+                    if (typeof(VSRuby.NET.LanguageService) == serviceType)
                     {
-                        Ruby.NET.LanguageService language = new Ruby.NET.LanguageService();
+                        VSRuby.NET.LanguageService language = new VSRuby.NET.LanguageService();
                         language.SetSite(this);
 
                         // register for idle time callbacks
@@ -56,7 +56,7 @@ namespace Ruby.NET
                 });
 
             // proffer the LanguageService
-            (this as IServiceContainer).AddService(typeof(Ruby.NET.LanguageService), callback, true);
+            (this as IServiceContainer).AddService(typeof(VSRuby.NET.LanguageService), callback, true);
         }
 
         protected override void Dispose(bool disposing)
@@ -87,7 +87,7 @@ namespace Ruby.NET
 
         public int FDoIdle(uint grfidlef)
         {
-            BabelLanguageService ls = GetService(typeof(Ruby.NET.LanguageService)) as BabelLanguageService;
+            BabelLanguageService ls = GetService(typeof(VSRuby.NET.LanguageService)) as BabelLanguageService;
             
             if (ls != null)
             {

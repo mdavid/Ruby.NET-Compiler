@@ -15,7 +15,7 @@ using PERWAPI;
 namespace Ruby.Compiler.AST
 {
 
-    internal abstract class Scope : Node
+    public abstract class Scope : Node
     {
         internal List<string> locals_list = new List<string>();
         internal ClassDef frame_def;

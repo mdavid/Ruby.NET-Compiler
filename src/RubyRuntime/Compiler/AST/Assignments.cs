@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections;
 using System.Diagnostics;
@@ -45,6 +45,11 @@ namespace Ruby.Compiler.AST
         {
             context.newLine(location);
             lhs.Assign(context, rhs);
+        }
+
+        public CodeStatement ToCodeStatement()
+        {
+            return new CodeAssignStatement(lhs.ToCodeExpression(), rhs.ToCodeExpression());
         }
     }
 

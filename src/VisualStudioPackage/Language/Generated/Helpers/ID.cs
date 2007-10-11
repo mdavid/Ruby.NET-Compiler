@@ -1,6 +1,6 @@
 /**********************************************************************
 
-  Ruby.NET Runtime Library
+  VSRuby.NET Runtime Library
   Originally developed at Queensland University of Technology
  
   Some sections of this C# code mirror the structure of the C code in the
@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public enum ID_Scope { NONE, LOCAL, INSTANCE, GLOBAL, ATTRSET, CONST, CLASS, INTERNAL, JUNK };
 

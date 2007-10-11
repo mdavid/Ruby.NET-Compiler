@@ -240,6 +240,7 @@
       <HintPath>..\..\bin\QUT.ShiftReduceParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Compiler\parser.y" />

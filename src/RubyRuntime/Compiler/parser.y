@@ -13,7 +13,7 @@
 
 %YYLTYPE YYLTYPE
 
-%visibility internal
+%visibility public
 %partial
 
 %token kCLASS kMODULE kDEF kUNDEF kBEGIN kRESCUE kENSURE kEND kIF kUNLESS kTHEN kELSIF kELSE
@@ -75,7 +75,7 @@
 PROGRAM    :    {
                 scanner.lex_state = Lex_State.EXPR_BEG;
                 if (CurrentScope == null)
-                    eval_tree = enter_scope(new PROGRAM(null));    
+                    eval_tree = enter_scope(new SOURCEFILE(null));    
                 else
                     eval_tree = CurrentScope;                
             }
@@ -1175,7 +1175,7 @@ primary    : literal
         | kDEF fname
             {
                 in_def++;
-                enter_scope(new DEFN(CurrentScope, $2, @1));
+                enter_scope(new DEFN(CurrentScope, $2, @1, @2));
             }
           f_arglist bodystmt kEND
             {
@@ -1191,7 +1191,7 @@ primary    : literal
             {
                 in_single++;
                 scanner.lex_state = Lex_State.EXPR_END;
-                enter_scope(new DEFS(CurrentScope, $5, @1));                
+                enter_scope(new DEFS(CurrentScope, $5, @1, @5));                
             }
           f_arglist bodystmt kEND
             {

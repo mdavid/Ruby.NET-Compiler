@@ -5,7 +5,7 @@
  
 **********************************************************************/
 
-
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
 
@@ -39,7 +39,6 @@ namespace Ruby.Compiler.AST
             this.ensure = ensure;
 
         }
-
 
         internal override void GenCode0(CodeGenContext context)
         {
@@ -236,6 +235,7 @@ namespace Ruby.Compiler.AST
             this.body = body;
             this.next = (RESCUE_CLAUSE)next;
         }
+
 
         internal void GenCode(CodeGenContext context, PERWAPI.CILLabel endLabel, int RescueTemp, int exception)
         {

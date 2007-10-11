@@ -15,7 +15,7 @@ using System.Text;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Package;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public class Methods : Microsoft.VisualStudio.Package.Methods
     {

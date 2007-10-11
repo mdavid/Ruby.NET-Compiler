@@ -1,6 +1,6 @@
-%using Ruby.NET.Parser;
+%using VSRuby.NET.Parser;
 
-%namespace Ruby.NET.Lexer
+%namespace VSRuby.NET.Lexer
 
 
 %x DEF

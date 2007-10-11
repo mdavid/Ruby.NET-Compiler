@@ -1,4 +1,4 @@
-%namespace Ruby.NET.Parser
+%namespace VSRuby.NET.Parser
 
 %partial
 

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Text;
-using Ruby.NET.ParserGenerator;
-using Ruby.NET.Parser;
+using VSRuby.NET.ParserGenerator;
+using VSRuby.NET.Parser;
 
 
-namespace Ruby.NET.Lexer
+namespace VSRuby.NET.Lexer
 {
     // Abstract base class to allow overriding of Get/SetEolState
     public abstract class ScanBase : AScanner<ValueType, LexLocation>, IColorScan

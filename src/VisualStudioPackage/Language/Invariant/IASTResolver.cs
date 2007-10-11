@@ -12,7 +12,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System;
 using System.Collections.Generic;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     interface IASTResolver
     {

@@ -125,7 +125,7 @@ namespace Ruby.Compiler.AST
     {
         // :id
 
-        private object id;
+        public object id;
 
         internal SYMBOL(Node id, YYLTYPE location)
             : base(location)

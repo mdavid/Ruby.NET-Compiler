@@ -67,6 +67,13 @@ namespace Ruby.Compiler
             this.lex_input = file;
         }
 
+        internal Scanner(Parser parser, System.IO.TextReader reader)
+        {
+            this.parser = parser;
+            this.lex_gets = stream_reader;
+            this.lex_input = reader;
+        }
+
         internal Scanner(Parser parser, String s)
         {
             this.parser = parser;
@@ -1346,6 +1353,19 @@ namespace Ruby.Compiler
                 return result;
             }
         }
+
+        private String stream_reader(object s)
+        {
+            System.IO.TextReader reader = (System.IO.TextReader)s;
+
+            string line = reader.ReadLine();
+
+            if (line == null)
+                return null;
+            else
+                return new String(line + "\n");
+        }
+
 
         private int lex_gets_ptr;
 

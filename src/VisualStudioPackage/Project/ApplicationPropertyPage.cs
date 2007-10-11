@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using System.ComponentModel;
 
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     [ComVisible(true), Guid("9899AEF5-D58F-48ff-9185-A2D4B78E517B")]
     public class ApplicationPropertyPage : SettingsPage

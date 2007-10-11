@@ -1,6 +1,6 @@
 /**********************************************************************
 
-  Ruby.NET Runtime Library
+  VSRuby.NET Runtime Library
   Originally developed at Queensland University of Technology
  
 **********************************************************************/
@@ -8,7 +8,7 @@
 
 using System.Collections.Generic;
 
-namespace Ruby.NET
+namespace VSRuby.NET
 {
     public class Scope
     {

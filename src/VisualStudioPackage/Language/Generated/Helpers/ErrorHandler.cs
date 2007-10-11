@@ -13,9 +13,9 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-using Ruby.NET.ParserGenerator;
+using VSRuby.NET.ParserGenerator;
 
-namespace Ruby.NET.Parser
+namespace VSRuby.NET.Parser
 {
     public class Error : IComparable<Error>
     {

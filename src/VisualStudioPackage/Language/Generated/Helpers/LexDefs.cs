@@ -11,7 +11,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 using System;
 
-namespace Ruby.NET.Lexer
+namespace VSRuby.NET.Lexer
 {
     public enum Tokens
     {
@@ -20,7 +20,7 @@ namespace Ruby.NET.Lexer
     };
 }
 
-namespace Ruby.NET.Parser
+namespace VSRuby.NET.Parser
 {
     //
     // These are the dummy declarations for stand-alone lex applications
