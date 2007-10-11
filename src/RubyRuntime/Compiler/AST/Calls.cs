@@ -291,25 +291,7 @@ namespace Ruby.Compiler.AST
         }
 
         private ISimple arguments;
-
-        
-        /*
-        private ListGen ParentArgs(CodeGenContext context)
-        {
-            Param[] parameters = context.Method.GetParams();       // BBTAG
-            //Param[] parameters = context.orig_func.GetParams();
-            
-            if (parameters[3].GetName() == "args")
-                return new PARAM("args", this.location);
-            
-            Node args = null;
-            for (int i=4; i<parameters.Length; i++)
-                args = Parser.append(args, new PARAM(parameters[i].GetName(), this.location));
-
-            return new ARGS(args, null, null, new PARAM("block", this.location), this.location);
-        }
-        */
-
+       
         private string ParentMethodName(CodeGenContext context)
         {
             if (parent_scope is BLOCK)
@@ -338,6 +320,7 @@ namespace Ruby.Compiler.AST
             int depth = 0;
             if (parent_scope is BLOCK)
             {
+                BLOCK test = (BLOCK)parent_scope;
                 Scope scope_cnt = parent_scope;
                 while (!(scope_cnt is DEFN || scope_cnt is DEFS) && (scope_cnt != null))
                 {
@@ -360,26 +343,26 @@ namespace Ruby.Compiler.AST
 
             if (formals != null)
             {
-                for (StaticLocalVar formal = formals.normal; formal != null; formal = (StaticLocalVar)formal.nd_next)
+                StaticLocalVar formal = formals.normal;
+                bool rest = false;
+
+                while (formal != null)
                 {
                     if (parent_scope is BLOCK)
                         args = Parser.append(args, new StaticOuterVar(formal.vid, (BLOCK)parent_scope, depth, this.location));
                     else
                         args = Parser.append(args, new StaticLocalVar(parent_scope, formal.vid, this.location));
-                }
 
-                for (StaticLocalVar formal = formals.rest; formal != null; formal = (StaticLocalVar)formal.nd_next)
-                {
-                    if (parent_scope is BLOCK)
-                        args = Parser.append(args, new StaticOuterVar(formal.vid, (BLOCK)parent_scope, depth, this.location));
-                    else
-                        args = Parser.append(args, new StaticLocalVar(parent_scope, formal.vid, this.location));
-                }
+                    formal = (StaticLocalVar)formal.nd_next;
 
+                    if (formal == null)
+                        if (!rest)
+                            formal = formals.rest;
+                }
             }
 
             if (parent_scope is BLOCK || parent_scope is SOURCEFILE)
-                return new ARGS(args, null, null, null, this.location);              // FIXME: what about if there is a block arg to a super call within a block?
+                return new ARGS(args, null, null, null, this.location);
             else
                 return new ARGS(args, null, null, new PARAM("block", this.location), this.location);
         }
@@ -397,6 +380,12 @@ namespace Ruby.Compiler.AST
             bool created;
             arguments = args.GenArgList(context, out created);
 
+            if (parent_scope is BLOCK)
+            {
+                arguments.GenSimple(context);
+                LoadBlock(context);
+                context.stfld(Runtime.ArgList.block);
+            }
 
             GenCall(context);
 
@@ -408,12 +397,9 @@ namespace Ruby.Compiler.AST
         {
             //Ruby.Eval.CallSuperA(last_class, caller, self, methodId, args);
             context.last_class(parent_scope);  
-            //context.ruby_cbase(parent_scope);      // BBTAG
             context.ldloc(0);
             new SELF(location).GenCode(context);
-            //context.ldstr(context.CurrentMethodName());      // BBTAG
             context.ldstr(ParentMethodName(context));
-            //context.ldstr(context.OrigFuncName());
             arguments.GenSimple(context);
             context.call(Runtime.Eval.CallSuperA);
         }
@@ -429,11 +415,8 @@ namespace Ruby.Compiler.AST
         {
             // Eval.FindSuperMethod(last_class, thisFrame, currentMethod)
             context.last_class(parent_scope);             
-            //context.ruby_cbase(parent_scope);
             context.ldloc(0);
-            //context.ldstr(context.CurrentMethodName());   // BBTAG
             context.ldstr(ParentMethodName(context));
-            //context.ldstr(context.OrigFuncName());
             context.call(Runtime.Eval.FindSuperMethod);
         }
     }
