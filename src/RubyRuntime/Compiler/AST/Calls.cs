@@ -349,7 +349,14 @@ namespace Ruby.Compiler.AST
                     formals = ((DEFN)scope_cnt).formals;
             }
             else if (parent_scope is DEFN)
-                formals = ((DEFN)parent_scope).formals;
+            {
+                Param[] parameters = context.Method.GetParams();     
+
+                if (parameters[3].GetName() == "args")
+                    return new PARAM("args", this.location);
+                else
+                    formals = ((DEFN)parent_scope).formals;
+            }
 
             if (formals != null)
             {
@@ -360,6 +367,15 @@ namespace Ruby.Compiler.AST
                     else
                         args = Parser.append(args, new StaticLocalVar(parent_scope, formal.vid, this.location));
                 }
+
+                for (StaticLocalVar formal = formals.rest; formal != null; formal = (StaticLocalVar)formal.nd_next)
+                {
+                    if (parent_scope is BLOCK)
+                        args = Parser.append(args, new StaticOuterVar(formal.vid, (BLOCK)parent_scope, depth, this.location));
+                    else
+                        args = Parser.append(args, new StaticLocalVar(parent_scope, formal.vid, this.location));
+                }
+
             }
 
             if (parent_scope is BLOCK || parent_scope is SOURCEFILE)
