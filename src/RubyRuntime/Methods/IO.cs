@@ -444,7 +444,7 @@ namespace Ruby.Methods
             }
         }
 
-        private bool IsShellCommand(string command)
+        private bool isInternalCmd(string command)
         {
             switch (command.ToUpperInvariant())
             {
@@ -532,17 +532,27 @@ namespace Ruby.Methods
             ParseCommand(command, out filename, out args);
 
             System.Diagnostics.Process process = new System.Diagnostics.Process();
-            if (IsShellCommand(filename))
+
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
             {
-                process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.Arguments = "/C " + command;
+                process.StartInfo.FileName = filename;
+                process.StartInfo.Arguments = args;
             }
             else
             {
-                filename = filename.Replace('/', '\\');
+                string shell = System.Environment.GetEnvironmentVariable("COMSPEC");
+                if (shell != null && isInternalCmd(filename))
+                {
+                    process.StartInfo.FileName = shell;
+                    process.StartInfo.Arguments = "/C " + command;
+                }
+                else
+                {
+                    filename = filename.Replace('/', '\\');
 
-                process.StartInfo.FileName = filename;
-                process.StartInfo.Arguments = args;
+                    process.StartInfo.FileName = filename;
+                    process.StartInfo.Arguments = args;
+                }
             }
 
             process.StartInfo.RedirectStandardOutput = true;
