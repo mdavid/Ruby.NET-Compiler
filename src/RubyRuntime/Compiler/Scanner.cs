@@ -2347,6 +2347,7 @@ namespace Ruby.Compiler
 
         internal void yyerror(string msg)
         {
+            errors++;
             if (Compiler.log != null)
                 Compiler.LogError(msg, sourcefile, start_line, start_column, sourceline, lex_p);
             else
@@ -2355,7 +2356,10 @@ namespace Ruby.Compiler
 
         public override void yyerror(string fmt, params object[] args)
         {
-            yyerror(System.String.Format(CultureInfo.InvariantCulture, fmt, args));
+            if (args.Length > 0)
+                yyerror(System.String.Format(CultureInfo.InvariantCulture, fmt, args));
+            else
+                yyerror(fmt);
         }
 
 

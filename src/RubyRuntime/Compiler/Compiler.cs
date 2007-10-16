@@ -162,31 +162,38 @@ namespace Ruby.Compiler
             peRubyRuntime = PERWAPI.PEFile.ReadExportedInterface(FindFile(RUBY_RUNTIME, GetPath()).FullName);
             mscorlib = PERWAPI.PEFile.ReadExportedInterface(FindFile("mscorlib.dll", GetPath()).FullName);
 
-            if (main != null)
+            try
             {
-                List<string> options;
-                files.Add(File.load_file(null, main, false, out options));
-            }
-
-            foreach (string input in inputFiles)
-            {
-                System.IO.FileInfo inputFile = new System.IO.FileInfo(input);
-                if (inputFile.Extension == ".dll")
-                {
-                    System.IO.FileInfo location = FindFile(input, GetPath());
-                    if (location == null)
-                        throw new LoadError("File not found: " + input).raise(null);
-                    PERWAPI.ReferenceScope reference = PERWAPI.PEFile.ReadExportedInterface(location.FullName);
-                    peFiles.Add(reference);
-                }
-                else
+                if (main != null)
                 {
                     List<string> options;
-                    if (input != main)
+                    files.Add(File.load_file(null, main, false, out options));
+                }
+
+                foreach (string input in inputFiles)
+                {
+                    System.IO.FileInfo inputFile = new System.IO.FileInfo(input);
+                    if (inputFile.Extension == ".dll")
                     {
-                        files.Add(File.load_file(null, input, false, out options));
+                        System.IO.FileInfo location = FindFile(input, GetPath());
+                        if (location == null)
+                            throw new LoadError("File not found: " + input).raise(null);
+                        PERWAPI.ReferenceScope reference = PERWAPI.PEFile.ReadExportedInterface(location.FullName);
+                        peFiles.Add(reference);
+                    }
+                    else
+                    {
+                        List<string> options;
+                        if (input != main)
+                        {
+                            files.Add(File.load_file(null, input, false, out options));
+                        }
                     }
                 }
+            }
+            catch (System.Exception e)
+            { // if Syntax Error then skip code generation
+                return;
             }
 
             if (main == null)

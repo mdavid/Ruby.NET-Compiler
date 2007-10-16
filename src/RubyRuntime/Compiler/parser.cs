@@ -78,6 +78,10 @@ namespace Ruby.Compiler
             Parser parser = new Parser();
             parser.scanner = new Scanner(parser, file);
             SOURCEFILE tree = (SOURCEFILE)parser.ParseInput(filename, start);
+
+            if (parser.scanner.errors > 0 && Compiler.log != null)
+                throw new SyntaxError("Syntax error").raise(null);
+
             return tree;
         }
 

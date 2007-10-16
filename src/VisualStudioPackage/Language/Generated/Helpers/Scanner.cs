@@ -2224,7 +2224,10 @@ namespace VSRuby.NET.Parser
 
         public override void yyerror(string fmt, params object[] args)
         {
+            if (args.Length > 0)
                 yyerror(System.String.Format(fmt, args));
+            else
+                yyerror(fmt);
         }
 
 
