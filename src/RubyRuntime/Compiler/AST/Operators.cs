@@ -112,7 +112,7 @@ namespace Ruby.Compiler.AST
 
         internal override void GenCode0(CodeGenContext context)
         {
-            new METHOD_CALL(pattern, ID.intern(Tokens.tMATCH), str, location).GenCode(context);
+            new METHOD_CALL(str, ID.intern(Tokens.tMATCH), pattern, location).GenCode(context);
         }
 
           internal override void Defined(CodeGenContext context)
