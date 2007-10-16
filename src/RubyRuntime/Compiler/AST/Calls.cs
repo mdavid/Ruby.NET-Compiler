@@ -28,7 +28,7 @@ namespace Ruby.Compiler.AST
             else if (args is ListGen)
                 this.args = (ListGen)args;
             else
-                this.args = new ARGS(args, null, null, null, location);
+                this.args = new ARGS(args, null, null, null, location, false);
         }
 
         internal Node block
@@ -150,7 +150,7 @@ namespace Ruby.Compiler.AST
         // receiver.method_id(args)
 
         public string method_id;
-        private Node receiver;
+        internal Node receiver;
 
         public override CodeExpression ToCodeExpression()
         {
@@ -179,25 +179,66 @@ namespace Ruby.Compiler.AST
                         }
                     }
                 }
-                
+
                 return call;
             }
-            else
+            else if (receiver.ToString() == "Interop" && method_id == "TypeReference")
             {
-                CodeMethodInvokeExpression call = new CodeMethodInvokeExpression();
-                call.Method = new CodeMethodReferenceExpression(receiver.ToCodeExpression(), method_id);
+                Node type = ((ARGS)args).parameters;
+                return new CodeTypeReferenceExpression(TypeToString(type));
+            }
+            else if (receiver.ToString() == "Interop" && method_id == "ArrayCreate")
+            {
+                Node type = ((ARGS)args).parameters;
+                Node size = type.nd_next;
+                Node array = size.nd_next;
+                return new CodeArrayCreateExpression(TypeToString(type), size.ToCodeExpression());
+            }
+            else if (receiver.ToString() == "Interop" && method_id == "TypeOf")
+            {
+                Node type = ((ARGS)args).parameters;
+                return new CodeTypeOfExpression(TypeToString(type));
+            }
+            else if (receiver.ToString() == "Interop" && method_id == "Cast")
+            {
 
+                Node type = ((ARGS)args).parameters;
+                Node expr = type.nd_next;
+                return new CodeCastExpression(TypeToString(type), expr.ToCodeExpression());
+            }
+            else 
                 if (args is ARGS)
                 {
                     ARGS a = (ARGS)args;
-                    for (Node n = a.parameters; n != null; n = n.nd_next)
-                        call.Parameters.Add(n.ToCodeExpression());
-                    if (a.block != null)
-                        call.Parameters.Add(a.block.ToCodeExpression());
-                }
 
-                return call;
-            }
+                    if (a.parens == false && a.IsEmpty)
+                    { // Field 
+                        return new CodeFieldReferenceExpression(receiver.ToCodeExpression(), method_id);
+                    }
+                    else if (method_id.StartsWith("get_") && a.IsEmpty)
+                    {   // Property get
+                        return new CodePropertyReferenceExpression(receiver.ToCodeExpression(), method_id.Substring(4));
+                    }
+                    else
+                    { // Normal method
+                        CodeMethodInvokeExpression call = new CodeMethodInvokeExpression();
+                        call.Method = new CodeMethodReferenceExpression(receiver.ToCodeExpression(), method_id);
+
+                        for (Node n = a.parameters; n != null; n = n.nd_next)
+                            call.Parameters.Add(n.ToCodeExpression());
+                        if (a.block != null)
+                            call.Parameters.Add(a.block.ToCodeExpression());
+
+                        return call;
+                    }
+                }
+                else
+                    throw new System.NotSupportedException(args.GetType().ToString());
+        }
+
+        private string TypeToString(Node type)
+        {
+            return type.ToString().Replace("::", ".");
         }
 
         internal static Node Create(Node receiver, string method_id, Node args, YYLTYPE location)
@@ -409,9 +450,9 @@ namespace Ruby.Compiler.AST
             }
 
             if (parent_scope is BLOCK || parent_scope is SOURCEFILE)
-                return new ARGS(args, null, null, null, this.location);
+                return new ARGS(args, null, null, null, this.location, true);
             else
-                return new ARGS(args, null, null, new PARAM("block", this.location), this.location);
+                return new ARGS(args, null, null, new PARAM("block", this.location), this.location, true);
         }
          
 

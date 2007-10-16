@@ -118,18 +118,18 @@ namespace VSRuby.NET
 
                         // insert new fields
                         foreach (CodeMemberField field in new_fields)
-                            gen.Generate(field);
+                            gen.GenerateMemberField(field);
 
                         gen.WriteLine();
 
                         // insert new InitializeComponent method
-                        gen.Generate(InitializeComponent);
+                        gen.GenerateMemberMethod(InitializeComponent);
 
                         // insert new methods
                         foreach (CodeMemberMethod method in new_methods)
                         {
                             gen.WriteLine();
-                            gen.Generate(method);
+                            gen.GenerateMemberMethod(method);
                         }
 
                         gen.Indent--;
@@ -207,217 +207,216 @@ namespace VSRuby.NET
             }
 
 
-            public void Generate(CodeMemberMethod member)
+            public void GenerateMemberMethod(CodeMemberMethod member)
             {
-                if (member is CodeTypeConstructor)
-                    Generate((CodeTypeConstructor)member);
-                else
+                GenerateCommentStatementCollection(member.Comments);
+
+                if (member is CodeConstructor)
+                    member.Name = "initialize";
+
+                Write("def {0}", member.Name);
+                Write("(");
+                for (int i = 0; i < member.Parameters.Count; i++)
                 {
-                    if (member is CodeEntryPointMethod)
-                    {
-                        member.Name = "main";
-                        member.Attributes = member.Attributes | MemberAttributes.Static;
-                    }
-                    else if (member is CodeConstructor)
-                    {
-                        member.Name = "initialize";
-                    }
+                    Write(member.Parameters[i].Name);
+                    if (i != member.Parameters.Count - 1)
+                        Write(",");
+                }
+                WriteLine(")");
 
-                    Generate(member.Comments);
-                    string self = "";
-                    if (MemberAttributes.Static == (member.Attributes & MemberAttributes.Static))
-                        self = "self.";
+                Indent++;
+                foreach (CodeStatement statement in member.Statements)
+                    GenerateStatement(statement);
+                Indent--;
 
-                    Write("def {0}{1}", self, member.Name);
-                    if (member.Parameters.Count > 0)
-                    {
-                        Write("(");
-                        for (int i = 0; i < member.Parameters.Count; i++)
-                        {
-                            Write(member.Parameters[i].Name);
-                            if (i != member.Parameters.Count - 1)
-                                Write(",");
-                        }
-                        Write(")");
-                    }
+                if (member.Statements.Count == 0)
                     WriteLine();
 
-                    {
-                        Indent++;
-                        foreach (CodeStatement statement in member.Statements)
-                            Generate(statement);
-                        Indent--;
-                    }
-                    WriteLine("end");
-
-
-
-                    if (member is CodeEntryPointMethod)
-                    {
-                        WriteLine();
-                        WriteLine("self.{0}", member.Name);
-                    }
-                }
+                WriteLine("end");
             }
 
 
-            public void Generate(CodeMemberField member)
+            public void GenerateMemberField(CodeMemberField member)
             {
                 WriteLine("attr_accessor :{0}", member.Name);
             }
 
 
-            public void Generate(CodeStatement statement)
+            public void GenerateStatement(CodeStatement statement)
             {
                 if (statement is CodeAssignStatement)
-                    Generate((CodeAssignStatement)statement);
+                    GenerateAssignStatement((CodeAssignStatement)statement);
                 else if (statement is CodeAttachEventStatement)
-                    Generate((CodeAttachEventStatement)statement);
+                    GenerateAttachEventStatement((CodeAttachEventStatement)statement);
                 else if (statement is CodeCommentStatement)
-                    Generate((CodeCommentStatement)statement);
+                    GenerateCommentStatement((CodeCommentStatement)statement);
                 else if (statement is CodeExpressionStatement)
-                    Generate((CodeExpressionStatement)statement);
+                    GenerateExpressionStatement((CodeExpressionStatement)statement);
                 else if (statement is CodeVariableDeclarationStatement)
-                    Generate((CodeVariableDeclarationStatement)statement);
+                    GenerateVariableDeclarationStatement((CodeVariableDeclarationStatement)statement);
                 else
                     throw new NotSupportedException();
             }
 
 
-            public void Generate(CodeAttachEventStatement statement)
+            public void GenerateAttachEventStatement(CodeAttachEventStatement statement)
             {
-                Generate(statement.Event.TargetObject);
+                GenerateExpression(statement.Event.TargetObject);
                 Write(".add_{0}(", statement.Event.EventName);
-                Generate(statement.Listener);
+                GenerateExpression(statement.Listener);
                 WriteLine(")");
             }
 
 
-            public void Generate(CodeCommentStatementCollection comments)
+            public void GenerateCommentStatementCollection(CodeCommentStatementCollection comments)
             {
                 foreach (CodeCommentStatement comment in comments)
-                    Generate(comment);
+                    GenerateCommentStatement(comment);
             }
 
 
-            public void Generate(CodeCommentStatement statement)
+            public void GenerateCommentStatement(CodeCommentStatement statement)
             {
                 WriteLine("# " + statement.Comment.Text);
             }
 
 
-            public void Generate(CodeAssignStatement statement)
+            public void GenerateAssignStatement(CodeAssignStatement statement)
             {
                 if (statement.Left is CodePropertyReferenceExpression)
                 {
                     CodePropertyReferenceExpression prop = (CodePropertyReferenceExpression)statement.Left;
-                    Generate(prop.TargetObject);
+                    GenerateExpression(prop.TargetObject);
                     Write(".set_{0}(", prop.PropertyName);
-                    Generate(statement.Right);
+                    GenerateExpression(statement.Right);
                     WriteLine(")");
                 }
                 else
                 {
-                    Generate(statement.Left);
+                    GenerateExpression(statement.Left);
                     Write(" = ");
-                    Generate(statement.Right);
+                    GenerateExpression(statement.Right);
                     WriteLine();
                 }
             }
 
 
-            public void Generate(CodeExpressionStatement statement)
+            public void GenerateExpressionStatement(CodeExpressionStatement statement)
             {
-                Generate(statement.Expression);
+                GenerateExpression(statement.Expression);
                 WriteLine();
             }
 
 
-            public void Generate(CodeVariableDeclarationStatement statement)
+            public void GenerateVariableDeclarationStatement(CodeVariableDeclarationStatement statement)
             {
-                //Fixme
-                Write("{0} = ", statement.Name);
+                Write("{0} = Interop.VariableInitialization(", statement.Name);
 
                 if (statement.InitExpression == null)
                     Write("nil");
                 else
-                    Generate(statement.InitExpression);
+                    GenerateExpression(statement.InitExpression);
+                
+                Write(", ");
+                
+                GenerateTypeReference(statement.Type);
 
-                WriteLine();
+                WriteLine(")");
             }
 
 
-            public void Generate(CodeExpression expression)
+            public void GenerateExpression(CodeExpression expression)
             {
                 if (expression is CodeArrayIndexerExpression)
-                    Generate((CodeBaseReferenceExpression)expression);
+                    GenerateArrayIndexerExpression((CodeArrayIndexerExpression)expression);
                 else if (expression is CodeBinaryOperatorExpression)
-                    Generate((CodeBinaryOperatorExpression)expression);
+                    GenerateBinaryOperatorExpression((CodeBinaryOperatorExpression)expression);
                 else if (expression is CodeCastExpression)
-                    Generate((CodeCastExpression)expression);
+                    GenerateCastExpression((CodeCastExpression)expression);
                 else if (expression is CodeDelegateCreateExpression)
-                    Generate((CodeDelegateCreateExpression)expression);
+                    GenerateDelegateCreateExpression((CodeDelegateCreateExpression)expression);
                 else if (expression is CodeFieldReferenceExpression)
-                    Generate((CodeFieldReferenceExpression)expression);
+                    GenerateFieldReferenceExpression((CodeFieldReferenceExpression)expression);
                 else if (expression is CodeMethodInvokeExpression)
-                    Generate((CodeMethodInvokeExpression)expression);
+                    GenerateMethodInvokeExpression((CodeMethodInvokeExpression)expression);
                 else if (expression is CodeMethodReferenceExpression)
-                    Generate((CodeMethodReferenceExpression)expression);
+                    GenerateMethodReferenceExpression((CodeMethodReferenceExpression)expression);
                 else if (expression is CodeObjectCreateExpression)
-                    Generate((CodeObjectCreateExpression)expression);
+                    GenerateObjectCreateExpression((CodeObjectCreateExpression)expression);
                 else if (expression is CodePrimitiveExpression)
-                    Generate((CodePrimitiveExpression)expression);
+                    GeneratePrimitiveExpression((CodePrimitiveExpression)expression);
                 else if (expression is CodePropertyReferenceExpression)
-                    Generate((CodePropertyReferenceExpression)expression);
+                    GeneratePropertyReferenceExpression((CodePropertyReferenceExpression)expression);
                 else if (expression is CodeThisReferenceExpression)
-                    Generate((CodeThisReferenceExpression)expression);
+                    GenerateThisReferenceExpression((CodeThisReferenceExpression)expression);
                 else if (expression is CodeTypeOfExpression)
-                    Generate((CodeTypeOfExpression)expression);
+                    GenerateTypeOfExpression((CodeTypeOfExpression)expression);
                 else if (expression is CodeArrayCreateExpression)
-                    Generate((CodeArrayCreateExpression)expression);
+                    GenerateArrayCreateExpression((CodeArrayCreateExpression)expression);
                 else if (expression is CodeTypeReferenceExpression)
-                    Generate((CodeTypeReferenceExpression)expression);
+                    GenerateTypeReferenceExpression((CodeTypeReferenceExpression)expression);
                 else
                     throw new NotSupportedException(expression.GetType().ToString());
             }
 
 
-            public void Generate(CodeCastExpression expression)
+            public void GenerateArrayCreateExpression(CodeArrayCreateExpression expression)
             {
-                // Fixme
-                Generate(expression.Expression);
+                Write("Interop.ArrayCreate(");
+                GenerateTypeReference(expression.CreateType);
+                Write(", ");
+                if (expression.SizeExpression != null)
+                    GenerateExpression(expression.SizeExpression);
+                else
+                    Write(expression.Size);
+                Write(", [");
+                for (int i=0; i<expression.Initializers.Count; i++)
+                {
+                    GenerateExpression(expression.Initializers[i]);
+                    if (i < expression.Initializers.Count - 1)
+                        Write(", ");
+                }
+                Write("]");
             }
 
 
-            public void Generate(CodeArrayCreateExpression expression)
+            public void GenerateTypeOfExpression(CodeTypeOfExpression expression)
             {
-                // Fixme
-                throw new NotImplementedException(expression.GetType().ToString());
+                Write("Interop.TypeOf(");
+                GenerateTypeReference(expression.Type);
+                Write(")");
             }
 
 
-            public void Generate(CodeTypeOfExpression expression)
+            public void GenerateCastExpression(CodeCastExpression expression)
             {
-                Write("{0}.GetType()", TypeToString(expression.Type));
+                Write("Interop.Cast(");
+                GenerateTypeReference(expression.TargetType);
+                Write(", ");
+                GenerateExpression(expression.Expression);
+                Write(")");
             }
 
 
-            public void Generate(CodeTypeReferenceExpression expression)
+            public void GenerateTypeReferenceExpression(CodeTypeReferenceExpression expression)
             {
-                Write(TypeToString(expression.Type));
+                Write("Interop.TypeReference(");
+                GenerateTypeReference(expression.Type);
+                Write(")");
             }
 
 
-            public void Generate(CodeDelegateCreateExpression expression)
+            public void GenerateDelegateCreateExpression(CodeDelegateCreateExpression expression)
             {
-                Write("{0}.new {{ |*args| ", TypeToString(expression.DelegateType));
-                Generate(expression.TargetObject);
+                GenerateTypeReference(expression.DelegateType);
+                Write(".new { |*args| ");
+                GenerateExpression(expression.TargetObject);
                 Write(".{0}(*args)", expression.MethodName);
                 Write("}");
             }
 
 
-            public void Generate(CodeFieldReferenceExpression expression)
+            public void GenerateFieldReferenceExpression(CodeFieldReferenceExpression expression)
             {
                 if (expression.TargetObject is CodeThisReferenceExpression)
                 {
@@ -425,58 +424,50 @@ namespace VSRuby.NET
                 }
                 else
                 {
-                    Generate(expression.TargetObject);
+                    GenerateExpression(expression.TargetObject);
                     Write(".{0}", expression.FieldName);
                 }
             }
 
 
-            public void Generate(CodeMethodInvokeExpression expression)
+            public void GenerateMethodInvokeExpression(CodeMethodInvokeExpression expression)
             {
-                Generate(expression.Method);
-                if (expression.Parameters.Count > 0)
+                GenerateMethodReferenceExpression(expression.Method);
+                Write("(");
+                for (int i = 0; i < expression.Parameters.Count; i++)
                 {
-                    Write("(");
-                    for (int i = 0; i < expression.Parameters.Count; i++)
-                    {
-                        Generate(expression.Parameters[i]);
-                        if (i != expression.Parameters.Count - 1)
-                            Write(", ");
-                    }
-                    Write(")");
+                    GenerateExpression(expression.Parameters[i]);
+                    if (i != expression.Parameters.Count - 1)
+                        Write(", ");
                 }
+                Write(")");
             }
 
 
-            public void Generate(CodeMethodReferenceExpression expression)
+            public void GenerateMethodReferenceExpression(CodeMethodReferenceExpression expression)
             {
-                if (!(expression.TargetObject is CodeThisReferenceExpression) || Char.IsUpper(expression.MethodName[0]))
-                {
-                    Generate(expression.TargetObject);
-                    Write(".");
-                }
+                GenerateExpression(expression.TargetObject);
+                Write(".");
                 Write(expression.MethodName);
             }
 
 
-            public void Generate(CodeObjectCreateExpression expression)
+            public void GenerateObjectCreateExpression(CodeObjectCreateExpression expression)
             {
-                Write("{0}.new", TypeToString(expression.CreateType));
-                if (expression.Parameters.Count > 0)
+                GenerateTypeReference(expression.CreateType);
+                Write(".new(");
+
+                for (int i = 0; i < expression.Parameters.Count; i++)
                 {
-                    Write("(");
-                    for (int i = 0; i < expression.Parameters.Count; i++)
-                    {
-                        Generate(expression.Parameters[i]);
-                        if (i != expression.Parameters.Count - 1)
-                            Write(", ");
-                    }
-                    Write(")");
+                    GenerateExpression(expression.Parameters[i]);
+                    if (i != expression.Parameters.Count - 1)
+                        Write(", ");
                 }
+                Write(")");
             }
 
 
-            public void Generate(CodePrimitiveExpression expression)
+            public void GeneratePrimitiveExpression(CodePrimitiveExpression expression)
             {
                 if (expression.Value is string)
                     Write("'{0}'", expression.Value);
@@ -487,26 +478,26 @@ namespace VSRuby.NET
             }
 
 
-            public void Generate(CodePropertyReferenceExpression expression)
+            public void GeneratePropertyReferenceExpression(CodePropertyReferenceExpression expression)
             {
-                Generate(expression.TargetObject);
-                Write(".get_{0}", expression.PropertyName);
+                GenerateExpression(expression.TargetObject);
+                Write(".get_{0}()", expression.PropertyName);
             }
 
-            public void Generate(CodeThisReferenceExpression expression)
+
+            public void GenerateThisReferenceExpression(CodeThisReferenceExpression expression)
             {
                 Write("self");
             }
 
 
-            public void Generate(CodeArrayIndexerExpression expression)
+            public void GenerateArrayIndexerExpression(CodeArrayIndexerExpression expression)
             {
-                throw new NotSupportedException(expression.GetType().ToString());
-                Generate(expression.TargetObject);
+                GenerateExpression(expression.TargetObject);
                 Write("[");
                 for (int i = 0; i < expression.Indices.Count; i++)
                 {
-                    Generate(expression.Indices[i]);
+                    GenerateExpression(expression.Indices[i]);
                     if (i != expression.Indices.Count - 1)
                         Write(", ");
                 }
@@ -514,9 +505,9 @@ namespace VSRuby.NET
             }
 
 
-            public void Generate(CodeBinaryOperatorExpression expression)
+            public void GenerateBinaryOperatorExpression(CodeBinaryOperatorExpression expression)
             {
-                Generate(expression.Left);
+                GenerateExpression(expression.Left);
                 switch (expression.Operator)
                 {
                     case CodeBinaryOperatorType.Add:
@@ -567,32 +558,30 @@ namespace VSRuby.NET
                     default:
                         throw new NotSupportedException();
                 }
-                Generate(expression.Right);
+                GenerateExpression(expression.Right);
             }
 
 
-
-
-
-            private string TypeToString(CodeTypeReference type)
+            public void GenerateTypeReference(CodeTypeReference type)
             {
-                string name = type.BaseType.Replace(".", "::");
-                if (type.TypeArguments.Count > 0)
+                if (type.ArrayRank > 0)
+                    throw new NotImplementedException("Array Type References");
+                else
                 {
-                    StringBuilder sb = new StringBuilder(name);
-                    sb.Append("[");
-                    for (int i = 0; i < type.TypeArguments.Count; i++)
+                    Write(type.BaseType.Replace(".", "::"));
+
+                    if (type.TypeArguments.Count > 0)
                     {
-                        sb.Append(TypeToString(type.TypeArguments[i]));
-
-                        if (i != type.TypeArguments.Count - 1)
-                            sb.Append(",");
+                        Write("[");
+                        for (int i = 0; i < type.TypeArguments.Count; i++)
+                        {
+                            GenerateTypeReference(type.TypeArguments[i]);
+                            if (i != type.TypeArguments.Count - 1)
+                                Write(", ");
+                        }
+                        Write("]");
                     }
-                    sb.Append("]");
-                    name = sb.ToString();
                 }
-
-                return name;
             }
         }
     }

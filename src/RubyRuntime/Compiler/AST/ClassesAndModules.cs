@@ -83,7 +83,7 @@ namespace Ruby.Compiler.AST
             
             PERWAPI.Class superClass = Runtime.ObjectRef;
             bool superClassFound = false;
-            PERWAPI.Method superClassConstructor0 = Runtime.Object.ctor;
+            PERWAPI.Method superClassConstructor0 = null;
             PERWAPI.Method superClassConstructor1 = Runtime.Object.ctor;
 
             if (this is CLASS)

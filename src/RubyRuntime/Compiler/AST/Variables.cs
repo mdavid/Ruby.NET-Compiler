@@ -375,7 +375,7 @@ namespace Ruby.Compiler.AST
     internal class CONST : VAR     // Constant
     {
         internal Node scope = null;
-        private bool qualified;
+        internal bool qualified;
         private Scope parent_scope;
 
         internal CONST(Scope parent_scope, string vid, YYLTYPE location) : base(vid, location) 

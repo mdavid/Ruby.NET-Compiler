@@ -79,7 +79,7 @@ namespace Ruby.Compiler.AST
             if (rhs is ListGen && !(rhs is MultipleRHS))
                 mrhs = (ListGen)rhs;
             else
-                mrhs = new ARGS(null, null, rhs, null, location);
+                mrhs = new ARGS(null, null, rhs, null, location, true);
 
             bool created;
             ISimple list = mrhs.GenArgList(context, out created);
@@ -224,7 +224,7 @@ namespace Ruby.Compiler.AST
             LOCAL recvLocal = context.StoreInLocal("recv", PrimitiveType.Object, recv.location);
 
             // lhs.vid=(lhs.vid() op rhs)
-            new METHOD_CALL(recvLocal, vid + "=", new METHOD_CALL(new METHOD_CALL(recvLocal, vid, new ARGS(null, null, null, null, recv.location), null, recv.location), op, rhs, location), location).GenCode(context);
+            new METHOD_CALL(recvLocal, vid + "=", new METHOD_CALL(new METHOD_CALL(recvLocal, vid, new ARGS(null, null, null, null, recv.location, true), null, recv.location), op, rhs, location), location).GenCode(context);
 
             context.ReleaseLocal(recvLocal.local, true);
         }

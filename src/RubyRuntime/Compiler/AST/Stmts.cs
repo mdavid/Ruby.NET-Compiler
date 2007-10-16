@@ -304,7 +304,7 @@ namespace Ruby.Compiler.AST
 
         internal override void GenCode0(CodeGenContext context)
         {        
-            new METHOD_CALL(list, ID.intern("each"), new ARGS(location), body, location).GenCode(context);
+            new METHOD_CALL(list, ID.intern("each"), new ARGS(location, true), body, location).GenCode(context);
         }
     }
 

@@ -54,21 +54,24 @@ namespace Ruby.Compiler.AST
         internal Node hashlist;
         internal Node array;
         internal Node block;
+        internal bool parens;
 
-        internal ARGS(YYLTYPE location): base(location)
+        internal ARGS(YYLTYPE location, bool parens): base(location)
         {
             this.parameters = null;
             this.hashlist = null;
             this.array = null;
             this.block = null;
+            this.parens = parens;
         }
 
-        internal ARGS(Node parameters, Node hashlist, Node array, Node block, YYLTYPE location): base(location)
+        internal ARGS(Node parameters, Node hashlist, Node array, Node block, YYLTYPE location, bool parens): base(location)
         {
             this.parameters = parameters;
             this.hashlist = hashlist;
             this.array = array;
             this.block = block;
+            this.parens = parens;
         }
 
         internal bool IsEmpty
@@ -86,6 +89,18 @@ namespace Ruby.Compiler.AST
                 length++;
 
             return length < 10;
+        }
+
+        internal bool Single()
+        {
+            if (hashlist != null || array != null)
+                return false;
+
+            int length = 0;
+            for (Node arg = parameters; arg != null; arg = arg.nd_next)
+                length++;
+
+            return length == 1;
         }
 
         internal override List<ISimple> GenFixedArgs(CodeGenContext context, out List<bool> created)

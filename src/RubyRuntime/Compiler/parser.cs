@@ -210,7 +210,7 @@ namespace Ruby.Compiler
                 if (CurrentScope.has_local(id))
                     return CurrentScope.add_local(id, location);
                 else
-                    return new METHOD_CALL(id, new ARGS(location), location);
+                    return new METHOD_CALL(id, new ARGS(location, true), location);
             }
             else if (ID.Scope(id) == ID_Scope.GLOBAL)
                 return new GVAR(id, location);

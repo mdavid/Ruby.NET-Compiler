@@ -53,8 +53,28 @@ namespace Ruby.Compiler.AST
             if (method_id == "InitializeComponent")
                 for (Node n = body; n != null; n = n.nd_next)
                 {
+
                     if (n is ASSIGNMENT)
-                        method.Statements.Add(((ASSIGNMENT)n).ToCodeStatement());
+                    {
+                        CodeStatement stmt = null;
+                        Node lhs = ((ASSIGNMENT)n).lhs;
+                        Node rhs = ((ASSIGNMENT)n).rhs;
+                        if (rhs is METHOD_CALL)
+                        {
+                            METHOD_CALL m = (METHOD_CALL)rhs;
+                            if (m.receiver.ToString() == "Interop" && m.method_id == "VariableDeclaration")
+                            {
+                                Node init = ((ARGS)m.args).parameters;
+                                Node type = init.nd_next;
+                                stmt = new CodeVariableDeclarationStatement(type.ToString().Replace("::","."), lhs.ToString(), init.ToCodeExpression());
+                            }
+                        }
+
+                        if (stmt == null)
+                            stmt = ((ASSIGNMENT)n).ToCodeStatement();
+                        
+                        method.Statements.Add(stmt);
+                    }
                     else if (n is METHOD_CALL)
                         method.Statements.Add(n.ToCodeExpression());
                     else

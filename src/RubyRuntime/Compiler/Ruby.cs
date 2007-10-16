@@ -72,7 +72,7 @@ namespace Ruby.Compiler
         private static void rb_parser_append_print()
         {
             tree.body = Parser.append(tree.body,
-                new AST.METHOD_CALL("print", new AST.ARRAY(new AST.ARGS(new AST.GVAR("$_", null), null, null, null, null), null), null));
+                new AST.METHOD_CALL("print", new AST.ARRAY(new AST.ARGS(new AST.GVAR("$_", null), null, null, null, null, true), null), null));
         }
 
         private static void rb_parser_while_loop(bool split, bool chop)

@@ -151,6 +151,8 @@ namespace Ruby.Runtime
             Init_marshal();
             Init_version();
 
+            Init_Interop();
+
             Init_Prog();
 
             // BBTAG: need to set default visibility to private
@@ -2215,6 +2217,16 @@ namespace Ruby.Runtime
             Variables.rb_define_global_const("VERSION", v);
             Variables.rb_define_global_const("RELEASE_DATE", d);
             Variables.rb_define_global_const("PLATFORM", p);
+        }
+
+        static void Init_Interop()
+        {
+            Class interop = Class.rb_define_module("Interop", null);
+            Class.rb_define_module_function(interop, "VariableInitialization", Ruby.Interop.VariableInitialization.singleton, 2, null);
+            Class.rb_define_module_function(interop, "ArrayCreate", Ruby.Interop.ArrayCreate.singleton, 3, null);
+            Class.rb_define_module_function(interop, "TypeOf", Ruby.Interop.TypeOf.singleton, 1, null);
+            Class.rb_define_module_function(interop, "Cast", Ruby.Interop.Cast.singleton, 2, null);
+            Class.rb_define_module_function(interop, "TypeReference", Ruby.Interop.TypeReference.singleton, 1, null);
         }
 
         static void Init_Prog()

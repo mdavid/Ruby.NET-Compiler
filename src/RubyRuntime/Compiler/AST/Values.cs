@@ -31,7 +31,7 @@ namespace Ruby.Compiler.AST
             if (args is ARGS)
                 this.args = (ARGS)args;
             else
-                this.args = new ARGS(args, null, null, null, args.location);
+                this.args = new ARGS(args, null, null, null, args.location, false);
         }
 
         internal override void GenCode0(CodeGenContext context)

@@ -659,19 +659,19 @@ arg        : lhs '=' arg
             }
         | tUMINUS_NUM tINTEGER tPOW arg
             {
-                $$ = new METHOD_CALL(new METHOD_CALL($2, ID.intern(Tokens.tPOW), $4, @3), ID.intern(Tokens.tUMINUS), new ARGS(@1), @1);
+                $$ = new METHOD_CALL(new METHOD_CALL($2, ID.intern(Tokens.tPOW), $4, @3), ID.intern(Tokens.tUMINUS), new ARGS(@1, false), @1);
             }
         | tUMINUS_NUM tFLOAT tPOW arg
             {
-                $$ = new METHOD_CALL(new METHOD_CALL($2, ID.intern(Tokens.tPOW), $4, @3), ID.intern(Tokens.tUMINUS), new ARGS(@1), @1);
+                $$ = new METHOD_CALL(new METHOD_CALL($2, ID.intern(Tokens.tPOW), $4, @3), ID.intern(Tokens.tUMINUS), new ARGS(@1, false), @1);
             }
         | tUPLUS arg
             {
-                $$ = new METHOD_CALL($2, ID.intern(Tokens.tUPLUS), new ARGS(@2), @1);
+                $$ = new METHOD_CALL($2, ID.intern(Tokens.tUPLUS), new ARGS(@2, false), @1);
             }
         | tUMINUS arg
             {
-                $$ = new METHOD_CALL($2, ID.intern(Tokens.tUMINUS), new ARGS(@2), @1);
+                $$ = new METHOD_CALL($2, ID.intern(Tokens.tUMINUS), new ARGS(@2, false), @1);
             }
         | arg '|' arg
             {
@@ -731,7 +731,7 @@ arg        : lhs '=' arg
             }
         | '~' arg
             {
-                $$ = new METHOD_CALL($2, ID.intern('~'), new ARGS(@2), @1);
+                $$ = new METHOD_CALL($2, ID.intern('~'), new ARGS(@2, false), @1);
             }
         | arg tLSHFT arg
             {
@@ -775,34 +775,34 @@ arg_value    : arg
 
 aref_args    : none
                 {
-                    $$ = new ARGS(null, null, null, null, @$);
+                    $$ = new ARGS(null, null, null, null, @$, false);
                 }
             | command opt_nl
                 {
                     scanner.yywarn("parenthesize argument(s) for future version");
-                    $$ = new ARGS($1, null, null, null, @$);
+                    $$ = new ARGS($1, null, null, null, @$, false);
                 }
             | args trailer
                 {
-                    $$ = new ARGS($1, null, null, null, @$);
+                    $$ = new ARGS($1, null, null, null, @$, false);
                 }
             | args ',' tSTAR arg opt_nl
                 {
-                    $$ = new ARGS($1, null, $4, null, @$);
+                    $$ = new ARGS($1, null, $4, null, @$, false);
                 }
             | assocs trailer
                 {
-                    $$ = new ARGS(null, $1, null, null, @$);
+                    $$ = new ARGS(null, $1, null, null, @$, false);
                 }
             | tSTAR arg opt_nl
                 {
-                    $$ = new ARGS(null, null, $2, null, @$);
+                    $$ = new ARGS(null, null, $2, null, @$, false);
                 }
             ;
 
 paren_args    : '(' none ')'
                 {
-                    $$ = new ARGS(null, null, null, null, @$);
+                    $$ = new ARGS(null, null, null, null, @$, true);
                 }
             | '(' call_args opt_nl ')'
                 {
@@ -816,13 +816,13 @@ paren_args    : '(' none ')'
             | '(' args ',' block_call opt_nl ')'
                 {
                     scanner.yywarn("parenthesize argument for future version");    
-                    $$ = new ARGS($2, null, null, $4, @$);
+                    $$ = new ARGS($2, null, null, $4, @$, true);
                 }
             ;
 
 opt_paren_args    : none
                 {
-                    $$ = new ARGS(null, null, null, null, @$);
+                    $$ = new ARGS(null, null, null, null, @$, false);
                 }
 
                 | paren_args
@@ -831,89 +831,89 @@ opt_paren_args    : none
 call_args    : command
                 {
                     scanner.yywarn("parenthesize argument(s) for future version");                
-                    $$ = new ARGS($1, null, null, null, @$);
+                    $$ = new ARGS($1, null, null, null, @$, false);
                 }
             | args opt_block_arg
                 {
-                    $$ = new ARGS($1, null, null, $2, @$);
+                    $$ = new ARGS($1, null, null, $2, @$, false);
                 }
             | args ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS($1, null, $4, $5, @$);
+                    $$ = new ARGS($1, null, $4, $5, @$, false);
                 }
             | assocs opt_block_arg
                 {
-                    $$ = new ARGS(null, $1, null, $2, @$);
+                    $$ = new ARGS(null, $1, null, $2, @$, false);
                 }
             | assocs ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(null, $1, $4, $5, @$);
+                    $$ = new ARGS(null, $1, $4, $5, @$, false);
                 }
             | args ',' assocs opt_block_arg
                 {
-                    $$ = new ARGS($1, $3, null, $4, @$);
+                    $$ = new ARGS($1, $3, null, $4, @$, false);
                 }
             | args ',' assocs ',' tSTAR arg opt_block_arg
                 {
-                    $$ = new ARGS($1, $3, $6, $7, @$);
+                    $$ = new ARGS($1, $3, $6, $7, @$, false);
                 }
             | tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(null, null, $2, $3, @$);
+                    $$ = new ARGS(null, null, $2, $3, @$, false);
                 }
             | block_arg
                 {
-                    $$ = new ARGS(null, null, null, $1, @$);
+                    $$ = new ARGS(null, null, null, $1, @$, false);
                 }
             ;
 
 call_args2    : arg_value ',' args opt_block_arg
                 {
-                    $$ = new ARGS(append($1, $3), null, null, $4, @$);
+                    $$ = new ARGS(append($1, $3), null, null, $4, @$, true);
                 }
             | arg_value ',' block_arg
                 {
-                    $$ = new ARGS($1, null, null, $3, @$);
+                    $$ = new ARGS($1, null, null, $3, @$, true);
                 }
             | arg_value ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS($1, null, $4, $5, @$);
+                    $$ = new ARGS($1, null, $4, $5, @$, true);
                 }
             | arg_value ',' args ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(append($1, $3), null, $6, $7, @$);
+                    $$ = new ARGS(append($1, $3), null, $6, $7, @$, true);
                 }
             | assocs opt_block_arg
                 {
-                    $$ = new ARGS(null, $1, null, $2, @$);
+                    $$ = new ARGS(null, $1, null, $2, @$, true);
                 }
             | assocs ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(null, $1, $4, $5, @$);
+                    $$ = new ARGS(null, $1, $4, $5, @$, true);
                 }
             | arg_value ',' assocs opt_block_arg
                 {
-                    $$ = new ARGS($1, $3, null, $4, @$);
+                    $$ = new ARGS($1, $3, null, $4, @$, true);
                 }
             | arg_value ',' args ',' assocs opt_block_arg
                 {
-                    $$ = new ARGS(append($1, $3), $5, null, $6, @$);
+                    $$ = new ARGS(append($1, $3), $5, null, $6, @$, true);
                 }
             | arg_value ',' assocs ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS($1, $3, $6, $7, @$);
+                    $$ = new ARGS($1, $3, $6, $7, @$, true);
                 }
             | arg_value ',' args ',' assocs ',' tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(append($1, $3), $5, $8, $9, @$);
+                    $$ = new ARGS(append($1, $3), $5, $8, $9, @$, true);
                 }
             | tSTAR arg_value opt_block_arg
                 {
-                    $$ = new ARGS(null, null, $2, $3, @$);
+                    $$ = new ARGS(null, null, $2, $3, @$, true);
                 }
             | block_arg
                 {
-                    $$ = new ARGS(null, null, null, $1, @$);
+                    $$ = new ARGS(null, null, null, $1, @$, true);
                 }
             ;
 
@@ -977,15 +977,15 @@ args: arg_value
 
 mrhs: args ',' arg_value
         {
-            $$ = new ARGS(append($1, $3), null, null, null, @$);
+            $$ = new ARGS(append($1, $3), null, null, null, @$, false);
         }
     | args ',' tSTAR arg_value
         {
-            $$ = new ARGS($1, null, $4, null, @$);
+            $$ = new ARGS($1, null, $4, null, @$, false);
         }
     | tSTAR arg_value
         {
-            $$ = new ARGS(null, null, $2, null, @$);
+            $$ = new ARGS(null, null, $2, null, @$, false);
         }
     ;
 
@@ -999,7 +999,7 @@ primary    : literal
         | backref
         | tFID
             {
-                $$ = new METHOD_CALL($1, new ARGS(@1), @1);
+                $$ = new METHOD_CALL($1, new ARGS(@1, false), @1);
             }
         | kBEGIN 
             {
@@ -1052,11 +1052,11 @@ primary    : literal
             }
         | kYIELD '(' ')'
             {
-                $$ = new YIELD(new ARGS(@1), @1);
+                $$ = new YIELD(new ARGS(@1, true), @1);
             }
         | kYIELD
             {
-                $$ = new YIELD(new ARGS(@1), @1);
+                $$ = new YIELD(new ARGS(@1, false), @1);
             }
         | kDEFINED opt_nl '(' 
             {
@@ -1068,7 +1068,7 @@ primary    : literal
             }
         | operation brace_block
             {
-                $$ = new METHOD_CALL($1, new ARGS(@1), $2, @1);
+                $$ = new METHOD_CALL($1, new ARGS(@1, false), $2, @1);
             }
         | method_call
         | method_call brace_block
@@ -1312,7 +1312,7 @@ method_call    : operation    paren_args
                 }
             | primary_value tCOLON2 operation3
                 {
-                    $$ = new METHOD_CALL($1, $3, new ARGS(@3), @3);
+                    $$ = new METHOD_CALL($1, $3, new ARGS(@3, false), @3);
                 }
             | kSUPER paren_args
                 {
@@ -1360,15 +1360,15 @@ case_body    : kWHEN when_args then compstmt cases
             
 when_args    : args
                 {
-                    $$ = new ARGS($1, null, null, null, @$);
+                    $$ = new ARGS($1, null, null, null, @$, false);
                 }
             | args ',' tSTAR arg_value
                 {
-                    $$ = new ARGS($1, null, $4, null, @$);
+                    $$ = new ARGS($1, null, $4, null, @$, false);
                 }
             | tSTAR arg_value
                 {
-                    $$ = new ARGS(null, null, $2, null, @$);
+                    $$ = new ARGS(null, null, $2, null, @$, false);
                 }
             ;
 
