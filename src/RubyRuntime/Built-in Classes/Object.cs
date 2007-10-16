@@ -278,7 +278,7 @@ namespace Ruby
             if (obj == null)
                 obj = nil_ivar_singleton;
 
-            if (generic_iv_tbl.ContainsKey(obj))
+            if (generic_iv_tbl.ContainsKey(obj) && generic_iv_tbl[obj].ContainsKey(id))
                 return generic_iv_tbl[obj][id];
 
             return null;
