@@ -26,9 +26,6 @@ namespace Ruby
 
         internal Bignum(double value) : this()
         {
-            // IronMath's make method for doubles is very naive
-            // build IronMath integer by parsing the double
-
             string number = value.ToString("e14", CultureInfo.InvariantCulture);
             int eIndex = number.IndexOf('e');
             if (number[eIndex - 1] == '0')
@@ -50,9 +47,10 @@ namespace Ruby
             if (value < 0)
                 exp++;
 
-            int digits = int.Parse(number.Remove(number.IndexOf('e')), CultureInfo.InvariantCulture);
+            string dd = number.Remove(number.IndexOf('e'));
+            long digits = long.Parse(dd, CultureInfo.InvariantCulture);
 
-            IronMath.integer x = IronMath.integer.make(digits);
+            IronMath.integer x = IronMath.integer.make((int)digits);
             IronMath.integer y = IronMath.integer.make(10).pow(exp);
 
             this.value = IronMath.integer.multiply(x, y);

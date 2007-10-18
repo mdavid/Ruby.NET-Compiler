@@ -374,7 +374,7 @@ namespace Ruby
             }
 
             match = rb_backref_get(caller);
-            if (match == null) // || FL_TEST(match, MATCH_BUSY))
+            if (match == null || match.busy)
             {
                 match = new Match(Ruby.Runtime.Init.rb_cMatch);
             }
@@ -534,7 +534,7 @@ namespace Ruby
 
                 if (match == null)
                     return null;
-                //rb_match_busy(match);
+                match.busy = true;
                 return match;
             }
 

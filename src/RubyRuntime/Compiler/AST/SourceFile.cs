@@ -380,7 +380,14 @@ namespace Ruby.Compiler.AST
             else
             {
                 MethodInfo load = type.GetMethod("Load");
-                load.Invoke(null, new object[] { Ruby.Object.ruby_top_self, caller });
+                try
+                {
+                    load.Invoke(null, new object[] { Ruby.Object.ruby_top_self, caller });
+                }
+                catch (System.Reflection.TargetInvocationException e)
+                {
+                    throw e.InnerException;
+                }
             }
         }
 

@@ -646,17 +646,23 @@ namespace Ruby.Methods
     {
         internal static rb_ary_flatten_bang singleton = new rb_ary_flatten_bang();
 
-        internal static bool FlattenHelper(ArrayList container, ArrayList ary)
+        internal static bool FlattenHelper(ArrayList container, ArrayList memo, Array ary2, Frame caller)
         {
             bool mod = false;
-            foreach (object o in ary)
+            if (memo.Contains(ary2))
+                throw new ArgumentError("tried to flatten recursive array").raise(caller);
+            memo.Add(ary2);
+
+            foreach (object o in ary2)
             {
                 if (o is Array)
-                    mod = FlattenHelper(container, ((Array)o).value);
+                {
+                    FlattenHelper(container, memo, (Array)o, caller);
+                    mod = true;
+                }
                 else
                 {
                     container.Add(o);
-                    mod = true;
                 }
             }
 
@@ -669,7 +675,7 @@ namespace Ruby.Methods
             ArrayList ary = new ArrayList();
 
             Array.rb_ary_modify(caller, result);
-            if (!FlattenHelper(ary, result.value))
+            if (!FlattenHelper(ary, new ArrayList(), result, caller))
                 return null;
 
             result.value = ary;

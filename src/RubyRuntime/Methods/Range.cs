@@ -113,7 +113,9 @@ namespace Ruby.Methods
 
                 for (int i = (int)range.Begin; i < end; i++)
                     Proc.rb_yield(block, caller, i);
-            }
+            } 
+            else if (range.Begin is String)
+                rb_str_upto_m.Call1(last_class, range.Begin, caller, block, range.End, range.Excl);
             else
             {
                 object o = range.Begin;

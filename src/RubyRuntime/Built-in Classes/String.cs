@@ -1147,7 +1147,7 @@ namespace Ruby
                 regs = match.value;
                 if (iter)
                 {
-                    //rb_match_busy(match);
+                    match.busy = true;
                     val = ObjectAsString(Proc.rb_yield(block, caller, Regexp.rb_reg_nth_match(0, match)), caller);
                     //str_mod_check(str, sp, slen);
                     if (bang)

@@ -259,8 +259,7 @@ namespace Ruby.Methods
                     case Regexp.KCODE.UTF8:
                         return new String("utf8");
                     default:
-                        Exception.rb_bug("unknown kcode - should not happen", caller);
-                        break;
+                        throw new Ruby.NotImplementedError("unknown kcode - " + ((Regexp.KCODE)(re._options & (int)Regexp.KCODE.MASK)).ToString()).raise(caller);
                 }
             }
             
@@ -302,7 +301,7 @@ namespace Ruby.Methods
             if (result == null)
                 return null;
             result = Regexp.rb_backref_get(caller);
-
+            ((Match)result).busy = true;
             return result;
         }
     }

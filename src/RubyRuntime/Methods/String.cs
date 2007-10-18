@@ -156,26 +156,32 @@ namespace Ruby.Methods
         internal static rb_str_upto_m singleton = new rb_str_upto_m();
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
-        {            
-           
+        {
+            return Call1(last_class, recv, caller, block, p1, false);
+        }
+
+        public static object Call1(Class last_class, object recv, Frame caller, Proc block, object p1, bool excl)
+        {
             String beg = (String)recv;
             String end = String.RStringValue(p1, caller);
 
-            String current, after_end;
+            object current, after_end;
             int n;
 
             n = beg.value.CompareTo(end.value);
-            if (n > 0)
+            if (n > 0 || excl && n == 0)
                 return beg;
             after_end = (String)Eval.CallPrivate0(end, caller, "succ", null);
             current = beg;
-            while (!current.value.Equals(after_end.value))
+            while (!(bool)rb_str_equal.singleton.Call1(last_class, current, caller, null, after_end))
             {
                 Proc.rb_yield(block, caller, new object[] { current });
-                if (current.Equals(end))
-                    break;
-                current = (String)Eval.CallPrivate0(current, caller, "succ", null);
-                if (current.value.Length > end.value.Length)
+                if (!excl && (bool)rb_str_equal.singleton.Call1(last_class, current, caller, null, end)) break;
+                current = Eval.CallPrivate0(current, caller, "succ", null);
+                if (current is String) 
+                    current = Eval.CallPrivate0(current, caller, "to_str", null);
+                if (!excl && (bool)rb_str_equal.singleton.Call1(last_class, current, caller, null, end)) break;
+                if (((String)current).value.Length > ((String)end).value.Length)
                     break;
             }
 
@@ -748,7 +754,7 @@ namespace Ruby.Methods
             while ((result = scan_once(str, pat, ref start, caller)) != null)
             {
                 match = Regexp.rb_backref_get(caller);
-                //rb_match_busy(match);
+                match.busy = true;
                 Proc.rb_yield(block, caller, new object[] { result });
                 Regexp.rb_backref_set(match, caller);    /* restore $~ value */
             }
@@ -817,6 +823,7 @@ namespace Ruby.Methods
                 int regs = match.value.Groups.Count;
                 if (iter)
                 {
+                    match.busy = true;
                     repl = String.ObjectAsString(Proc.rb_yield(block, caller, new object[] { Regexp.rb_reg_nth_match(0, match) }), caller);
                     String.str_frozen_check(caller, str);
                     Regexp.rb_backref_set(match, caller);

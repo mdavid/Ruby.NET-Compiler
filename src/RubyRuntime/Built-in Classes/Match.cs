@@ -18,6 +18,7 @@ namespace Ruby
     {
         internal System.Text.RegularExpressions.Match value;
         internal string matched;
+        internal bool busy = false;
 
         //-------------------------------------------------------------------------------
 

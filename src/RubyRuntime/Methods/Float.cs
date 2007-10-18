@@ -516,12 +516,15 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            double val = System.Math.Truncate(((Float)recv).value);
+            double f = System.Math.Truncate(((Float)recv).value);
 
-            if (!Numeric.FIXABLE(val))
-                return new Bignum(val);
+            if (f > 0.0) f = System.Math.Floor(f);
+            if (f < 0.0) f = System.Math.Ceiling(f);
 
-            return (int)val;
+            if (!Numeric.FIXABLE(f))
+                return new Bignum(f);
+
+            return (int)f;
         }
     }
 
