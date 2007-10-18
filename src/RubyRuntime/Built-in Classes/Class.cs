@@ -596,10 +596,10 @@ namespace Ruby
             }
 
             if (read)
-                add_method(id, new AttrReaderMethodBody(id), 0, access, caller);
+                add_method(id, new AttrReaderMethodBody("@"+id), 0, access, caller);
 
             if (write)
-                add_method(id + "=", new AttrWriterMethodBody(id), 1, access, caller);
+                add_method(id + "=", new AttrWriterMethodBody("@"+id), 1, access, caller);
         }
 
         internal bool const_defined(string name, bool recurse)//status: done
