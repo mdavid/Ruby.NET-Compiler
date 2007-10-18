@@ -324,7 +324,7 @@ namespace Ruby.Compiler.AST
 
     internal class IVAR : VAR, ISimple      // Instance Variable
     {
-        internal IVAR(string vid, YYLTYPE location) : base(vid.Substring(1), location) { }
+        internal IVAR(string vid, YYLTYPE location) : base(vid, location) { }
 
 
         internal override string DefinedName()
@@ -336,7 +336,7 @@ namespace Ruby.Compiler.AST
         {
             // Eval.ivar_defined(recv, vid)
             context.ldarg("recv");
-            context.ldstr(vid.ToString());
+            context.ldstr(vid);
             context.call(Runtime.Eval.ivar_defined);
         }
 
@@ -344,7 +344,7 @@ namespace Ruby.Compiler.AST
         {
             // Eval.ivar_get(recv, vid)
             context.ldarg("recv");
-            context.ldstr(vid.ToString());
+            context.ldstr(vid);
             context.call(Runtime.Eval.ivar_get);
         }
 
@@ -357,7 +357,7 @@ namespace Ruby.Compiler.AST
             // Eval.ivar_set(caller, recv, "vid", rhs);
             context.ldloc(0);
             context.ldarg("recv");
-            context.ldstr(vid.ToString());
+            context.ldstr(vid);
             value.GenSimple(context);
             context.call(Runtime.Eval.ivar_set);
 
@@ -366,7 +366,7 @@ namespace Ruby.Compiler.AST
 
         public override CodeExpression ToCodeExpression()
         {
-            return new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), vid);
+            return new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), vid.Substring(1));
         }
     }
 
