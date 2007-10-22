@@ -63,8 +63,12 @@ namespace Ruby.Methods
         internal static rb_str_plus singleton = new rb_str_plus();
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
-        {                        
-            return new String(((String)recv).value + String.StringValue(param0, caller));
+        {
+            String str = new String(((String)recv).value + String.StringValue(param0, caller));
+            if (((recv is Basic) && (((Basic)recv).Tainted)) ||
+                ((param0 is Basic) && (((Basic)param0).Tainted)))
+                str.Tainted = true;
+            return str;
         }
     }
 
