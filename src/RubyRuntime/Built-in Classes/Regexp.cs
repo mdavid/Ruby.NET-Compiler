@@ -390,8 +390,8 @@ namespace Ruby
             match.matched = str.value;
             rb_backref_set(match, caller);
 
-            Object.obj_infect(match, re.Tainted);
-            Object.obj_infect(match, str.Tainted);
+            Object.obj_infect(match, re);
+            Object.obj_infect(match, str);
 
             return result;
         }

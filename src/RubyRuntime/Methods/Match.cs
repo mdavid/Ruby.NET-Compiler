@@ -69,7 +69,9 @@ namespace Ruby.Methods
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
             Match md = (Match) recv;
-            return new String(md.matched.Substring(md.value.Index + md.value.Length));
+            String str = new String(md.matched.Substring(md.value.Index + md.value.Length));
+            if (md.Tainted) str.Tainted = true;
+            return str;
         }
     }
 
@@ -82,7 +84,9 @@ namespace Ruby.Methods
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
             Match md = (Match)recv;
-            return new String(md.matched.Substring(0, md.value.Index));
+            String str = new String(md.matched.Substring(0, md.value.Index));
+            if (md.Tainted) str.Tainted = true;
+            return str;
         }
     }
 
