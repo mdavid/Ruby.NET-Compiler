@@ -128,16 +128,13 @@ namespace Ruby.Methods
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
         {
-            String line = null;
-            
-            if (!IO.next_argv(caller))
-            {
-                if (IO.current_file != null)
-                    line = (String)Eval.CallPrivate(IO.current_file, caller, "gets", null, args.ToArray());
-                else
-                    line = IO.argf_getline(args.ToArray(), caller);
-            }
+            if (!IO.next_argv(caller)) return null;
 
+            String line;
+            if (IO.current_file != null)
+                line = (String)Eval.CallPrivate(IO.current_file, caller, "gets", null, args.ToArray());
+            else
+                line = IO.argf_getline(args.ToArray(), caller);
             Eval.rb_lastline_set(caller, line);
             return line;
         }
