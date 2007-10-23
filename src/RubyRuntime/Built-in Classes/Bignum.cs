@@ -114,10 +114,18 @@ namespace Ruby
 
         internal static object Normalise(object x)
         {
-            if (x is int && Numeric.FIXNUM_MIN <= (int)x && (int)x <= Numeric.FIXNUM_MAX)
-                return x;
+            if (x is int)
+            {
+                if (Numeric.FIXABLE((int)x))
+                    return x;
+                else
+                    return new Bignum((int)x);
+            }
             else
+            {
+                System.Diagnostics.Debug.Assert(x is Bignum);
                 return NormaliseUsing(((Bignum)x).value);
+            }
         }
 
         internal static int rb_big2long(Bignum b, Frame caller)
