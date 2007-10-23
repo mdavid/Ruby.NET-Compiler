@@ -112,8 +112,7 @@ namespace Ruby.Methods
                 else if (caller.call_status == CallStatus.VCall)
                 {
                     msg = "undefined local variable or method `" + id + "' for " + classStr;
-                    // BBTAG: how do we distinguish between method calls and variable access?
-                    //throwNameError = true;
+                    throwNameError = true;
                 }
                 else if (caller.call_status == CallStatus.Super)
                 {
