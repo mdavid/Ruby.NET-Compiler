@@ -118,7 +118,18 @@ namespace Ruby.Runtime
             while (tmp != null)
             {
                 if (tmp.attached != null)
-                    tmp = (Class)(tmp.attached);
+                {
+                    if (tmp._type == Class.Type.Singleton && !(tmp.attached is Class))
+                    {
+                        Methods.rb_warn_m.singleton.Call1(klass, klass, null, null, new String("class variable access from toplevel singleton method"));
+                        tmp = (Class)(tmp.super);
+                        klass = tmp;
+                    }
+                    else
+                    {
+                        tmp = (Class)(tmp.attached);
+                    }
+                }
 
                 if (tmp.instance_variable_defined(cvar_name))
                 {
@@ -150,7 +161,18 @@ namespace Ruby.Runtime
             while (tmp != null)
             {
                 if (tmp.attached != null)
-                    tmp = (Class)(tmp.attached);
+                {
+                    if (tmp._type == Class.Type.Singleton && !(tmp.attached is Class))
+                    {
+                        Methods.rb_warn_m.singleton.Call1(klass, klass, null, null, new String("class variable access from toplevel singleton method"));
+                        tmp = (Class)(tmp.super);
+                        klass = tmp;
+                    }
+                    else
+                    {
+                        tmp = (Class)(tmp.attached);
+                    }
+                }
 
                 object value = tmp.instance_variable_get(cvar_name);
 
@@ -177,7 +199,18 @@ namespace Ruby.Runtime
             while (tmp != null)
             {
                 if (tmp.attached != null)
-                    tmp = (Class)(tmp.attached);
+                {
+                    if (tmp._type == Class.Type.Singleton && !(tmp.attached is Class))
+                    {
+                        Methods.rb_warn_m.singleton.Call1(klass, klass, null, null, new String("class variable access from toplevel singleton method"));
+                        tmp = (Class)(tmp.super);
+                        klass = tmp;
+                    }
+                    else
+                    {
+                        tmp = (Class)(tmp.attached);
+                    }
+                }
 
                 if (tmp.instance_vars.ContainsKey(cvar_name))
                     return true;
