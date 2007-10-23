@@ -1412,7 +1412,7 @@ namespace Ruby.Methods
             {
                 int beg, len;
                 beg = begin(p2, ary.Count, caller);
-                len = p3 == null ? ary.Count - beg : Numeric.rb_num2long(p2, caller);
+                len = p3 == null ? ary.Count - beg : Numeric.rb_num2long(p3, caller);
 
                 fill(ary, p1, null, beg, beg + len, caller);
             }
