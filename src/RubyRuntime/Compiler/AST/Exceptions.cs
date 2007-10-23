@@ -333,7 +333,8 @@ namespace Ruby.Compiler.AST
                     context.Goto(endLabel);
                 }
             }
-            context.EndCatchBlock(Runtime.RubyExceptionRef, tryBlock);
+
+            context.EndCatchBlock(Runtime.StandardErrorRef, tryBlock);
 
             context.CodeLabel(endLabel);
 

@@ -61,6 +61,7 @@ namespace Ruby.Compiler
         internal static ClassRef VariablesRef           = AddClass(Assembly, "Ruby.Runtime", "Variables");
         internal static ClassRef BlockRef               = AddClass(Assembly, "Ruby.Runtime", "Block");
         internal static ClassRef RubyExceptionRef       = AddClass(Assembly, "Ruby.Runtime", "RubyException");
+        internal static ClassRef StandardErrorRef       = AddClass(Assembly, "Ruby", "StandardError");
         internal static ClassRef IEvalRef               = AddClass(Assembly, "Ruby.Runtime", "IEval");
         internal static ClassRef errinfo_globalRef      = AddClass(Assembly, "Ruby.Runtime", "errinfo_global");
         internal static ClassRef global_variableRef     = AddClass(Assembly, "Ruby.Runtime", "global_variable");
