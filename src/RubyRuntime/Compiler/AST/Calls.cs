@@ -501,8 +501,14 @@ namespace Ruby.Compiler.AST
         internal void LastClass(CodeGenContext context)
         {
             Scope scope_cnt = parent_scope;
+            DEFS singletonMethod = null;
+
             while (!(scope_cnt is CLASS_OR_MODULE) && (scope_cnt != null))
+            {
+                if (scope_cnt is DEFS)
+                    singletonMethod = (DEFS)scope_cnt;
                 scope_cnt = scope_cnt.parent_scope;
+            }
 
             if (scope_cnt == null)
             {
@@ -512,6 +518,9 @@ namespace Ruby.Compiler.AST
 
             CLASS_OR_MODULE parentClass = (CLASS_OR_MODULE)scope_cnt;
             context.ldsfld(parentClass.singletonField);
+
+            if (singletonMethod != null && singletonMethod.receiver is SELF)
+                context.call(Runtime.Class.CLASS_OF);
         }
 
 

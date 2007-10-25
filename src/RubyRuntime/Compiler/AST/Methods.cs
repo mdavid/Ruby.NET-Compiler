@@ -297,7 +297,7 @@ namespace Ruby.Compiler.AST
         {
         }
 
-        private Node receiver;
+        internal Node receiver;
 
         internal override void Init(YYLTYPE location, params object[] inputs)
         {
