@@ -243,9 +243,14 @@ namespace Ruby.Compiler.AST
             {
                 PERWAPI.CILLabel nextClause = context.NewLabel();
                 PERWAPI.CILLabel thisClause = context.NewLabel();
- 
+
+                context.ldc_i4(0);
+                LOCAL exceptionCaught = context.StoreInLocal("caught", PERWAPI.PrimitiveType.Boolean, this.location);
+
                 for (Node type = clause.types; type != null; type = type.nd_next)
                 {
+                    PERWAPI.CILLabel label1 = context.NewLabel();
+
                     // Precompute each separately to avoid computing a list of types
                     type.GenCode0(context);
                     LOCAL tt = context.StoreInLocal("type", PERWAPI.PrimitiveType.Object, type.location);
@@ -255,8 +260,15 @@ namespace Ruby.Compiler.AST
                     context.ReleaseLocal(tt.local, true);
 
                     context.call(Runtime.Eval.Test);
-                    context.brtrue(thisClause);
+                    context.brfalse(label1);
+                    context.PushTrue();
+                    context.stloc(exceptionCaught.local);
+                    context.CodeLabel(label1);                  
                 }
+
+                context.ldloc(exceptionCaught.local);
+                context.brtrue(thisClause);
+                context.ReleaseLocal(exceptionCaught.local, true);
 
                 context.br(nextClause);
 
