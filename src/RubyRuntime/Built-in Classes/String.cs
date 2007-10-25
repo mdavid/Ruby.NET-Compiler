@@ -990,7 +990,12 @@ namespace Ruby
             {
                 len = 0;
             }
-            if (len == 0) return new String();
+            if (len == 0)
+            {
+                str2 = new String();
+                Object.obj_infect(str2, str);
+                return str2;
+            }
 
             if (false)
             {
