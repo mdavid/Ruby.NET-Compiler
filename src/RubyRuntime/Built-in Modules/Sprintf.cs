@@ -208,7 +208,7 @@ namespace Ruby
                 {
                     c++;
                     int width = 0;
-                    int precision = 0;
+                    int precision = 6;
                     char type;
                     int temp = 0;
                     char lengthModifier;
@@ -223,6 +223,7 @@ namespace Ruby
                     if (fmt[c] == '.')
                     {
                         c++;
+                        temp = 0;
                         //precision
                         while (char.IsNumber(fmt[c]))
                         {
@@ -266,10 +267,12 @@ namespace Ruby
                             result.Append("%");
                             break;
                         case 'f':
-                            string fix = ((double)args[argNum]).ToString(string.Format(CultureInfo.InvariantCulture, "f{0}", precision), CultureInfo.InvariantCulture);
-                            if (width > 0)
-                                fix = fix.Substring(0, width);
-                            result.Append(fix);
+                            double num = (double)args[argNum];
+                            string s = num.ToString("f" + precision.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+                            int pad = width - s.Length;
+                            if (pad > 0)
+                                result.Append(' ', pad);
+                            result.Append(s);
                             break;
                         default:
                             throw new NotImplementedError(fmt).raise(null);

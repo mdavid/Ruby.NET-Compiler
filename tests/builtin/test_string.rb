@@ -174,6 +174,38 @@ class TestString < Test::Unit::TestCase
     end
   end
 
+  def test_modulo_float
+    # no length & precision
+    assert_equal('12.350000', '%f' % 12.35)
+
+    # no precision
+    assert_equal('12.350000', '%1f' % 12.35)
+    assert_equal('12.350000', '%2f' % 12.35)
+    assert_equal(' 12.350000', '%10f' % 12.35)
+
+    # no length
+    assert_equal('12.4', '%.1f' % 12.35)
+    assert_equal('12.35', '%.2f' % 12.35)
+    assert_equal('12.350', '%.3f' % 12.35)
+
+    # length <= real length
+    assert_equal('12.4', '%0.1f' % 12.35)
+    assert_equal('12.35', '%0.2f' % 12.35)
+    assert_equal('12.350', '%0.3f' % 12.35)
+    assert_equal('12.4', '%1.1f' % 12.35)
+    assert_equal('12.35', '%1.2f' % 12.35)
+    assert_equal('12.350', '%1.3f' % 12.35)
+    assert_equal('12.35', '%5.2f' % 12.35)
+
+    # length > real length
+    assert_equal(' 12.4', '%5.1f' % 12.35)
+    assert_equal(' 12.35', '%6.2f' % 12.35)
+    assert_equal(' 12.350', '%7.3f' % 12.35)
+    assert_equal('  12.4', '%6.1f' % 12.35)
+    assert_equal('  12.35', '%7.2f' % 12.35)
+    assert_equal('  12.350', '%8.3f' % 12.35)
+  end
+
   def test_rindex_invalid_sub
     assert_raise(TypeError) { @hello.rindex(Array.new) }
   end
