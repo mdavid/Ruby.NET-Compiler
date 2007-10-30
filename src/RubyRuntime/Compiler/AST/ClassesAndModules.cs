@@ -17,7 +17,7 @@ namespace Ruby.Compiler.AST
 
     internal abstract class CLASS_OR_MODULE : Scope
     {
-        protected CONST name;
+        internal CONST name;
         internal FieldDef singletonField;
         internal string internal_name;
 

@@ -519,8 +519,17 @@ namespace Ruby.Compiler.AST
             CLASS_OR_MODULE parentClass = (CLASS_OR_MODULE)scope_cnt;
             context.ldsfld(parentClass.singletonField);
 
-            if (singletonMethod != null && singletonMethod.receiver is SELF)
-                context.call(Runtime.Class.CLASS_OF);
+            if (singletonMethod != null)
+            {
+                if (singletonMethod.receiver is SELF)
+                    context.call(Runtime.Class.CLASS_OF);
+                else if (singletonMethod.receiver is CONST)
+                {
+                    CONST receiver = (CONST)singletonMethod.receiver;
+                    if (receiver.vid == parentClass.name.vid)
+                        context.call(Runtime.Class.CLASS_OF);
+                }
+            }
         }
 
 
