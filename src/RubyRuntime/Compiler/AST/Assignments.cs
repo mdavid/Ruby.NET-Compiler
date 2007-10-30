@@ -196,6 +196,11 @@ namespace Ruby.Compiler.AST
             context.newLine(location);
             if (lhs is ARRAY_ACCESS) // for array access -> need to avoid recomputation of lhs index
                 ((ARRAY_ACCESS)lhs).AssignOp(context, op, rhs);
+            else if (lhs is CVAR && op == "||")
+            {
+                Node lhsDefined = new DEFINED(lhs, location);
+                lhs.Assign(context, METHOD_CALL.Create(lhsDefined, op, rhs, location));
+            }
             else
                 lhs.Assign(context, METHOD_CALL.Create(lhs, op, rhs, location));
         }
