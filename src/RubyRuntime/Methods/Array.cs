@@ -1034,15 +1034,12 @@ namespace Ruby.Methods
 
 
     
-    internal class rb_ary_select : VarArgMethodBody0 // author: cjs, status: done
+    internal class rb_ary_select : MethodBody0 // author: cjs, status: done
     {
         internal static rb_ary_select singleton = new rb_ary_select();
 
-        public override object Call(Class last_class, object recv, Frame caller, Proc block, Array rest)
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            if (rest.Count > 0)
-                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 0)", rest.Count)).raise(caller);
-
             if (block == null)
                 throw new LocalJumpError("no block given").raise(caller);
 

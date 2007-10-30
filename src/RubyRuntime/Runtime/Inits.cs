@@ -1107,7 +1107,7 @@ namespace Ruby.Runtime
             Class.rb_define_method(rb_cArray, "collect!", rb_ary_collect_bang.singleton, 0, null);
             Class.rb_define_method(rb_cArray, "map", rb_ary_collect.singleton, 0, null);
             Class.rb_define_method(rb_cArray, "map!", rb_ary_collect_bang.singleton, 0, null);
-            Class.rb_define_method(rb_cArray, "select", rb_ary_select.singleton, -1, null);
+            Class.rb_define_method(rb_cArray, "select", rb_ary_select.singleton, -1, null); // NOTE: MRI 1.8.2 bug; should be 0.
             Class.rb_define_method(rb_cArray, "values_at", rb_ary_values_at.singleton, -1, null);
             Class.rb_define_method(rb_cArray, "delete", rb_ary_delete.singleton, 1, null);
             Class.rb_define_method(rb_cArray, "delete_at", rb_ary_delete_at_m.singleton, 1, null);
