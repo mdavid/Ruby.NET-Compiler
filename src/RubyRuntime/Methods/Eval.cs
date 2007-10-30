@@ -332,7 +332,12 @@ namespace Ruby.Methods
             catch (SymbolException e)
             {
                 if (e.symbol.id_s == ((Symbol)symbol).id_s)
-                    return e.args;
+                {
+                    if (e.args.Count == 1)
+                        return e.args[0];
+                    else
+                        return null;
+                }
                 else
                     throw e;
             }
@@ -346,6 +351,9 @@ namespace Ruby.Methods
 
         public override object Call(Class last_class, object recv, Frame caller, Proc block, object symbol, Array rest)
         {
+            if (rest.Count > 1)
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", rest.Count + 1, 2)).raise(caller);
+
             throw new SymbolException((Symbol)symbol, rest);
         }
     }
