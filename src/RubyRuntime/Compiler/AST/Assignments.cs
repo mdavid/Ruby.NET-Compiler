@@ -198,8 +198,17 @@ namespace Ruby.Compiler.AST
                 ((ARRAY_ACCESS)lhs).AssignOp(context, op, rhs);
             else if (lhs is CVAR && op == "||")
             {
+                CILLabel alreadyDefined1 = new CILLabel();
+                CILLabel alreadyDefined2 = new CILLabel();
+                CILLabel alreadyDefined3 = new CILLabel();
                 Node lhsDefined = new DEFINED(lhs, location);
-                lhs.Assign(context, METHOD_CALL.Create(lhsDefined, op, rhs, location));
+                lhsDefined.GenCode(context);
+                context.brtrue(alreadyDefined1);
+                lhs.Assign(context, rhs);
+                context.br(alreadyDefined2);
+                context.CodeLabel(alreadyDefined1);
+                lhs.GenCode(context);
+                context.CodeLabel(alreadyDefined2);
             }
             else
                 lhs.Assign(context, METHOD_CALL.Create(lhs, op, rhs, location));
