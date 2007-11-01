@@ -207,7 +207,7 @@ namespace Ruby.Compiler.AST
                 lhs.Assign(context, rhs);
                 context.br(alreadyDefined2);
                 context.CodeLabel(alreadyDefined1);
-                lhs.GenCode(context);
+                lhs.Assign(context, METHOD_CALL.Create(lhs, op, rhs, location));
                 context.CodeLabel(alreadyDefined2);
             }
             else
