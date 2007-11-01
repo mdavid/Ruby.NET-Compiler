@@ -700,13 +700,23 @@ namespace Ruby.Runtime
             return !(test == null || (test is bool && ((bool)test) == false));
         }
 
+        /// <summary>
+        /// rb_respond_to
+        /// </summary>
         internal static bool RespondTo(object obj, string method)
         {
-            Class klass;
-            // Fixme!!!
-            return Eval.FindPrivateMethod(obj, null, method, out klass) != null;
-
-            //return (bool)(rb_obj_respond_to.singleton.Call1(null, obj, null, null, true));
+            Class origin;
+            // FIXME:
+            // - Is the null correct?
+            // - May need to use rb_method_boundp.
+            if (Eval.FindPrivateMethod(obj, null, method, out origin) != null)
+                return true;
+            else
+            {
+                object result = Eval.CallPrivate1(obj, caller, "respond_to?", null, new Symbol(method));
+                // Return true for any object other than false (even nil).
+                return (!(result is bool) || (bool)result);
+            }
         }
 
         // ------------------------------------------------------------------------------
