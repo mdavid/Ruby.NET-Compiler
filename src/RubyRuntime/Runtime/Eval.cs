@@ -707,13 +707,14 @@ namespace Ruby.Runtime
         {
             Class origin;
             // FIXME:
-            // - Is the null correct?
+            // - Is the null caller correct?
             // - May need to use rb_method_boundp.
             if (Eval.FindPrivateMethod(obj, null, method, out origin) != null)
                 return true;
             else
             {
-                object result = Eval.CallPrivate1(obj, caller, "respond_to?", null, new Symbol(method));
+                // FIXME: Is the null caller correct?
+                object result = Eval.CallPrivate1(obj, null, "respond_to?", null, new Symbol(method));
                 // Return true for any object other than false (even nil).
                 return (!(result is bool) || (bool)result);
             }
