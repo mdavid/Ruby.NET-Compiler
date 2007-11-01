@@ -151,6 +151,7 @@ namespace Ruby.Compiler.AST
 
         public string method_id;
         internal Node receiver;
+        public bool isVarAccess = false;
 
         public override CodeExpression ToCodeExpression()
         {
@@ -262,6 +263,16 @@ namespace Ruby.Compiler.AST
             this.IsPublic = false;
         }
 
+        internal METHOD_CALL(string method_id, Node args, bool isVarAccess, YYLTYPE location)
+            : base(args, location)
+        {
+            System.Diagnostics.Debug.Assert(args != null);
+            this.method_id = method_id;
+            this.receiver = new SELF(location);
+            this.IsPublic = false;
+            this.isVarAccess = isVarAccess;
+        }
+
         internal METHOD_CALL(string method_id, Node args, Node block, YYLTYPE location)
             : this(method_id, args, location)
         {
@@ -296,6 +307,17 @@ namespace Ruby.Compiler.AST
             SetLine(context);
             
             bool self_created, arguments_created = false;
+
+            if (isVarAccess)
+            {
+                context.ldloc(0);
+                context.call(Runtime.Frame.SetCallStatusVCall);
+            }
+            else
+            {
+                context.ldloc(0);
+                context.call(Runtime.Frame.SetCallStatusNone);
+            }
 
             // object self = receiver;
             self = context.PreCompute(receiver, "receiver", out self_created);

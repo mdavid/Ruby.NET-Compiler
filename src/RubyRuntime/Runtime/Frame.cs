@@ -115,6 +115,18 @@ namespace Ruby.Runtime
         {
             return dynamic_vars[vid];
         }
+
+        [UsedByRubyCompiler]
+        public void SetCallStatusVCall()
+        {
+            call_status = CallStatus.VCall;
+        }
+
+        [UsedByRubyCompiler]
+        public void SetCallStatusNone()
+        {
+            call_status = CallStatus.None;
+        }
     }
 
 

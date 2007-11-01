@@ -504,13 +504,6 @@ namespace Ruby.Runtime
             }
             else
             {
-                if (caller != null)
-                {
-                    if (receiverStyle != Receiver.Explicit)
-                        caller.call_status = CallStatus.VCall;
-                    else
-                        caller.call_status = CallStatus.None;
-                }
                 return null;
             }
         }

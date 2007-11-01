@@ -323,6 +323,8 @@ namespace Ruby.Compiler
             internal static MethodRef SetDynamic = AddInstanceMethod(FrameRef, "SetDynamic", PrimitiveType.Void, new Type[] { PrimitiveType.String, PrimitiveType.Object });
             internal static MethodRef get_Tilde = AddInstanceMethod(FrameRef, "get_Tilde", MatchRef, new Type[0]);
             internal static MethodRef set_Tilde = AddInstanceMethod(FrameRef, "set_Tilde", PrimitiveType.Void, new Type[] { MatchRef });
+            internal static MethodRef SetCallStatusVCall = AddInstanceMethod(FrameRef, "SetCallStatusVCall", PrimitiveType.Void, new Type[0]);
+            internal static MethodRef SetCallStatusNone = AddInstanceMethod(FrameRef, "SetCallStatusNone", PrimitiveType.Void, new Type[0]);
 
             internal static FieldRef line = AddField(FrameRef, "line", PrimitiveType.Int32);
             internal static FieldRef block_arg = AddField(FrameRef, "block_arg", ProcRef);
