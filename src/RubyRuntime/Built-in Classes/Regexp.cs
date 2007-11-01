@@ -343,8 +343,6 @@ namespace Ruby
             rb_reg_check(caller, re);
 
             string str_for_match = str.value;
-            if (str_for_match.EndsWith("\n"))
-                str_for_match = str_for_match.Remove(str_for_match.Length - 1);
 
             if (reverse)
             {
@@ -632,4 +630,5 @@ namespace Ruby
         public RegExpError(Class klass) : base(klass) { }
     }
 }
+
 
