@@ -19,11 +19,13 @@ namespace Ruby.Methods
     {
         internal static rb_f_srand singleton = new rb_f_srand();
 
+        private static int n = 0;
+
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
             int old = Numeric.seed;
 
-            Numeric.seed = (int)System.DateTime.Now.Ticks;
+            Numeric.seed = (int)System.DateTime.Now.Ticks ^ System.Diagnostics.Process.GetCurrentProcess().Id ^ n++;
             Numeric.random = new System.Random(Numeric.seed);
             
             return old;
