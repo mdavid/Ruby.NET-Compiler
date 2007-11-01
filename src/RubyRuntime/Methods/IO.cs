@@ -1907,11 +1907,11 @@ namespace Ruby.Methods
     }
 
     
-    internal class rb_io_isatty : MethodBody1 // status: done
+    internal class rb_io_isatty : MethodBody0 // status: done
     {
         internal static rb_io_isatty singleton = new rb_io_isatty();
 
-        public override object Call1(Class last_class, object recv, Frame caller, Proc block, object p1)
+        public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
             return !(((IO)recv).f is FileStream);
         }
