@@ -165,7 +165,7 @@ namespace Ruby.Runtime
                      (element[0] == '\"' && element[element.Length - 1] == '\"')))
                     element = element.Substring(1, element.Length - 2);
 
-                if (globbing)
+                if (globbing && args[args.Count - 1] != "-e")
                 {
                     List<string> files = Dir.glob(element);
                     if (files.Count == 0)
