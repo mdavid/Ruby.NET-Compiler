@@ -69,9 +69,6 @@ namespace Ruby
             this.pattern = pattern;
             this._options = options;
 
-            if (string.IsNullOrEmpty(pattern))
-                pattern = ".";
-
             this.value = new System.Text.RegularExpressions.Regex(pattern, IntToOptions(options));
         }
 
@@ -343,6 +340,9 @@ namespace Ruby
             rb_reg_check(caller, re);
 
             string str_for_match = str.value;
+            // Don't match /^$/ =~ "abc\n"
+            if (re.pattern == "^$" && str_for_match.EndsWith("\n"))
+                str_for_match = str_for_match.Remove(str_for_match.Length - 1);
 
             if (reverse)
             {
@@ -358,10 +358,7 @@ namespace Ruby
             }
 
             if (regs.Success)
-                if (re.pattern.Equals(""))
-                    result = regs.Index + regs.Length;
-                else
-                    result = regs.Index;
+                result = regs.Index;
             else
                 result = -1;
 
