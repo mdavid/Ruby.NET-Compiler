@@ -609,10 +609,43 @@ namespace Ruby.Compiler
                 ldsfld(Runtime.Init.rb_cObject);
         }
 
-        internal void last_class(AST.Scope current)
+        internal void LastClass(AST.Scope parent_scope)
         {
-            ldarg("last_class");
+            AST.Scope scope_cnt = parent_scope;
+            AST.DEFS singletonMethod = null;
+
+            while (!(scope_cnt is AST.CLASS_OR_MODULE) && (scope_cnt != null))
+            {
+                if (scope_cnt is AST.DEFS)
+                    singletonMethod = (AST.DEFS)scope_cnt;
+                scope_cnt = scope_cnt.parent_scope;
+            }
+
+            if (scope_cnt == null)
+            {
+                ldsfld(Runtime.Init.rb_cObject);
+                return;
+            }
+
+            AST.CLASS_OR_MODULE parentClass = (AST.CLASS_OR_MODULE)scope_cnt;
+
+            if (singletonMethod != null)
+            {
+                if (singletonMethod.receiver is AST.SELF)
+                {
+                    ldsfld(parentClass.singletonField);
+                    call(Runtime.Class.CLASS_OF);
+                }
+                else
+                {
+                    singletonMethod.receiver.GenCode(this);
+                    call(Runtime.Class.CLASS_OF);
+                }
+            }
+            else
+                ldsfld(parentClass.singletonField);
         }
+
 
         internal static PERWAPI.FieldRef FindParentClassField(System.Type type)
         {

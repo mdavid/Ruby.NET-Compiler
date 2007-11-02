@@ -487,9 +487,10 @@ namespace Ruby.Runtime
 
                     if (caller != null)
                     {
-                        Class[] nesting = caller.nesting();
-                        if (nesting != null && nesting.Length > 0)
-                            outerScope = nesting[0];
+                        //Class[] nesting = caller.nesting();
+                        //if (nesting != null && nesting.Length > 0)
+                        //    outerScope = nesting[0];
+                        outerScope = caller.lastClass();
                     }
 
                     if (!outerScope.is_kind_of(method.definingClass))
@@ -888,6 +889,11 @@ namespace Ruby.Runtime
             public override Class[] nesting()
             {
                 return new Class[0];
+            }
+
+            public override Class lastClass()
+            {
+                return null;
             }
         }
     }

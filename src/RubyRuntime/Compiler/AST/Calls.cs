@@ -506,7 +506,7 @@ namespace Ruby.Compiler.AST
         internal override void GenCall0(CodeGenContext context)
         {
             //Ruby.Eval.CallSuperA(last_class, caller, self, methodId, args);
-            LastClass(context);
+            context.LastClass(parent_scope);
             context.ldloc(0);
             new SELF(location).GenCode(context);
             context.ldstr(ParentMethodName(context));
@@ -520,45 +520,10 @@ namespace Ruby.Compiler.AST
             return "super";
         }
 
-        internal void LastClass(CodeGenContext context)
-        {
-            Scope scope_cnt = parent_scope;
-            DEFS singletonMethod = null;
-
-            while (!(scope_cnt is CLASS_OR_MODULE) && (scope_cnt != null))
-            {
-                if (scope_cnt is DEFS)
-                    singletonMethod = (DEFS)scope_cnt;
-                scope_cnt = scope_cnt.parent_scope;
-            }
-
-            if (scope_cnt == null)
-            {
-                context.last_class(parent_scope);
-                return;
-            }
-
-            CLASS_OR_MODULE parentClass = (CLASS_OR_MODULE)scope_cnt;
-            context.ldsfld(parentClass.singletonField);
-
-            if (singletonMethod != null)
-            {
-                if (singletonMethod.receiver is SELF)
-                    context.call(Runtime.Class.CLASS_OF);
-                else if (singletonMethod.receiver is CONST)
-                {
-                    CONST receiver = (CONST)singletonMethod.receiver;
-                    receiver.GenCode(context);
-                    context.call(Runtime.Class.CLASS_OF);
-                }
-            }
-        }
-
-
         internal override void MethodDefined(CodeGenContext context)
         {
             // Eval.FindSuperMethod(last_class, thisFrame, currentMethod)
-            LastClass(context);
+            context.LastClass(parent_scope);
             context.ldloc(0);
             context.ldstr(ParentMethodName(context));
             context.call(Runtime.Eval.FindSuperMethod);

@@ -54,6 +54,8 @@ namespace Ruby.Runtime
 
         public abstract Class[] nesting();
 
+        public abstract Class lastClass();
+
         private Frame OuterFrame()
         {
             if (current_block != null)

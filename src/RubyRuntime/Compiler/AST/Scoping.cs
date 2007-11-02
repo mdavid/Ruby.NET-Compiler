@@ -206,6 +206,7 @@ namespace Ruby.Compiler.AST
             methodName.Close();
 
             CreateNestingMethod(frame_def, context);
+            CreateLastClassMethod(frame_def, context);
 
             // ------------------ Return to Old Context ----------------------
 
@@ -229,6 +230,18 @@ namespace Ruby.Compiler.AST
             }
         }
 
+        private void CreateLastClassMethod(ClassDef Class, CodeGenContext context)
+        {
+            CodeGenContext lastClass = context.CreateMethod(Class, PERWAPI.MethAttr.PublicVirtual, "lastClass", Runtime.ClassRef);
+            lastClass.startMethod(this.location);
+            int frame = lastClass.CreateLocal("frame", Runtime.FrameRef);
+            lastClass.ldarg(0);
+            lastClass.stloc(frame);
+            lastClass.LastClass(this);
+            lastClass.ret();
+            lastClass.ReleaseLocal(frame, true);
+            lastClass.Close();
+        }
 
         private void CreateNestingMethod(ClassDef Class, CodeGenContext context)
         {
