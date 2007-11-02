@@ -548,8 +548,8 @@ namespace Ruby.Compiler.AST
                 else if (singletonMethod.receiver is CONST)
                 {
                     CONST receiver = (CONST)singletonMethod.receiver;
-                    if (receiver.vid == parentClass.name.vid)
-                        context.call(Runtime.Class.CLASS_OF);
+                    receiver.GenCode(context);
+                    context.call(Runtime.Class.CLASS_OF);
                 }
             }
         }
