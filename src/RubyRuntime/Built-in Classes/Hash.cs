@@ -140,12 +140,26 @@ namespace Ruby
                 this.key = key;
             }
 
+            // rb_any_hash
             public override int GetHashCode()
             {
-                if (key == null || key is Object || key is Basic)
-                    return (int)Eval.CallPrivate(key, null, "hash", null);
+                if (key is int)
+                    return (int)key;
+                else if (key is Symbol)
+                    return (int)((Symbol)key).id_new;
+                else if (key is String)
+                    return ((String)key).value.GetHashCode();
                 else
-                    return key.GetHashCode();
+                {
+                    object hval = Eval.CallPrivate(key, null, "hash", null);
+                    if (!(hval is int))
+                    {
+                        hval = Eval.CallPrivate(hval, null, "%", null, int.MaxValue);
+                        if (!(hval is int))
+                            return hval.GetHashCode();
+                    }
+                    return (int)hval;
+                }
             }
 
             public override bool Equals(object obj)

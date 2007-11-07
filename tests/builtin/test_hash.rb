@@ -13,6 +13,18 @@ class TestHash < Test::Unit::TestCase
     assert_raise(ArgumentError) { @h['a', 'b'] }
   end
 
+  def test_aset
+    assert_nothing_raised { @h[4] = 5 }
+    assert_nothing_raised { @h[:a] = 5 }
+    assert_nothing_raised { @h['a'] = 5 }
+    # The key's hash method must return an object that responds to %,
+    # even if the value returned by that % is not a Fixnum.
+    assert_nothing_raised { @h[BignumHash.new] = 5 }
+    assert_nothing_raised { @h[HasPercentHash.new] = 5 }
+    assert_raise(NoMethodError) { @h[NoPercentHash.new] = 5 }
+    assert_raise(NoMethodError) { @h[NilHash.new] = 5 }
+  end
+
   def test_aset_arity
     # 2
     assert_raise(ArgumentError) { @h.[]= }
@@ -292,9 +304,38 @@ class TestHash < Test::Unit::TestCase
     end
   end
 
+  class BignumHash
+    def hash
+      20 ** 20
+    end
+  end
+
   class HashToHash
     def to_hash
       return {'z'=>'9'}
+    end
+  end
+
+  class HasPercentHash
+    class TruePercent
+      def %(x)
+        true # not Fixnum
+      end
+    end
+    def hash
+      TruePercent.new
+    end
+  end
+
+  class NilHash
+    def hash
+      nil
+    end
+  end
+
+  class NoPercentHash
+    def hash
+      Object.new # does not respond to %
     end
   end
 
@@ -310,7 +351,7 @@ class TestHash < Test::Unit::TestCase
 
   class StringToHash
     def to_hash
-      return 'z'
+      'z'
     end
   end
 
