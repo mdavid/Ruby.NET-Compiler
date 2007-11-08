@@ -530,7 +530,8 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Array ary = new Array((ArrayList)((Array)recv).value.Clone());
+            Array ary = (Array)recv;
+            ary = new Array(ary.my_class, (ArrayList)ary.value.Clone());
             return rb_ary_sort_bang.singleton.Call0(last_class, ary, caller, block);
         }
     }
