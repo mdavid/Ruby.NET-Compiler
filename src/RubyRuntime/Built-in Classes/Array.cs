@@ -363,10 +363,13 @@ namespace Ruby
                 {
                     this.value.Add(null);
                 }
-                if (rpl is Array)
-                    this.value.InsertRange(this.value.Count, (Array)rpl);
-                else
-                    this.value.Insert(beg, rpl);
+                if (rlen > 0)
+                {
+                    if (rpl is Array)
+                        this.value.AddRange(((Array)rpl).value);
+                    else
+                        this.value.Add(rpl);
+                }
             }
             else
             {
@@ -407,10 +410,10 @@ namespace Ruby
                     len = 0;
             }
 
-            if (len == 0) 
-                return new Array();
+            if (len == 0)
+                return new Array(this.my_class);
 
-            return new Array(this.value.GetRange(beg, len));
+            return new Array(this.my_class, this.value.GetRange(beg, len));
         }
 
         internal object rb_ary_entry(int offset)

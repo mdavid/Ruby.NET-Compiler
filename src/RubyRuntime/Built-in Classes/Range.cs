@@ -105,7 +105,7 @@ namespace Ruby
                 if (beg < 0) goto out_of_range;
             }
 
-            if (raiseException)
+            if (trimToMax)
             {
                 if (beg > len) goto out_of_range;
                 if (end > len) end = len;

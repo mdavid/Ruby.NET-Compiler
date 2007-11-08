@@ -99,11 +99,13 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            Array ary = (Array) recv;
-            Array.rb_ary_modify(caller, ary);
-            ary.value.Clear();
-            ary.value.AddRange(Array.ArrayValue(param0, caller));
-            return ary;
+            Array copy = (Array)recv;
+            Array.rb_ary_modify(caller, copy);
+            Array orig = Array.to_ary(param0, caller);
+            if (object.ReferenceEquals(copy, orig)) return copy;
+            copy.value.Clear();
+            copy.value.AddRange(orig.value);
+            return copy;
         }
     }
 
@@ -500,9 +502,9 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Array ary = new Array(((Array)recv).value);
+            Array ary = (Array)recv;
+            ary = new Array(ary.my_class, ary.value);
             rb_ary_reverse_bang.singleton.Call0(last_class, ary, caller, block);
-            
             return ary;
         }
     }
@@ -636,7 +638,8 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Array ary = new Array((Array)recv);
+            Array ary = (Array)recv;
+            ary = new Array(ary.my_class, ary.value);
             rb_ary_flatten_bang.singleton.Call0(last_class, ary, caller, block);
             return ary;
         }
@@ -667,6 +670,7 @@ namespace Ruby.Methods
                     container.Add(o);
                 }
             }
+            memo.RemoveAt(memo.Count - 1);
 
             return mod;
         }
@@ -1247,26 +1251,17 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            ArrayList ary = ((Array)recv).value;
+            ArrayList ary1 = ((Array)recv).value;
             ArrayList ary2 = Array.ArrayValue(param0, caller);
-            ArrayList result = new ArrayList(ary.Count);
+            ArrayList result = new ArrayList(ary1.Count);
             Dictionary set = new Dictionary();
 
-            for (int i = 0; i < ary2.Count; i++)
-            {
-                Dictionary.Key key = new Dictionary.Key(ary2[i]);
-                if (!set.ContainsKey(key))
-                    set.Add(key, null);
-            }
+            foreach (object v in ary2)
+                set[new Dictionary.Key(v)] = null;
 
-            for (int i = 0; i < ary.Count; i++)
-            {
-                Dictionary.Key key = new Dictionary.Key(ary[i]);
-                if (set.ContainsKey(key))
-                {
-                    result.Add(ary[i]);
-                }
-            }
+            foreach (object v in ary1)
+                if (set.Remove(new Dictionary.Key(v)))
+                    result.Add(v);
 
             return Array.CreateUsing(result);
         }
@@ -1932,7 +1927,7 @@ namespace Ruby.Methods
                     throw new TypeError("Symbol as array index").raise(caller);
                 }
                 
-                object result = Range.MapToLength(rest[0], ary.Count, false, false, out beg, out len, caller);
+                object result = Range.MapToLength(rest[0], ary.Count, true, false, out beg, out len, caller);
                 if (result == null || (result is bool && (bool)result == true))
                 {
                     ary.rb_ary_splice(beg, len, rest[1], caller);
