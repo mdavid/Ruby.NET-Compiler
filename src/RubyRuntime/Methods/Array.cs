@@ -1018,7 +1018,7 @@ namespace Ruby.Methods
             for (int i = 0; i < ary.Count; i++)
             {
                 object result = Proc.rb_yield(block, caller, ary[i]);
-                if (result is bool && (bool) result)
+                if (Eval.Test(result))
                 {
                     ary.RemoveAt(i);
                     i--;
