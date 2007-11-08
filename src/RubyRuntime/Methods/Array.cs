@@ -361,6 +361,7 @@ namespace Ruby.Methods
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList optional)
         {
+            if (optional.Length == 0) return recv; // special case
             Array.rb_ary_modify(caller, (Array)recv);
             ((Array)recv).value.InsertRange(0, optional);
             return recv;
