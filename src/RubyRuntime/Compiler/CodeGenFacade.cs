@@ -609,7 +609,7 @@ namespace Ruby.Compiler
                 ldsfld(Runtime.Init.rb_cObject);
         }
 
-        internal void LastClass(AST.Scope parent_scope)
+        internal void LastClass(AST.Scope parent_scope, bool frame)
         {
             AST.Scope scope_cnt = parent_scope;
             AST.DEFS singletonMethod = null;
@@ -638,8 +638,25 @@ namespace Ruby.Compiler
                 }
                 else
                 {
-                    singletonMethod.receiver.GenCode(this);
-                    call(Runtime.Class.CLASS_OF);
+                    if (frame)
+                    {
+                        if (singletonMethod.receiver is AST.IVAR)
+                        {
+                            ldsfld(parentClass.singletonField);
+                            ldstr(((AST.IVAR)singletonMethod.receiver).vid);
+                            call(Runtime.Eval.ivar_get);
+                        }
+                        else
+                        {
+                            singletonMethod.receiver.GenCode(this);
+                            call(Runtime.Class.CLASS_OF);
+                        }
+                    }
+                    else
+                    {
+                        singletonMethod.receiver.GenCode(this);
+                        call(Runtime.Class.CLASS_OF);
+                    }
                 }
             }
             else

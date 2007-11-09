@@ -506,7 +506,7 @@ namespace Ruby.Compiler.AST
         internal override void GenCall0(CodeGenContext context)
         {
             //Ruby.Eval.CallSuperA(last_class, caller, self, methodId, args);
-            context.LastClass(parent_scope);
+            context.LastClass(parent_scope, false);
             context.ldloc(0);
             new SELF(location).GenCode(context);
             context.ldstr(ParentMethodName(context));
@@ -523,7 +523,7 @@ namespace Ruby.Compiler.AST
         internal override void MethodDefined(CodeGenContext context)
         {
             // Eval.FindSuperMethod(last_class, thisFrame, currentMethod)
-            context.LastClass(parent_scope);
+            context.LastClass(parent_scope, false);
             context.ldloc(0);
             context.ldstr(ParentMethodName(context));
             context.call(Runtime.Eval.FindSuperMethod);

@@ -237,7 +237,7 @@ namespace Ruby.Compiler.AST
             int frame = lastClass.CreateLocal("frame", Runtime.FrameRef);
             lastClass.ldarg(0);
             lastClass.stloc(frame);
-            lastClass.LastClass(this);
+            lastClass.LastClass(this, true);
             lastClass.ret();
             lastClass.ReleaseLocal(frame, true);
             lastClass.Close();
