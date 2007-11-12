@@ -309,12 +309,27 @@ namespace Ruby.Compiler.AST
 
         internal override void GenCode0(CodeGenContext context)
         {
+            int receiverLocal = 0;
             // singleton_class(caller, receiver).define_method(...);
             context.newStartPoint(location);
-            context.ldloc(0);
-            receiver.GenCode(context);
+            if (!(receiver is AST.CALL))
+            {
+                context.ldloc(0);
+                receiver.GenCode(context);
+            }
+            else
+            {
+                receiver.GenCode(context);
+                receiverLocal = context.CreateLocal("receiverLocal", PrimitiveType.Object);
+                context.stloc(receiverLocal);
+                context.ldloc(0);
+                context.ldloc(receiverLocal);
+            }
             context.call(Runtime.Class.singleton_class);
             DefineMethod(context);
+
+            if (receiver is AST.CALL)
+                context.ReleaseLocal(receiverLocal, true);
         }
     }
 
