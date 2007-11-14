@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubyRuntime", "RubyRuntime\RubyRuntime.csproj", "{11FC7AC6-E067-48ED-8748-D8CDD7D97713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ruby", "Ruby\Ruby.csproj", "{E86792CA-6A3C-4DF2-82F1-87D9F6086766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubyCompiler", "RubyCompiler\RubyCompiler.csproj", "{36689868-1851-408E-BA21-E8D501A2EC51}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RubyRuntimeInstaller", "RubyRuntimeInstaller\RubyRuntimeInstaller.vdproj", "{62462BAA-6F36-4125-9DDF-EE2497A9919A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11FC7AC6-E067-48ED-8748-D8CDD7D97713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11FC7AC6-E067-48ED-8748-D8CDD7D97713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11FC7AC6-E067-48ED-8748-D8CDD7D97713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11FC7AC6-E067-48ED-8748-D8CDD7D97713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E86792CA-6A3C-4DF2-82F1-87D9F6086766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E86792CA-6A3C-4DF2-82F1-87D9F6086766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E86792CA-6A3C-4DF2-82F1-87D9F6086766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E86792CA-6A3C-4DF2-82F1-87D9F6086766}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36689868-1851-408E-BA21-E8D501A2EC51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36689868-1851-408E-BA21-E8D501A2EC51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36689868-1851-408E-BA21-E8D501A2EC51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36689868-1851-408E-BA21-E8D501A2EC51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62462BAA-6F36-4125-9DDF-EE2497A9919A}.Debug|Any CPU.ActiveCfg = Debug
+		{62462BAA-6F36-4125-9DDF-EE2497A9919A}.Debug|Any CPU.Build.0 = Debug
+		{62462BAA-6F36-4125-9DDF-EE2497A9919A}.Release|Any CPU.ActiveCfg = Release
+		{62462BAA-6F36-4125-9DDF-EE2497A9919A}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

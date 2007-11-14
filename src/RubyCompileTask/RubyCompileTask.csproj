@@ -34,6 +34,10 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
     <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="Ruby.NET.Runtime, Version=0.9.0.0, Culture=neutral, PublicKeyToken=834595ca8023c318, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Ruby.NET.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -42,12 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ruby.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RubyRuntime\RubyRuntime.csproj">
-      <Project>{11FC7AC6-E067-48ED-8748-D8CDD7D97713}</Project>
-      <Name>RubyRuntime</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

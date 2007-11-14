@@ -27,7 +27,7 @@ namespace Ruby.Compiler
         internal static ClassRef ParamArrayAttributeRef = AddClass(System, "System", "ParamArrayAttribute");
         internal static ClassRef RuntimeTypeHandleRef   = AddValueClass(System, "System", "RuntimeTypeHandle");
 
-        internal static AssemblyRef Assembly = AssemblyRef.MakeAssemblyRef("Ruby.NET.Runtime", 0, 8, 2, 0,  new byte[] {0x83, 0x45, 0x95, 0xCA, 0x80, 0x23, 0xC3, 0x18} );
+        internal static AssemblyRef Assembly = AssemblyRef.MakeAssemblyRef("Ruby.NET.Runtime", 0, 9, 0, 0,  new byte[] {0x83, 0x45, 0x95, 0xCA, 0x80, 0x23, 0xC3, 0x18} );
 
         internal static ClassRef ArgListRef             = AddClass(Assembly, "Ruby.Runtime", "ArgList");
         internal static ClassRef ProgramRef             = AddClass(Assembly, "Ruby.Runtime", "Program");
