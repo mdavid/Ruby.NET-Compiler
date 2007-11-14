@@ -1,0 +1,1893 @@
+﻿"DeployProject"
+{
+"VSVersion" = "3:800"
+"ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
+"IsWebType" = "8:FALSE"
+"ProjectName" = "8:RubyRuntimeInstaller"
+"LanguageId" = "3:1033"
+"CodePage" = "3:1252"
+"UILanguageId" = "3:1033"
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
+"SccAuxPath" = "8:"
+"SccProvider" = "8:"
+    "Hierarchy"
+    {
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "OwnerKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_508DC60C90A94C949A9D22EAE0325009"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_95852C74442D43AE8E8A4BD8085B946A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_986F6A8CBFE74C13B38110DFC80BC085"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9C0F8F2658EB45A4B864BB129F89C406"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E962182189BB481DA67321935E14601D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "OwnerKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_19A2B88D5C64413E8AC0568F39BD5FB3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9C0F8F2658EB45A4B864BB129F89C406"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_986F6A8CBFE74C13B38110DFC80BC085"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_47E39699ACDD40EB89CC654C64BD5765"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+    }
+    "Configurations"
+    {
+        "Debug"
+        {
+        "DisplayName" = "8:Debug"
+        "IsDebugOnly" = "11:TRUE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Debug\\RubyRuntimeInstaller.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:FALSE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
+        }
+        "Release"
+        {
+        "DisplayName" = "8:Release"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:TRUE"
+        "OutputFilename" = "8:Release\\RubyInstaller.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
+        }
+    }
+    "Deployable"
+    {
+        "CustomAction"
+        {
+        }
+        "DefaultFeature"
+        {
+        "Name" = "8:DefaultFeature"
+        "Title" = "8:"
+        "Description" = "8:"
+        }
+        "ExternalPersistence"
+        {
+            "LaunchCondition"
+            {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_FFE7AB4145514AB0B647DB3FB5EA6435"
+                {
+                "Name" = "8:.NET Framework"
+                "Message" = "8:[VSDNETMSG]"
+                "Version" = "8:2.0.50727"
+                "AllowLaterVersions" = "11:TRUE"
+                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
+                }
+            }
+        }
+        "File"
+        {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_177BBC055223838AD8739B3B8A143D39"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.ShiftReduceParser, Version=0.9.1.0, Culture=neutral, PublicKeyToken=ffc62d346f572a54, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_177BBC055223838AD8739B3B8A143D39"
+                    {
+                    "Name" = "8:QUT.ShiftReduceParser.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QUT.ShiftReduceParser.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.PERWAPI, Version=1.1.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+                    {
+                    "Name" = "8:QUT.PERWAPI.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QUT.PERWAPI.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_47E39699ACDD40EB89CC654C64BD5765"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.SymbolWriter, Version=0.0.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_47E39699ACDD40EB89CC654C64BD5765"
+                    {
+                    "Name" = "8:QUT.SymbolWriter.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QUT.SymbolWriter.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_508DC60C90A94C949A9D22EAE0325009"
+            {
+            "SourcePath" = "8:Ruby.bmp"
+            "TargetName" = "8:Ruby.bmp"
+            "Tag" = "8:"
+            "Folder" = "8:_58BEBAC282304EF481B4F435EAD2DD26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_95852C74442D43AE8E8A4BD8085B946A"
+            {
+            "SourcePath" = "8:..\\copyright.rtf"
+            "TargetName" = "8:copyright.rtf"
+            "Tag" = "8:"
+            "Folder" = "8:_EA373E613B684126AC45571B30F81EDA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_986F6A8CBFE74C13B38110DFC80BC085"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.SymbolWriter, Version=0.0.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_986F6A8CBFE74C13B38110DFC80BC085"
+                    {
+                    "Name" = "8:QUT.SymbolWriter.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\QUT.SymbolWriter.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FE0D1CCC1BAB4F75A4506ABC096A1464"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9C0F8F2658EB45A4B864BB129F89C406"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.ShiftReduceParser, Version=0.9.1.0, Culture=neutral, PublicKeyToken=ffc62d346f572a54, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_9C0F8F2658EB45A4B864BB129F89C406"
+                    {
+                    "Name" = "8:QUT.ShiftReduceParser.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\QUT.ShiftReduceParser.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FE0D1CCC1BAB4F75A4506ABC096A1464"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BC360B5C8CF74B8696B8B70D7DC5BD95"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.PERWAPI, Version=1.1.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_BC360B5C8CF74B8696B8B70D7DC5BD95"
+                    {
+                    "Name" = "8:QUT.PERWAPI.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\QUT.PERWAPI.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FE0D1CCC1BAB4F75A4506ABC096A1464"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E962182189BB481DA67321935E14601D"
+            {
+            "SourcePath" = "8:..\\..\\bin\\test.rb"
+            "TargetName" = "8:test.rb"
+            "Tag" = "8:"
+            "Folder" = "8:_2C83E4BA2AFC40F3B7FF5CBBF65FADA4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Ruby.NET.Runtime, Version=0.9.0.0, Culture=neutral, PublicKeyToken=834595ca8023c318, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+                    {
+                    "Name" = "8:Ruby.NET.Runtime.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Ruby.NET.Runtime.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6980DD74C8F544EEB2B96BD1440CBB82"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+        }
+        "FileType"
+        {
+        }
+        "Folder"
+        {
+            "{C7E34266-2C30-44B9-A9A3-4E394ABD6E18}:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            {
+            "Name" = "8:#1927"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:GAC"
+                "Folders"
+                {
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_752DD30F064F4375807056B906AE8DCF"
+            {
+            "Name" = "8:#1912"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:VSDIR"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:ProgramFilesFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6DFBD6C0DC6B46D8BBFF6CF4A7F82E40"
+                    {
+                    "Name" = "8:MSBuild"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_A92E67FE50C7400BB04687407431C683"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_6980DD74C8F544EEB2B96BD1440CBB82"
+                            {
+                            "Name" = "8:Ruby.NET"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_535912E94EFF4262A635A379756DDCF6"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            "{994432C3-9487-495D-8656-3E829A8DBDDE}:_7BDAEDDD70844CC4B6D18126C094238C"
+            {
+            "DefaultLocation" = "8:[VSDIR]"
+            "Name" = "8:VisualStudio"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:VSDIR"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:VSDIR"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3F2F773F711D498CAFACBEA93EA1C587"
+                    {
+                    "Name" = "8:ProjectTemplatesExp"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_0D4C6E64F6A8498C80CCAEC65C24F4FA"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_8E991631CE79494DA6328F55CE0C9612"
+                            {
+                            "Name" = "8:Ruby"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_9BB9253F3BC0426AA0209F3AA6DECC92"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4E11A21B695D41ABABB6E4D364F1007F"
+                                    {
+                                    "Name" = "8:Windows"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_CBC21ACB61DF4B3A9E03FDA32098E123"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_690B7237C5DE4E22A9F4931C7995F585"
+                    {
+                    "Name" = "8:ItemTemplatesExp"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E87336DBA1484A4A975B7E434859847D"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_76DA9F80BFDB4FDD94F7650FEACB2ABC"
+                            {
+                            "Name" = "8:Ruby"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_FAFE89E0F3A04D078FE0826037AE2E70"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_EA373E613B684126AC45571B30F81EDA"
+            {
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\Ruby.NET 0.9.0"
+            "Name" = "8:#1925"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:TARGETDIR"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2C83E4BA2AFC40F3B7FF5CBBF65FADA4"
+                    {
+                    "Name" = "8:bin"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E646D925DFF9478C80FBBF9351A138F2"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_58BEBAC282304EF481B4F435EAD2DD26"
+                    {
+                    "Name" = "8:images"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_74BAD6C3A2B649CEBA14796279F47B14"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_FE0D1CCC1BAB4F75A4506ABC096A1464"
+                    {
+                    "Name" = "8:dlls"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:VSIP"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_71DC24DEC43545D58BBD13020FC64D37"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_FBA27F1F528F45FC834AC8220622902E"
+            {
+            "Name" = "8:#1919"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:ProgramMenuFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2AFE234B331F407AA009493DB7B70C61"
+                    {
+                    "Name" = "8:Ruby.NET"
+                    "AlwaysCreate" = "11:TRUE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_F067C3A027C54CB18382563CEA6AA5DF"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
+        }
+        "LaunchCondition"
+        {
+        }
+        "Locator"
+        {
+        }
+        "MsiBootstrapper"
+        {
+        "LangId" = "3:1033"
+        }
+        "Product"
+        {
+        "Name" = "8:Microsoft Visual Studio"
+        "ProductName" = "8:Ruby.NET Runtime 0.9.0"
+        "ProductCode" = "8:{D279132D-C216-4FD5-91B3-0F3AE61F03B6}"
+        "PackageCode" = "8:{406B357F-8B39-4CED-9AD5-42A901C07CE7}"
+        "UpgradeCode" = "8:{DF643FE4-6207-4A5C-9E1A-9790EA14B4C6}"
+        "RestartWWWService" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
+        "DetectNewerInstalledVersion" = "11:FALSE"
+        "InstallAllUsers" = "11:FALSE"
+        "ProductVersion" = "8:0.9.0"
+        "Manufacturer" = "8:Ruby.NET open source community"
+        "ARPHELPTELEPHONE" = "8:"
+        "ARPHELPLINK" = "8:"
+        "Title" = "8:Ruby.NET Runtime"
+        "Subject" = "8:"
+        "ARPCONTACT" = "8:"
+        "Keywords" = "8:"
+        "ARPCOMMENTS" = "8:Ruby.NET Runtime"
+        "ARPURLINFOABOUT" = "8:"
+        "ARPPRODUCTICON" = "8:"
+        "ARPIconIndex" = "3:0"
+        "SearchPath" = "8:"
+        "UseSystemSearchPath" = "11:TRUE"
+        "TargetPlatform" = "3:0"
+        "PreBuildEvent" = "8:"
+        "PostBuildEvent" = "8:"
+        "RunPostBuildEvent" = "3:0"
+        }
+        "Registry"
+        {
+            "HKLM"
+            {
+                "Keys"
+                {
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5DA19EBA96E24AC297BB70EF7938BAA6"
+                    {
+                    "Name" = "8:Software"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_8B1D678E6C0047E4AC0699969D1EA177"
+                            {
+                            "Name" = "8:[Manufacturer]"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                        }
+                    }
+                }
+            }
+            "HKCU"
+            {
+                "Keys"
+                {
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_1B21DEE6468F48069BA4636A6C5CCACF"
+                    {
+                    "Name" = "8:Software"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2C2E26DA462A41D78CEC149D5A307533"
+                            {
+                            "Name" = "8:[Manufacturer]"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                        }
+                    }
+                }
+            }
+            "HKCR"
+            {
+                "Keys"
+                {
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_3F3552EE6526451B8D129F8D36CB1DB1"
+                    {
+                    "Name" = "8:Ruby.NET.rbproj0.7"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_1E2F9E8BB0AA419AA824EE05A0B6EED4"
+                            {
+                            "Name" = "8:Shell"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_3CB574D2073E45EEBFB960376DD97B0E"
+                                    {
+                                    "Name" = "8:Open"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_31BB9C3D45C3475F9EE852BE565D7904"
+                                            {
+                                            "Name" = "8:Command"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                }
+                                                "Values"
+                                                {
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_CE5AE3542C144FBF979D3ACB71A812B5"
+                                                    {
+                                                    "Name" = "8:"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_25CEE26616C34F71B5ABF5677D76335E"
+                            {
+                            "Name" = "8:DefaultIcon"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_87602C629BC449B8A479B281AFE6D21C"
+                                    {
+                                    "Name" = "8:"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:[VSDIR]\\devenv.exe,0"
+                                    }
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_992142B84F894A0B8A04FF9F0437F79D"
+                            {
+                            "Name" = "8:"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:Ruby.NET Project file"
+                            }
+                        }
+                    }
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4D5B190CF3FF493AA698921EE7C84CD6"
+                    {
+                    "Name" = "8:.rbproj"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4738083302D04FD99EAC278FF933E0E0"
+                            {
+                            "Name" = "8:OpenWithProgids"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_669CE5931772411A90BF115C5C124F6A"
+                                    {
+                                    "Name" = "8:Ruby.NET.rbproj0.7"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:"
+                                    }
+                                }
+                            }
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7D587FAB7EF84B87BC0FD9C3F99123E8"
+                            {
+                            "Name" = "8:OpenWithList"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_561A12EF7DB74789B2CA679F90C5F564"
+                                    {
+                                    "Name" = "8:VisualStudioExp"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_1DEF461FA9EB41B0AD1DE285871FC5E7"
+                                            {
+                                            "Name" = "8:"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:"
+                                            }
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_A9EF88E6456040179BD8B72242517B49"
+                            {
+                            "Name" = "8:"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:Ruby.NET.rbproj0.7"
+                            }
+                        }
+                    }
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_796DEE6D0AD94604BA5F60AB5F1A62E8"
+                    {
+                    "Name" = "8:Ruby.NET.rb0.7"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_59B7945559E84935AC198DF844D5ABF0"
+                            {
+                            "Name" = "8:DefaultIcon"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_4BF07A92942C4F6DA47D4457A4B3DD5C"
+                                    {
+                                    "Name" = "8:"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:[TARGETDIR]\\images\\Class.ico,0"
+                                    }
+                                }
+                            }
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_EDA5CCFC2D054BAA9E9C456B0840CE21"
+                            {
+                            "Name" = "8:Shell"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B41AEF3EB89E40F1BF87332BDC968DF9"
+                                    {
+                                    "Name" = "8:Run"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A300CF23A8DA4080A0F0B695F2D86DCA"
+                                            {
+                                            "Name" = "8:Command"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                }
+                                                "Values"
+                                                {
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_48C535A8788A45A987405C869CC40382"
+                                                    {
+                                                    "Name" = "8:"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:\"[TARGETDIR]\\bin\\Ruby.exe\" \"%1\""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D93AA62FCCA5427FB138254335EF0AF8"
+                                    {
+                                    "Name" = "8:Play"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_FDB3DAEEE8D74AE5B8A13088CEF3393A"
+                                            {
+                                            "Name" = "8:Command"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                }
+                                                "Values"
+                                                {
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_A20F69BA4C884E0CB1E91F2B3EDF626F"
+                                                    {
+                                                    "Name" = "8:"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:\"[TARGETDIR]\\bin\\Ruby.exe\" \"%1\""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E4487954B1E44B3F9E236F38A5C771BE"
+                                    {
+                                    "Name" = "8:Open"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A31ECA9834B94013A779DC64AA9C775C"
+                                            {
+                                            "Name" = "8:Command"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                }
+                                                "Values"
+                                                {
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6A27AE38871D4F6FA2A4AA3B8DA459F2"
+                                                    {
+                                                    "Name" = "8:"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_232D0E628D6A44A1B9C8CC21589A8380"
+                            {
+                            "Name" = "8:"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:Ruby source file"
+                            }
+                        }
+                    }
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7B339EC065D54B17AB304F4F972BE561"
+                    {
+                    "Name" = "8:Applications"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_570CA757237E488CA7F4891F0F511F1A"
+                            {
+                            "Name" = "8:VisualStudioExp"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_893268933CE14EAD8255FEA0066052E7"
+                                    {
+                                    "Name" = "8:Shell"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B5C24989ABAC43B5902AA7194FA1C5EB"
+                                            {
+                                            "Name" = "8:Open"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_21976F3D2DF6460C9CD639AB3C81E72F"
+                                                    {
+                                                    "Name" = "8:Command"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                        }
+                                                        "Values"
+                                                        {
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6EB176B30075473CB93F6C904A5CC883"
+                                                            {
+                                                            "Name" = "8:"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "ValueTypes" = "3:1"
+                                                            "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                "Values"
+                                                {
+                                                }
+                                            }
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E2C01B8803784B9A9BD87F0C2DCF09E4"
+                                            {
+                                            "Name" = "8:Edit"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_F4774259D00B4008891644D92F904005"
+                                                    {
+                                                    "Name" = "8:Command"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                        }
+                                                        "Values"
+                                                        {
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_C079052AB4E64096ACC6ED154D1FCF91"
+                                                            {
+                                                            "Name" = "8:"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "ValueTypes" = "3:1"
+                                                            "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                "Values"
+                                                {
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                        }
+                    }
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_954A8620EB614EFB9767FFF978DAF24F"
+                    {
+                    "Name" = "8:.rb"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "DeleteAtUninstall" = "11:FALSE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_479C1EA3697F45CFB7B06A6B1D7E8CBB"
+                            {
+                            "Name" = "8:OpenWithList"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7609841CBE194BB8A56C3F0C8BF68180"
+                                    {
+                                    "Name" = "8:VisualStudioExp"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_51BD626818A24813BF819B82DA1BBFA2"
+                                            {
+                                            "Name" = "8:"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:"
+                                            }
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B056D26F6FFE49AB8E26A6872C318880"
+                            {
+                            "Name" = "8:OpenWithProgids"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                }
+                                "Values"
+                                {
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5535B5458DF54E0381D874EEE3E12F7F"
+                                    {
+                                    "Name" = "8:Ruby.NET.rb0.7"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:"
+                                    }
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_EEA74A9535BA4F3188F51DA94CAF551B"
+                                    {
+                                    "Name" = "8:VisualStudioExp"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:"
+                                    }
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_77A3B400A99E46CE9802B419CAD1A39B"
+                            {
+                            "Name" = "8:"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:Ruby.NET.rb0.7"
+                            }
+                        }
+                    }
+                }
+            }
+            "HKU"
+            {
+                "Keys"
+                {
+                }
+            }
+            "HKPU"
+            {
+                "Keys"
+                {
+                }
+            }
+        }
+        "Sequences"
+        {
+        }
+        "Shortcut"
+        {
+        }
+        "UserInterface"
+        {
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_630C7555191C488BAD112E3BC8AA74B7"
+            {
+            "Name" = "8:#1902"
+            "Sequence" = "3:2"
+            "Attributes" = "3:3"
+                "Dialogs"
+                {
+                }
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_70EF14C0476C44F4B505C474ED82C0A3"
+            {
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_87CF151E9110498DB25803ACCE3DF842"
+            {
+            "Name" = "8:#1901"
+            "Sequence" = "3:1"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_70E54D015A7F442AB07F1F0221A01FFC"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Progress"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ShowProgress"
+                            {
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_8CAC498FC8554641B2803277726997EE"
+            {
+            "Name" = "8:#1900"
+            "Sequence" = "3:1"
+            "Attributes" = "3:1"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1BD4C549CF934254AE2808E0543F4394"
+                    {
+                    "Sequence" = "3:400"
+                    "DisplayName" = "8:Confirm Installation"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_94909AF0EBBA4FD4853F98EAC8DB1497"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Welcome"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdWelcomeDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "CopyrightWarning"
+                            {
+                            "Name" = "8:CopyrightWarning"
+                            "DisplayName" = "8:#1002"
+                            "Description" = "8:#1102"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
+                            "DefaultValue" = "8:#1202"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Welcome"
+                            {
+                            "Name" = "8:Welcome"
+                            "DisplayName" = "8:#1003"
+                            "Description" = "8:#1103"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:1"
+                            "Value" = "8:#1203"
+                            "DefaultValue" = "8:#1203"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_CF340BBA97534ACB9C38FCB465857D22"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:Installation Folder"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "InstallAllUsersVisible"
+                            {
+                            "Name" = "8:InstallAllUsersVisible"
+                            "DisplayName" = "8:#1059"
+                            "Description" = "8:#1159"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_EABDBDA163774111A68F5FE75EB35445"
+                    {
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:License Agreement"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdLicenseDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "EulaText"
+                            {
+                            "Name" = "8:EulaText"
+                            "DisplayName" = "8:#1008"
+                            "Description" = "8:#1108"
+                            "Type" = "3:6"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:_95852C74442D43AE8E8A4BD8085B946A"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Sunken"
+                            {
+                            "Name" = "8:Sunken"
+                            "DisplayName" = "8:#1007"
+                            "Description" = "8:#1107"
+                            "Type" = "3:5"
+                            "ContextData" = "8:4;True=4;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:4"
+                            "DefaultValue" = "3:4"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_94F5C3E0E2F54BEC8810960E59F8B485"
+            {
+            "Name" = "8:#1900"
+            "Sequence" = "3:2"
+            "Attributes" = "3:1"
+                "Dialogs"
+                {
+                }
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_996F075356864F96B1DDCCA9FC780ECE"
+            {
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_AC8409ACC6A74DEBB254E3C89F65ADFD"
+            {
+            "Name" = "8:#1901"
+            "Sequence" = "3:2"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                }
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_B82AEB210A1241FABF940885EEC1A06F"
+            {
+            "Name" = "8:#1902"
+            "Sequence" = "3:1"
+            "Attributes" = "3:3"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_6B349FF0BBED4442BA0ABB3474AF9413"
+                    {
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:Finished"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_508DC60C90A94C949A9D22EAE0325009"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "UpdateText"
+                            {
+                            "Name" = "8:UpdateText"
+                            "DisplayName" = "8:#1058"
+                            "Description" = "8:#1158"
+                            "Type" = "3:15"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:1"
+                            "Value" = "8:#1258"
+                            "DefaultValue" = "8:#1258"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        "MergeModule"
+        {
+        }
+        "ProjectOutput"
+        {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_19A2B88D5C64413E8AC0568F39BD5FB3"
+            {
+            "SourcePath" = "8:..\\Ruby\\obj\\Debug\\Ruby.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_2C83E4BA2AFC40F3B7FF5CBBF65FADA4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{E86792CA-6A3C-4DF2-82F1-87D9F6086766}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_57298712C81C4720860DD9994612C07A"
+            {
+            "SourcePath" = "8:..\\RubyCompiler\\obj\\Debug\\RubyCompiler.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_2C83E4BA2AFC40F3B7FF5CBBF65FADA4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{36689868-1851-408E-BA21-E8D501A2EC51}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
+            {
+            "SourcePath" = "8:..\\RubyRuntime\\obj\\Debug\\Ruby.NET.Runtime.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{11FC7AC6-E067-48ED-8748-D8CDD7D97713}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F3E7EE189C5640F992A88CFC8B581070"
+            {
+            "SourcePath" = "8:..\\RubyRuntime\\obj\\Debug\\Ruby.NET.Runtime.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FE0D1CCC1BAB4F75A4506ABC096A1464"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{11FC7AC6-E067-48ED-8748-D8CDD7D97713}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+        }
+        "VJSharpPlugin"
+        {
+        }
+    }
+}
