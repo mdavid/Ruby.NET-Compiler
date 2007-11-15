@@ -15,24 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1ED4EBBF83F84ADFA409DE6C352400EA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -45,20 +27,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
-        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "MsmKey" = "8:_36145F0E4596952F61ECAF1172248C5C"
         "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmKey" = "8:_36145F0E4596952F61ECAF1172248C5C"
+        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_36145F0E4596952F61ECAF1172248C5C"
+        "OwnerKey" = "8:_CD487356529EC57AD9BBD7E0A6A1CF83"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -388,7 +370,7 @@
         "Entry"
         {
         "MsmKey" = "8:_9E3FB10C1801F7AAA02248256B7BB0A2"
-        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
+        "OwnerKey" = "8:_36145F0E4596952F61ECAF1172248C5C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -400,13 +382,13 @@
         "Entry"
         {
         "MsmKey" = "8:_9E3FB10C1801F7AAA02248256B7BB0A2"
-        "OwnerKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_9E3FB10C1801F7AAA02248256B7BB0A2"
-        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
+        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -419,6 +401,24 @@
         {
         "MsmKey" = "8:_C77A3D15AEB0B14768BEE11C5E8DEA0F"
         "OwnerKey" = "8:_8BF4CF82586EF42A0C65B4F41580F231"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C9A5EF5476BE324F34BB6D5BD5BB9007"
+        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C9A5EF5476BE324F34BB6D5BD5BB9007"
+        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C9A5EF5476BE324F34BB6D5BD5BB9007"
+        "OwnerKey" = "8:_CD487356529EC57AD9BBD7E0A6A1CF83"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -437,6 +437,18 @@
         {
         "MsmKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CD487356529EC57AD9BBD7E0A6A1CF83"
+        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CD487356529EC57AD9BBD7E0A6A1CF83"
+        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -489,18 +501,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "OwnerKey" = "8:_CB7617E38E9A49A786A5730CB7EE8D25"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_FFFB296108A41B9E70B67DF455B67C4D"
         "OwnerKey" = "8:_92C320AE423644A297692EF692439488"
         "MsmSig" = "8:_UNDEFINED"
@@ -509,12 +509,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9E3FB10C1801F7AAA02248256B7BB0A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -563,6 +557,30 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_FFFB296108A41B9E70B67DF455B67C4D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_CD487356529EC57AD9BBD7E0A6A1CF83"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C9A5EF5476BE324F34BB6D5BD5BB9007"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_36145F0E4596952F61ECAF1172248C5C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9E3FB10C1801F7AAA02248256B7BB0A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -637,24 +655,6 @@
         "OwnerKey" = "8:_5DB418323214ED7CF9FE9F6C889A4A80"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -663,7 +663,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\RubyVSIntegrationInstaller.msi"
+        "OutputFilename" = "8:Debug\\VSRuby.NET-0.9.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -754,37 +754,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_177BBC055223838AD8739B3B8A143D39"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QUT.ShiftReduceParser, Version=0.9.1.0, Culture=neutral, PublicKeyToken=ffc62d346f572a54, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_177BBC055223838AD8739B3B8A143D39"
-                    {
-                    "Name" = "8:QUT.ShiftReduceParser.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:QUT.ShiftReduceParser.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1ED4EBBF83F84ADFA409DE6C352400EA"
             {
             "SourcePath" = "8:..\\RubyCompileTask\\Ruby.targets"
@@ -825,14 +794,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_36145F0E4596952F61ECAF1172248C5C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:QUT.PERWAPI, Version=1.1.0.0, Culture=neutral, PublicKeyToken=8b16d9e060688056, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+                    "_36145F0E4596952F61ECAF1172248C5C"
                     {
                     "Name" = "8:QUT.PERWAPI.dll"
                     "Attributes" = "3:512"
@@ -1592,6 +1561,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C9A5EF5476BE324F34BB6D5BD5BB9007"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QUT.ShiftReduceParser, Version=0.9.1.0, Culture=neutral, PublicKeyToken=ffc62d346f572a54, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C9A5EF5476BE324F34BB6D5BD5BB9007"
+                    {
+                    "Name" = "8:QUT.ShiftReduceParser.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QUT.ShiftReduceParser.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6F4AB28CB9694CEAB9AE8AA446676C1C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB1D4E9FF6E2452BB9077596A342EB74"
             {
             "SourcePath" = "8:..\\VisualStudioPackage\\Project\\Templates\\ProjectItems\\Class\\Class.ico"
@@ -1610,6 +1610,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CD487356529EC57AD9BBD7E0A6A1CF83"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Ruby.NET.Runtime, Version=0.9.0.0, Culture=neutral, PublicKeyToken=834595ca8023c318, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CD487356529EC57AD9BBD7E0A6A1CF83"
+                    {
+                    "Name" = "8:Ruby.NET.Runtime.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Ruby.NET.Runtime.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6980DD74C8F544EEB2B96BD1440CBB82"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D2D46E2F49AE92485B9F3715B87E1EAD"
@@ -1691,37 +1722,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Ruby.NET.Runtime, Version=0.9.0.0, Culture=neutral, PublicKeyToken=834595ca8023c318, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-                    {
-                    "Name" = "8:Ruby.NET.Runtime.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Ruby.NET.Runtime.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_6980DD74C8F544EEB2B96BD1440CBB82"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
