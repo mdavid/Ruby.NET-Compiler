@@ -48,53 +48,28 @@ namespace Ruby.Compiler.AST
             return false;
         }
 
-        internal static bool RedefineConstructor(PERWAPI.MethodDef ctor, PERWAPI.Class perwapiClass, int arity)
+        internal static bool RedefineConstructor(PERWAPI.MethodDef ctor, PERWAPI.Class perwapiClass)
         {
             PERWAPI.CILInstruction[] ctorInstructions = ctor.GetCodeBuffer().GetInstructions();
 
             // try and find a constructor in the base class
             PERWAPI.Method superClassConstructor = null;
-            if (arity == 0)
-                superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
-            
-            if (superClassConstructor == null)
-            {
-                PERWAPI.Method[] constructors = perwapiClass.GetMethodDescs(".ctor");
-                foreach (PERWAPI.Method constructor in constructors)
-                {
-                    if (constructor.GetParTypes().Length == 1 && constructor.GetParTypes()[0].TypeName().Contains("Class"))
-                        superClassConstructor = constructor;
-                }
-                //superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
-                if (superClassConstructor == null)
-                {
-                    // don't use zero-arg constructor for built-in Ruby classes if we need a constructor that
-                    // takes a Ruby.Class
-                    if (perwapiClass.NameSpace() == "Ruby")
-                        return false;
-
-                    superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
-                    arity = 0;
-                }
-            }
-
-            if (superClassConstructor == null)
-                return false;
 
             for (int i = 0; i < ctorInstructions.Length; i++)
             {
                 if (ctorInstructions[i] is PERWAPI.MethInstr)
                 {
                     PERWAPI.MethInstr inst = (PERWAPI.MethInstr)(ctorInstructions[i]);
-                    if (inst.GetMethod().Name() == ".ctor")
+                    PERWAPI.Method calledCtor = inst.GetMethod();
+                    if (calledCtor.Name() == ".ctor")
                     {
-                        int pos = i;
-                        if (arity == 0)
-                        {
-                            ctor.GetCodeBuffer().RemoveInstruction(i - 1);
-                            pos = i - 1;
-                        }
-                        ctor.GetCodeBuffer().ReplaceInstruction(pos);
+                        PERWAPI.Type[] calledCtorParams = calledCtor.GetParTypes();
+                        superClassConstructor = perwapiClass.GetMethodDesc(".ctor", calledCtorParams);
+
+                        if (superClassConstructor == null)
+                            return false;
+
+                        ctor.GetCodeBuffer().ReplaceInstruction(i);
                         ctor.GetCodeBuffer().MethInst(MethodOp.call, superClassConstructor);
                         ctor.GetCodeBuffer().EndInsert();
                         return true;
@@ -104,6 +79,7 @@ namespace Ruby.Compiler.AST
 
             return false;
         }
+
 
         internal static void SuperclassPostPass(CodeGenContext context, List<PERWAPI.ReferenceScope> peFiles)
         {
@@ -120,20 +96,13 @@ namespace Ruby.Compiler.AST
 
                     postPass.subClassDef.SuperType = perwapiClassRef;
                     // redefine the constructor
-                    PERWAPI.MethodDef ctor = postPass.subClassDef.GetMethod(".ctor", new Type[0]);
-                    if (!RedefineConstructor(ctor, perwapiClass, 0))
+                    PERWAPI.MethodDef[] ctors = postPass.subClassDef.GetMethods(".ctor");
+
+                    foreach (PERWAPI.MethodDef ctor in ctors)
                     {
-                        Compiler.InteropWarning("No zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
-                        context.Assembly.RemoveClass(postPass.subClassDef);
-                        RemoveAllocatorDefinition(postPass.subClass);
-                        context.Assembly.RemoveClass(postPass.subClass.allocator);
-                    }
-                    else
-                    {
-                        ctor = postPass.subClassDef.GetMethod(".ctor", new Type[] { Runtime.ClassRef });
-                        if (!RedefineConstructor(ctor, perwapiClass, 1))
+                        if (!RedefineConstructor(ctor, perwapiClass))
                         {
-                            Compiler.InteropWarning("No zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                            Compiler.InteropWarning("No " + ctor.GetParTypes().Length + "-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                             context.Assembly.RemoveClass(postPass.subClassDef);
                             RemoveAllocatorDefinition(postPass.subClass);
                             context.Assembly.RemoveClass(postPass.subClass.allocator);

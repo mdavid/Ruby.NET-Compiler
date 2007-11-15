@@ -110,7 +110,10 @@ namespace Ruby.Compiler.AST
                 string methodName = Translate(this.method_id);
                 if (CLASS_OR_MODULE.CurrentInteropClass().GetMethod(methodName) != null)
                     CLASS_OR_MODULE.CurrentInteropClass().RemoveMethod(methodName);
-                AddInteropMethod(context);
+                if (methodName == "initialize")
+                    AddInteropConstructor(context);
+                else
+                    AddInteropMethod(context);
             }
         }
 
@@ -178,6 +181,93 @@ namespace Ruby.Compiler.AST
             catch (PERWAPI.DescriptorException e)
             {
                 Compiler.LogWarning(e.Message);
+            }
+        }
+
+        private void AddInteropConstructor(CodeGenContext context)
+        {
+            List<Param> args = new List<Param>();
+            if (formals.arity < 0)
+            {
+                Param param = new Param(ParamAttr.Default, "args", new PERWAPI.ZeroBasedArray(PERWAPI.PrimitiveType.Object));
+                param.AddCustomAttribute(Runtime.ParamArrayAttribute.ctor, new byte[0]);
+                args.Add(param);
+            }
+            else
+                for (int i = 1; i <= this.formals.arity; i++)
+                    args.Add(new Param(ParamAttr.Default, "p" + i, PrimitiveType.Object));
+
+            // public .ctor(...) {
+
+            try
+            {
+                // remove existing zero-arg constructor if it exists
+                if (formals.arity == 0 && CLASS_OR_MODULE.CurrentInteropClass().GetMethodDesc(".ctor", new Type[0]) != null)
+                    CLASS_OR_MODULE.CurrentInteropClass().RemoveMethod(".ctor", new Type[0]);
+
+                CodeGenContext method = context.CreateConstructor(CLASS_OR_MODULE.CurrentInteropClass(), args.ToArray());
+
+                method.startMethod(this.location);
+
+                // call base class constructor
+
+                PERWAPI.Method superClassConstructor0 = null;
+                PERWAPI.Method superClassConstructor1 = null;
+                PERWAPI.Class superClass = null;
+
+                ClassSkeleton superClassSkeleton = context.currentSkeleton.FindClass(CLASS_OR_MODULE.CurrentInteropClass().SuperType.Name());
+                if (superClassSkeleton != null)
+                {
+                    superClass = superClassSkeleton.perwapiClass;
+                    superClassConstructor0 = superClass.GetMethodDesc(".ctor", new Type[0]);
+
+                    if (superClassConstructor0 is MethodDef)
+                        superClassConstructor0 = ((MethodDef)superClassConstructor0).MakeRefOf();
+
+                    superClassConstructor1 = superClass.GetMethodDesc(".ctor", new Type[] { Runtime.ClassRef });
+
+                    if (superClassConstructor1 is MethodDef)
+                        superClassConstructor1 = ((MethodDef)superClassConstructor1).MakeRefOf();
+                }
+
+                if (superClassConstructor1 != null)
+                {
+                    method.ldarg(0);
+                    method.ldsfld(((CLASS_OR_MODULE)this.parent_scope).singletonField);
+                    method.call(superClassConstructor1);
+                }
+                else if (superClassConstructor0 != null)
+                {
+                    method.ldarg(0);
+                    method.call(superClassConstructor0);
+                }
+
+                //    return Eval.CallPrivateN(recv, null, "methodId", null, ...);
+                method.ldarg(0);
+                method.ldnull();
+                method.ldstr(method_id);
+                method.ldnull();
+
+                if (formals.arity < 0)
+                {
+                    method.ldarg(1);
+                    method.call(Runtime.Eval.Call("Private"));
+                }
+                else
+                {
+                    for (int i = 1; i <= args.Count; i++)
+                        method.ldarg(i);
+                    method.call(Runtime.Eval.Call("Private", args.Count));
+                }
+
+                method.pop();
+
+                method.ret();
+
+                method.Close();
+            }
+            catch (PERWAPI.DescriptorException e)
+            {
             }
         }
 

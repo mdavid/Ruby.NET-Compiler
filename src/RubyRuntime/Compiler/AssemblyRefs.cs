@@ -272,6 +272,16 @@ namespace Ruby.Compiler
             internal static FieldRef ruby_errinfo = AddField(EvalRef, "ruby_errinfo", errinfo_globalRef);
 
 
+            internal static MethodRef Call(string protection)
+            {
+                MethodRef method = EvalRef.GetMethod("Call" + protection);
+
+                if (method != null)
+                    return method;
+                else
+                    return AddStaticMethod(EvalRef, "Call" + protection, PrimitiveType.Object, new Type[] { PrimitiveType.Object, PrimitiveType.String, new PERWAPI.ZeroBasedArray(PrimitiveType.Object)});
+            }
+
             internal static MethodRef Call(string protection, int n)
             {
                 MethodRef method = EvalRef.GetMethod("Call" + protection + n);
