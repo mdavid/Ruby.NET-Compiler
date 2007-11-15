@@ -65,11 +65,26 @@ namespace Ruby.Compiler.AST
                     {
                         PERWAPI.Type[] calledCtorParams = calledCtor.GetParTypes();
                         superClassConstructor = perwapiClass.GetMethodDesc(".ctor", calledCtorParams);
+                        int pos = i;
 
                         if (superClassConstructor == null)
-                            return false;
+                        {
+                            superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
 
-                        ctor.GetCodeBuffer().ReplaceInstruction(i);
+                            if (superClassConstructor == null)
+                                return false;
+
+                            if (calledCtorParams.Length > 0)
+                            {
+                                for (int j = 0; j < calledCtorParams.Length; j++)
+                                {
+                                    ctor.GetCodeBuffer().RemoveInstruction(pos - 1);
+                                    pos--;
+                                }
+                            }
+                        }
+
+                        ctor.GetCodeBuffer().ReplaceInstruction(pos);
                         ctor.GetCodeBuffer().MethInst(MethodOp.call, superClassConstructor);
                         ctor.GetCodeBuffer().EndInsert();
                         return true;
@@ -97,12 +112,12 @@ namespace Ruby.Compiler.AST
                     postPass.subClassDef.SuperType = perwapiClassRef;
                     // redefine the constructor
                     PERWAPI.MethodDef[] ctors = postPass.subClassDef.GetMethods(".ctor");
-
+                    
                     foreach (PERWAPI.MethodDef ctor in ctors)
                     {
                         if (!RedefineConstructor(ctor, perwapiClass))
                         {
-                            Compiler.InteropWarning("No " + ctor.GetParTypes().Length + "-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
+                            Compiler.InteropWarning("No zero-arg constructor found for " + perwapiClass.Name() + ", no interop class generated for " + postPass.subClassDef.Name());
                             context.Assembly.RemoveClass(postPass.subClassDef);
                             RemoveAllocatorDefinition(postPass.subClass);
                             context.Assembly.RemoveClass(postPass.subClass.allocator);
