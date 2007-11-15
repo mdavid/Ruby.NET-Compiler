@@ -148,7 +148,10 @@ class TestHash < Test::Unit::TestCase
     assert_raise(ArgumentError) { h.fetch(1, 3, 5) {} }
 
     # TODO: Check that this produces warning.
+    old_w = $-w
+    $-w = nil  # Suppress warning.
     assert_nothing_raised { h.fetch(1, 3) {} }
+    $-w = old_w
   end
 
   def test_initialize_arity
@@ -178,10 +181,17 @@ class TestHash < Test::Unit::TestCase
     assert_raise(RuntimeError)  { @h.select {|k, v| @h.rehash } }
 
     h1 = {}
-    h1[1] = RehashingObject.new(h1)
-    h2 = {}
-    h2[1] = RehashingObject.new(h2)
+    # The iteration terminates on the first non-match, so we test that with
+    # retval=false.
+    h1[1] = RehashingObject.new(h1, false)
+    h2 = {1 => 2}
     assert_raise(RuntimeError) { h1 == h2 }
+    # Only the LHS has this check.
+    # FIXME: If RHS is not a Hash but responds to to_hash, the order would be
+    # reversed.
+    assert_nothing_raised { h2 == h1 }
+    # Does not affect comparing the same object.
+    assert_nothing_raised { h1 == h1 }
 
     assert_raise(RuntimeError) { h1.index(RehashingObject.new(h1)) }
     assert_raise(RuntimeError) { h1.has_value?(RehashingObject.new(h1)) }
@@ -340,12 +350,13 @@ class TestHash < Test::Unit::TestCase
   end
 
   class RehashingObject
-    def initialize(hash)
+    def initialize(hash, retval=true)
       @hash = hash
+      @retval = retval
     end
     def ==(other)
       @hash.rehash
-      true
+      @retval
     end
   end
 

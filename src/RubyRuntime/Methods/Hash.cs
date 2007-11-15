@@ -34,7 +34,7 @@ namespace Ruby.Methods
             }
 
             if (rest.Count % 2 != 0)
-                return new ArgumentError("odd number of arguments for Hash").raise(caller);
+                throw new ArgumentError("odd number of arguments for Hash").raise(caller);
 
             hash = new Hash((Class)recv);
             for (int i = 0; i < rest.Count; i += 2)
@@ -62,8 +62,11 @@ namespace Ruby.Methods
                     throw new ArgumentError("wrong number of arguments").raise(caller);
                 hash.defaultProc = block;
             }
-            else if (args.Count > 0)
-                hash.defaultValue = args[0];
+            else
+            {
+                if (Class.rb_scan_args(caller, args, 0, 1, false) > 0)
+                    hash.defaultValue = args[0];
+            }
 
             return hash;
         }
@@ -136,9 +139,17 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            foreach (object value in ((Hash)recv).value.Values)
-                if (Object.Equal(param0, value, caller))
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+
+            foreach (object value in dict.Values)
+            {
+                bool equal = Object.Equal(param0, value, caller);
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+                if (equal)
                     return true;
+            }
 
             return false;
         }
@@ -282,11 +293,18 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+
             System.Collections.ArrayList result = new System.Collections.ArrayList();
 
-            foreach (KeyValuePair pair in ((Hash)recv).value)
+            foreach (KeyValuePair pair in dict)
+            {
                 if (Eval.Test(Proc.rb_yield(block, caller, pair.Key.key, pair.Value)))
                     result.Add(new Array(pair.Key.key, pair.Value));
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+            }
 
             return Array.CreateUsing(result);
         }
@@ -378,11 +396,18 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+
             // Don't lock the original dictionary.
-            Dictionary copy = new Dictionary(((Hash)recv).value);
+            Dictionary copy = new Dictionary(dict);
 
             foreach (KeyValuePair pair in copy)
+            {
                 Proc.rb_yield(block, caller, new Array(pair.Key.key, pair.Value));
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+            }
 
             return recv;
         }
@@ -396,11 +421,18 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+
             // Don't lock the original dictionary.
-            Dictionary copy = new Dictionary(((Hash)recv).value);
+            Dictionary copy = new Dictionary(dict);
 
             foreach (KeyValuePair pair in copy)
+            {
                 Proc.rb_yield(block, caller, pair.Key.key, pair.Value);
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+            }
 
             return recv;
         }
@@ -414,14 +446,19 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Dictionary dict = ((Hash)recv).value;
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
 
             // Don't lock the original dictionary.
             Dictionary.Key[] keys = new Dictionary.Key[dict.Count];
             dict.Keys.CopyTo(keys, 0);
 
             foreach (Dictionary.Key key in keys)
+            {
                 Proc.rb_yield(block, caller, key.key);
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+            }
 
             return recv;
         }
@@ -435,14 +472,19 @@ namespace Ruby.Methods
 
         public override object Call0(Class last_class, object recv, Frame caller, Proc block)
         {
-            Dictionary dict = ((Hash)recv).value;
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
 
             // Don't lock the original dictionary.
             object[] values = new object[dict.Count];
             dict.Values.CopyTo(values, 0);
 
             foreach (object value in values)
+            {
                 Proc.rb_yield(block, caller, value);
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+            }
 
             return recv;
         }
@@ -566,9 +608,15 @@ namespace Ruby.Methods
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object param0)
         {
-            foreach (KeyValuePair pair in ((Hash)recv).value)
+            Hash hash = (Hash)recv;
+            Dictionary dict = hash.value;
+
+            foreach (KeyValuePair pair in dict)
             {
-                if (Object.Equal(pair.Value, param0, caller))
+                bool equal = Object.Equal(pair.Value, param0, caller);
+                if (!object.ReferenceEquals(hash.value, dict))
+                    throw new RuntimeError("rehash occurred during iteration").raise(caller);
+                if (equal)
                     return pair.Key.key;
             }
 
@@ -804,16 +852,20 @@ namespace Ruby.Methods
             }
             else
             {
-                Dictionary d1 = ((Hash)recv).value;
-                Dictionary d2 = ((Hash)param0).value;
+                Hash hash1 = (Hash)recv;
+                Dictionary dict1 = hash1.value;
+                Dictionary dict2 = ((Hash)param0).value;
 
-                if (d1.Count != d2.Count)
+                if (dict1.Count != dict2.Count)
                     return false;
 
-                foreach (KeyValuePair pair in d1)
+                foreach (KeyValuePair pair in dict1)
                 {
                     object value;
-                    if (!d2.TryGetValue(pair.Key, out value) || !Object.Equal(pair.Value, value, caller))
+                    bool equal = dict2.TryGetValue(pair.Key, out value) && Object.Equal(pair.Value, value, caller);
+                    if (!object.ReferenceEquals(hash1.value, dict1))
+                        throw new RuntimeError("rehash occurred during iteration").raise(caller);
+                    if (!equal)
                         return false;
                 }
 
