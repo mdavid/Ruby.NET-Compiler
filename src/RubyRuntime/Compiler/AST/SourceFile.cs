@@ -64,22 +64,42 @@ namespace Ruby.Compiler.AST
                     if (calledCtor.Name() == ".ctor")
                     {
                         PERWAPI.Type[] calledCtorParams = calledCtor.GetParTypes();
+                        PERWAPI.Method[] superClassConstructors = perwapiClass.GetMethodDescs(".ctor");
                         superClassConstructor = perwapiClass.GetMethodDesc(".ctor", calledCtorParams);
                         int pos = i;
 
                         if (superClassConstructor == null)
                         {
-                            superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
+                            if (calledCtorParams.Length == 1)
+                            {
+                                string paramTypeName = calledCtorParams[0].TypeName();
+                                foreach (PERWAPI.Method superCtor in superClassConstructors)
+                                {
+                                    PERWAPI.Type[] superCtorParams = superCtor.GetParTypes();
+                                    if (superCtorParams.Length == 1)
+                                    {
+                                        string superParamTypeName = superCtorParams[0].TypeName();
+                                        if (paramTypeName == "Ruby.Class" && superParamTypeName == paramTypeName)
+                                            superClassConstructor = superCtor;
+                                    }
+                                }
+                            }
 
                             if (superClassConstructor == null)
-                                return false;
-
-                            if (calledCtorParams.Length > 0)
                             {
-                                for (int j = 0; j < calledCtorParams.Length; j++)
+                                // fall back on zero-arg constructor
+                                superClassConstructor = perwapiClass.GetMethodDesc(".ctor", new Type[0]);
+
+                                if (superClassConstructor == null)
+                                    return false;
+
+                                if (calledCtorParams.Length > 0)
                                 {
-                                    ctor.GetCodeBuffer().RemoveInstruction(pos - 1);
-                                    pos--;
+                                    for (int j = 0; j < calledCtorParams.Length; j++)
+                                    {
+                                        ctor.GetCodeBuffer().RemoveInstruction(pos - 1);
+                                        pos--;
+                                    }
                                 }
                             }
                         }
