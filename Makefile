@@ -1,8 +1,6 @@
 CSC=gmcs -debug -warn:0
 
 all: bin/Ruby.exe bin/RubyCompiler.exe
-	chmod 755 bin/Ruby.exe
-	chmod 755 bin/RubyCompiler.exe
 
 clean:
 	rm -f bin/Ruby.NET.Runtime.dll bin/Ruby.exe bin/RubyCompiler.exe
