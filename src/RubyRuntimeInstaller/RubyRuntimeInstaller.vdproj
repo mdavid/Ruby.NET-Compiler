@@ -22,6 +22,12 @@
         "Entry"
         {
         "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
         "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -35,12 +41,6 @@
         {
         "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,6 +58,12 @@
         "Entry"
         {
         "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
         "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -71,12 +77,6 @@
         {
         "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,6 +190,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -221,12 +227,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -809,7 +809,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Ruby.NET Runtime 0.9.0"
         "ProductCode" = "8:{D279132D-C216-4FD5-91B3-0F3AE61F03B6}"
-        "PackageCode" = "8:{285292DC-D719-4992-9B5B-9FA496CC03AA}"
+        "PackageCode" = "8:{8EC3DBC0-FA71-4AD1-BA2A-AD8E18D47CCD}"
         "UpgradeCode" = "8:{DF643FE4-6207-4A5C-9E1A-9790EA14B4C6}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -908,180 +908,6 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_3F3552EE6526451B8D129F8D36CB1DB1"
-                    {
-                    "Name" = "8:Ruby.NET.rbproj0.7"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_1E2F9E8BB0AA419AA824EE05A0B6EED4"
-                            {
-                            "Name" = "8:Shell"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_3CB574D2073E45EEBFB960376DD97B0E"
-                                    {
-                                    "Name" = "8:Open"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_31BB9C3D45C3475F9EE852BE565D7904"
-                                            {
-                                            "Name" = "8:Command"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                }
-                                                "Values"
-                                                {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_CE5AE3542C144FBF979D3ACB71A812B5"
-                                                    {
-                                                    "Name" = "8:"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        "Values"
-                                        {
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_25CEE26616C34F71B5ABF5677D76335E"
-                            {
-                            "Name" = "8:DefaultIcon"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_87602C629BC449B8A479B281AFE6D21C"
-                                    {
-                                    "Name" = "8:"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "ValueTypes" = "3:1"
-                                    "Value" = "8:[VSDIR]\\devenv.exe,0"
-                                    }
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_992142B84F894A0B8A04FF9F0437F79D"
-                            {
-                            "Name" = "8:"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "ValueTypes" = "3:1"
-                            "Value" = "8:Ruby.NET Project file"
-                            }
-                        }
-                    }
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4D5B190CF3FF493AA698921EE7C84CD6"
-                    {
-                    "Name" = "8:.rbproj"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4738083302D04FD99EAC278FF933E0E0"
-                            {
-                            "Name" = "8:OpenWithProgids"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_669CE5931772411A90BF115C5C124F6A"
-                                    {
-                                    "Name" = "8:Ruby.NET.rbproj0.7"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "ValueTypes" = "3:1"
-                                    "Value" = "8:"
-                                    }
-                                }
-                            }
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7D587FAB7EF84B87BC0FD9C3F99123E8"
-                            {
-                            "Name" = "8:OpenWithList"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_561A12EF7DB74789B2CA679F90C5F564"
-                                    {
-                                    "Name" = "8:VisualStudioExp"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_1DEF461FA9EB41B0AD1DE285871FC5E7"
-                                            {
-                                            "Name" = "8:"
-                                            "Condition" = "8:"
-                                            "Transitive" = "11:FALSE"
-                                            "ValueTypes" = "3:1"
-                                            "Value" = "8:"
-                                            }
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_A9EF88E6456040179BD8B72242517B49"
-                            {
-                            "Name" = "8:"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "ValueTypes" = "3:1"
-                            "Value" = "8:Ruby.NET.rbproj0.7"
-                            }
-                        }
-                    }
                     "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_796DEE6D0AD94604BA5F60AB5F1A62E8"
                     {
                     "Name" = "8:Ruby.NET.rb0.7"
@@ -1194,42 +1020,6 @@
                                         {
                                         }
                                     }
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E4487954B1E44B3F9E236F38A5C771BE"
-                                    {
-                                    "Name" = "8:Open"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A31ECA9834B94013A779DC64AA9C775C"
-                                            {
-                                            "Name" = "8:Command"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                }
-                                                "Values"
-                                                {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6A27AE38871D4F6FA2A4AA3B8DA459F2"
-                                                    {
-                                                    "Name" = "8:"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        "Values"
-                                        {
-                                        }
-                                    }
                                 }
                                 "Values"
                                 {
@@ -1248,120 +1038,6 @@
                             }
                         }
                     }
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7B339EC065D54B17AB304F4F972BE561"
-                    {
-                    "Name" = "8:Applications"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_570CA757237E488CA7F4891F0F511F1A"
-                            {
-                            "Name" = "8:VisualStudioExp"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_893268933CE14EAD8255FEA0066052E7"
-                                    {
-                                    "Name" = "8:Shell"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B5C24989ABAC43B5902AA7194FA1C5EB"
-                                            {
-                                            "Name" = "8:Open"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_21976F3D2DF6460C9CD639AB3C81E72F"
-                                                    {
-                                                    "Name" = "8:Command"
-                                                    "Condition" = "8:"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "DeleteAtUninstall" = "11:FALSE"
-                                                    "Transitive" = "11:FALSE"
-                                                        "Keys"
-                                                        {
-                                                        }
-                                                        "Values"
-                                                        {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6EB176B30075473CB93F6C904A5CC883"
-                                                            {
-                                                            "Name" = "8:"
-                                                            "Condition" = "8:"
-                                                            "Transitive" = "11:FALSE"
-                                                            "ValueTypes" = "3:1"
-                                                            "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                "Values"
-                                                {
-                                                }
-                                            }
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E2C01B8803784B9A9BD87F0C2DCF09E4"
-                                            {
-                                            "Name" = "8:Edit"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_F4774259D00B4008891644D92F904005"
-                                                    {
-                                                    "Name" = "8:Command"
-                                                    "Condition" = "8:"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "DeleteAtUninstall" = "11:FALSE"
-                                                    "Transitive" = "11:FALSE"
-                                                        "Keys"
-                                                        {
-                                                        }
-                                                        "Values"
-                                                        {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_C079052AB4E64096ACC6ED154D1FCF91"
-                                                            {
-                                                            "Name" = "8:"
-                                                            "Condition" = "8:"
-                                                            "Transitive" = "11:FALSE"
-                                                            "ValueTypes" = "3:1"
-                                                            "Value" = "8:\"[VSDIR]\\devenv.exe\" /rootsuffix Exp \"%1\""
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                "Values"
-                                                {
-                                                }
-                                            }
-                                        }
-                                        "Values"
-                                        {
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                     "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_954A8620EB614EFB9767FFF978DAF24F"
                     {
                     "Name" = "8:.rb"
@@ -1371,72 +1047,6 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_479C1EA3697F45CFB7B06A6B1D7E8CBB"
-                            {
-                            "Name" = "8:OpenWithList"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7609841CBE194BB8A56C3F0C8BF68180"
-                                    {
-                                    "Name" = "8:VisualStudioExp"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_51BD626818A24813BF819B82DA1BBFA2"
-                                            {
-                                            "Name" = "8:"
-                                            "Condition" = "8:"
-                                            "Transitive" = "11:FALSE"
-                                            "ValueTypes" = "3:1"
-                                            "Value" = "8:"
-                                            }
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B056D26F6FFE49AB8E26A6872C318880"
-                            {
-                            "Name" = "8:OpenWithProgids"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5535B5458DF54E0381D874EEE3E12F7F"
-                                    {
-                                    "Name" = "8:Ruby.NET.rb0.7"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "ValueTypes" = "3:1"
-                                    "Value" = "8:"
-                                    }
-                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_EEA74A9535BA4F3188F51DA94CAF551B"
-                                    {
-                                    "Name" = "8:VisualStudioExp"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "ValueTypes" = "3:1"
-                                    "Value" = "8:"
-                                    }
-                                }
-                            }
                         }
                         "Values"
                         {

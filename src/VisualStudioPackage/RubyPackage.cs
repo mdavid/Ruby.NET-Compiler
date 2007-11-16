@@ -12,7 +12,7 @@ namespace VSRuby.NET
     // Generic Package attributes ...
     [DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\8.0Exp")]
     [Guid("60CC6DB2-7F18-409c-9E28-B69964DCF160")]
-    [InstalledProductRegistration(false, "#100", "#101", "0.8.2", IconResourceID = 400)]
+    [InstalledProductRegistration(false, "#100", "#101", "0.9.0", IconResourceID = 400)]
     [PackageRegistration(UseManagedResourcesOnly = true)]
     // Project Attributes ...
     [ProvideMenuResource(1000, 1)]
