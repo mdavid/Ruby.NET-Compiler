@@ -1641,21 +1641,21 @@ test_ok(i7 == nil)
 
 test_check "system"
 test_ok(`echo foobar` == "foobar\n")
-test_ok(`./Ruby -e 'print "foobar"'` == 'foobar')
+test_ok(`./Ruby.exe -e 'print "foobar"'` == 'foobar')
 
 tmp = open("script_tmp", "w")
 tmp.print "print $zzz\n";
 tmp.close
 
-test_ok(`./Ruby -s script_tmp -zzz` == 'true')
-test_ok(`./Ruby -s script_tmp -zzz=555` == '555')
+test_ok(`./Ruby.exe -s script_tmp -zzz` == 'true')
+test_ok(`./Ruby.exe -s script_tmp -zzz=555` == '555')
 
 tmp = open("script_tmp", "w")
 tmp.print "#! /usr/local/bin/ruby -s\n";
 tmp.print "print $zzz\n";
 tmp.close
 
-test_ok(`./Ruby script_tmp -zzz=678` == '678')
+test_ok(`./Ruby.exe script_tmp -zzz=678` == '678')
 
 tmp = open("script_tmp", "w")
 tmp.print "this is a leading junk\n";
@@ -1665,8 +1665,8 @@ tmp.print "__END__\n";
 tmp.print "this is a trailing junk\n";
 tmp.close
 
-test_ok(`./Ruby -x script_tmp` == 'nil')
-test_ok(`./Ruby -x script_tmp -zzz=555` == '555')
+test_ok(`./Ruby.exe -x script_tmp` == 'nil')
+test_ok(`./Ruby.exe -x script_tmp -zzz=555` == '555')
 
 tmp = open("script_tmp", "w")
 for i in 1..5
@@ -1674,7 +1674,7 @@ for i in 1..5
 end
 tmp.close
 
-`./Ruby -i.bak -pe 'sub(/^[0-9]+$/){$&.to_i * 5}' script_tmp`
+`./Ruby.exe -i.bak -pe 'sub(/^[0-9]+$/){$&.to_i * 5}' script_tmp`
 done = true
 tmp = open("script_tmp", "r")
 while tmp.gets

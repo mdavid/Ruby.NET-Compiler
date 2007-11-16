@@ -1,10 +1,15 @@
 CSC=gmcs -debug -warn:0
 
 all: bin/Ruby.exe bin/RubyCompiler.exe
+	chmod 755 bin/Ruby.exe
+	chmod 755 bin/RubyCompiler.exe
 
 clean:
 	rm -f bin/Ruby.NET.Runtime.dll bin/Ruby.exe bin/RubyCompiler.exe
 	rm -f bin/*.mdb
+
+test: all
+	cd bin && ./Ruby.exe test.rb
 
 bin/Ruby.NET.Runtime.dll:
 	$(CSC) -t:library -out:bin/Ruby.NET.Runtime.dll -r:Microsoft.Build.Utilities.dll -r:bin/QUT.ShiftReduceParser.dll -r:bin/QUT.PERWAPI.dll -recurse:src/RubyRuntime/*.cs
