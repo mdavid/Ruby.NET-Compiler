@@ -272,7 +272,7 @@ namespace Setup
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Progress";
-            this.Text = "Ruby.NET 0.8.2";
+            this.Text = "Ruby.NET 0.9.0";
             this.Load += new System.EventHandler(this.Progress_Load);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
