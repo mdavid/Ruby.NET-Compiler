@@ -22,12 +22,6 @@
         "Entry"
         {
         "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
         "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -41,6 +35,12 @@
         {
         "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_177BBC055223838AD8739B3B8A143D39"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,12 +58,6 @@
         "Entry"
         {
         "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
         "OwnerKey" = "8:_F3E7EE189C5640F992A88CFC8B581070"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -77,6 +71,12 @@
         {
         "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2E33E2E3D5989E1FC00A9D8683BF1AA8"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -153,6 +153,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C295A9603D12475EB45A46E12158C708"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CCDEAE9E9E524B2EAF9E25D1CF49C893"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -190,12 +196,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BC360B5C8CF74B8696B8B70D7DC5BD95"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -227,6 +227,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_57298712C81C4720860DD9994612C07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F47EB2CA0EAD298D976DC4D73E8E2CFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -558,6 +564,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C295A9603D12475EB45A46E12158C708"
+            {
+            "SourcePath" = "8:..\\..\\bin\\Hello.rb"
+            "TargetName" = "8:Hello.rb"
+            "Tag" = "8:"
+            "Folder" = "8:_2C83E4BA2AFC40F3B7FF5CBBF65FADA4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E962182189BB481DA67321935E14601D"
             {
             "SourcePath" = "8:..\\..\\bin\\test.rb"
@@ -728,7 +754,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_EA373E613B684126AC45571B30F81EDA"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder]\\Ruby.NET 0.9.0"
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\Ruby.NET-0.9"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -807,9 +833,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Ruby.NET Runtime 0.9.0"
+        "ProductName" = "8:Ruby.NET Runtime 0.9"
         "ProductCode" = "8:{D279132D-C216-4FD5-91B3-0F3AE61F03B6}"
-        "PackageCode" = "8:{8EC3DBC0-FA71-4AD1-BA2A-AD8E18D47CCD}"
+        "PackageCode" = "8:{8C14BA25-2F0A-4270-B82D-DB1A4655D2C4}"
         "UpgradeCode" = "8:{DF643FE4-6207-4A5C-9E1A-9790EA14B4C6}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
