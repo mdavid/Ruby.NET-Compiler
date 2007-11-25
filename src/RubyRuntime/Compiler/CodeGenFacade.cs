@@ -311,19 +311,22 @@ namespace Ruby.Compiler
 
         internal TryBlock EndTryBlock()
         {
-            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Try);
+            System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Try);
+            blocks.Pop();
             return buffer.EndTryBlock();
         }
 
         internal void EndCatchBlock(PERWAPI.Class type, TryBlock tryBlock)
         {
-            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Catch);
+            System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Catch);
+            blocks.Pop();
             buffer.EndCatchBlock(type, tryBlock);
         }
 
         internal void EndFinallyBlock(TryBlock tryBlock)
         {
-            System.Diagnostics.Debug.Assert(blocks.Pop() == Clause.Finally);
+            System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Finally);
+            blocks.Pop();
             buffer.EndFinallyBlock(tryBlock);
         }
 
