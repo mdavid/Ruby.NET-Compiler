@@ -319,25 +319,21 @@ namespace Ruby.Methods
     }
 
     
-    internal class rb_f_catch : MethodBody1 //status: partial
+    internal class rb_f_catch : MethodBody1 // status: done
     {
         internal static rb_f_catch singleton = new rb_f_catch();
 
         public override object Call1(Class last_class, object recv, Frame caller, Proc block, object symbol)
         {
+            string tag = Symbol.rb_to_id(caller, symbol);
             try
             {
                 return Proc.rb_yield(block, caller);
             }
             catch (SymbolException e)
             {
-                if (e.symbol.id_s == ((Symbol)symbol).id_s)
-                {
-                    if (e.args.Count == 1)
-                        return e.args[0];
-                    else
-                        return null;
-                }
+                if (e.tag == tag)
+                    return e.arg;
                 else
                     throw e;
             }
@@ -345,16 +341,19 @@ namespace Ruby.Methods
     }
 
     
-    internal class rb_f_throw : VarArgMethodBody1 //status: partial
+    internal class rb_f_throw : VarArgMethodBody1 // status: done
     {
         internal static rb_f_throw singleton = new rb_f_throw();
 
         public override object Call(Class last_class, object recv, Frame caller, Proc block, object symbol, Array rest)
         {
             if (rest.Count > 1)
-                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for {1})", rest.Count + 1, 2)).raise(caller);
+                throw new ArgumentError(string.Format(CultureInfo.InvariantCulture, "wrong number of arguments ({0} for 2)", 1 + rest.Count)).raise(caller);
 
-            throw new SymbolException((Symbol)symbol, rest);
+            string tag = Symbol.rb_to_id(caller, symbol);
+            if (rest.Count == 0)
+                throw new SymbolException(tag, null);
+            throw new SymbolException(tag, rest[0]);
         }
     }
 

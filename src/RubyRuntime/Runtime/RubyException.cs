@@ -50,13 +50,13 @@ namespace Ruby.Runtime
     
     internal class SymbolException : ControlException
     {
-        internal Symbol symbol;
-        internal Array args;
+        internal string tag;
+        internal object arg;
 
-        internal SymbolException(Symbol symbol, Array args)
+        internal SymbolException(string tag, object arg)
         {
-            this.symbol = symbol;
-            this.args = args;
+            this.tag = tag;
+            this.arg = arg;
         }
     }
 }
