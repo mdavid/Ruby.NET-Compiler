@@ -675,16 +675,16 @@ namespace Ruby.Methods
                 {
                     object value;
                     if (dict.TryGetValue(pair.Key, out value))
-                        dict[pair.Key] = Proc.rb_yield(block, caller, pair.Key.key, value, pair.Value);
+                        value = Proc.rb_yield(block, caller, pair.Key.key, value, pair.Value);
+                    else
+                        value = pair.Value;
+                    dict[pair.Key] = value;
                 }
             }
             else
             {
                 foreach (KeyValuePair pair in dict2)
-                {
-                    if (dict.ContainsKey(pair.Key))
-                        dict[pair.Key] = pair.Value;
-                }
+                    dict[pair.Key] = pair.Value;
             }
 
             return recv;
