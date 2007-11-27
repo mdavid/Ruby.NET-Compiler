@@ -148,7 +148,7 @@ namespace Ruby.Compiler
                     target = "exe"; // default
 
             // Remove any file extension
-            outFile = file.Directory + @"\" + file.Name.Substring(0, file.Name.Length - file.Extension.Length);
+            outFile = file.FullName.Substring(0, file.FullName.Length - file.Extension.Length);
 
             if (target == "exe" || target == "winexe")
                 outFile += ".exe";
