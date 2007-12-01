@@ -480,7 +480,24 @@ namespace Ruby.Interop
             NoMatch,
             Exact,
             BasicConversion,
-            ProcConversion
+            ProcConversion,
+            ArrayConversion
+        }
+
+        internal class TypeOnlyParameterInfo : ParameterInfo
+        {
+            System.Type parameterType;
+            internal TypeOnlyParameterInfo(System.Type type)
+            {
+                parameterType = type;
+            }
+            public override System.Type ParameterType
+            {
+                get
+                {
+                    return parameterType;
+                }
+            }
         }
 
         private static MatchResult MatchArgument(System.Type parameter, object arg)
@@ -493,7 +510,22 @@ namespace Ruby.Interop
                 return MatchResult.Exact;
             if (arg is Proc && parameter.IsSubclassOf(typeof(System.Delegate)))
                 return MatchResult.ProcConversion;
+            if (arg is Array && (parameter.IsSubclassOf(typeof(System.Array))))
+                return MatchResult.ArrayConversion;
             return MatchResult.NoMatch;
+        }
+
+        private bool MatchArguments(object[] args, MatchResult[] conversions, ParameterInfo[] parameters)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                MatchResult result = MatchArgument(parameters[i].ParameterType, args[i]);
+                if (result == MatchResult.NoMatch)
+                    return false;
+                else
+                    conversions[i] = result;
+            }
+            return true;
         }
 
         private MethodBase MatchArguments(object[] args, out MatchResult[] conversions,
@@ -508,21 +540,58 @@ namespace Ruby.Interop
                 if (parameters.Length != args.Length)
                     continue;
 
-                for (int i = 0; i < args.Length; i++)
-                {
-                    MatchResult result = MatchArgument(parameters[i].ParameterType, args[i]);
-                    if (result == MatchResult.NoMatch)
-                        goto next_method;
-                    else
-                        conversions[i] = result;
-                }
-
-                return method;
-
-                next_method: ;
+                if (MatchArguments(args, conversions, parameters))
+                    return method;
             }
 
             return null;
+        }
+
+        private object ArrayConversion(Array src, System.Type arrayType)
+        {
+            if (arrayType == typeof(object[]))
+            {
+                object[] dst = new object[src.Count];
+                ParameterInfo[] parameters = new ParameterInfo[dst.Length];
+                ParameterInfo pinfo = new TypeOnlyParameterInfo(typeof(object));
+                for (int i = 0; i < src.Count; i++)
+                {
+                    dst[i] = src[i];
+                    parameters[i] = pinfo;
+                }
+                MatchResult[] conversions = new MatchResult[dst.Length];
+                if (MatchArguments(dst, conversions, parameters))
+                {
+                    ConvertArguments(dst, conversions, parameters);
+                    return dst;
+                }
+            }
+            throw new System.NotSupportedException("Ruby.Array into " + arrayType);
+        }
+
+        private void ConvertArguments(object[] out_args, MatchResult[] conversions, ParameterInfo[] parameters)
+        {
+            for (int i = 0; i < out_args.Length; i++)
+            {
+                switch (conversions[i])
+                {
+                    case MatchResult.Exact:
+                        break;
+                    case MatchResult.BasicConversion:
+                        out_args[i] = ((Basic)out_args[i]).Inner();
+                        break;
+                    case MatchResult.ProcConversion:
+                        out_args[i] = DelegateConstructor.Convert(
+                            (Proc)out_args[i],
+                            parameters[i].ParameterType);
+                        break;
+                    case MatchResult.ArrayConversion:
+                        out_args[i] = ArrayConversion((Array)out_args[i], parameters[i].ParameterType);
+                        break;
+                    default:
+                        throw new System.NotSupportedException();
+                }
+            }
         }
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
@@ -548,24 +617,7 @@ namespace Ruby.Interop
 
             if (method != null)
             {
-                for (int i = 0; i < out_args.Length; i++)
-                {
-                    switch (conversions[i])
-                    {
-                        case MatchResult.Exact:
-                            break;
-                        case MatchResult.BasicConversion:
-                            out_args[i] = ((Basic)out_args[i]).Inner();
-                            break;
-                        case MatchResult.ProcConversion:
-                            out_args[i] = DelegateConstructor.Convert(
-                                (Proc)out_args[i],
-                                parameters[i].ParameterType);
-                            break;
-                        default:
-                            throw new System.NotSupportedException();
-                    }
-                }
+                ConvertArguments(out_args, conversions, parameters);
 
                 try
                 {
