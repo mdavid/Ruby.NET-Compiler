@@ -520,7 +520,7 @@ namespace Ruby.Runtime
         internal static object method_missing(object recv, Frame caller, string methodId, ArgList args)
         {
             ArgList newargs = new ArgList(args.block);
-            newargs.Add(methodId);
+            newargs.Add(new Symbol(methodId));
             newargs.AddRange(args);
 
             Class origin;
