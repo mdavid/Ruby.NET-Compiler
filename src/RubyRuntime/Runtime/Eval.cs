@@ -419,7 +419,11 @@ namespace Ruby.Runtime
 
         internal static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId, out Class origin)
         {
-            return FindMethodForClass(klass.super, Receiver.Super, caller, methodId, out origin);
+            Class superClass = klass.super;
+            if (superClass == null && klass._type == Class.Type.Module)
+                superClass = Init.rb_cObject;
+
+            return FindMethodForClass(superClass, Receiver.Super, caller, methodId, out origin);
         }
 
         internal static RubyMethod FindPrivateMethod(object recv, Frame caller, string methodId, out Class origin)
@@ -439,6 +443,10 @@ namespace Ruby.Runtime
         public static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId)
         {
             Class origin;
+            Class superClass = klass.super;
+            if (superClass == null && klass._type == Class.Type.Module)
+                superClass = Init.rb_cObject;
+
             return FindMethodForClass(klass.super, Receiver.Super, caller, methodId, out origin);
         }
 
