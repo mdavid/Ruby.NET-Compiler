@@ -321,6 +321,7 @@ namespace Ruby.Compiler.AST
         internal override void GenCode0(CodeGenContext context)
         {
             int RescueTemp = context.CreateLocal("rescueTemp", PERWAPI.PrimitiveType.Object);
+            int ExceptionTemp = context.CreateLocal("exceptionTemp", PERWAPI.PrimitiveType.Object);
 
             PERWAPI.CILLabel endLabel = context.NewLabel();
 
@@ -337,7 +338,15 @@ namespace Ruby.Compiler.AST
 
             context.StartBlock(Clause.Catch);
             {
-                context.pop();
+                PERWAPI.CILLabel stdErrLabel = context.NewLabel();
+                context.stloc(ExceptionTemp);
+                context.ldloc(ExceptionTemp);
+                context.ldfld(Runtime.RubyException.parent);
+                context.isinst(Runtime.StandardErrorRef);
+                context.brtrue(stdErrLabel);
+                context.ldloc(ExceptionTemp);
+                context.throwOp();
+                context.CodeLabel(stdErrLabel);
                 rescue.GenCode(context);
                 if (context.Reachable())
                 {
@@ -346,13 +355,14 @@ namespace Ruby.Compiler.AST
                 }
             }
 
-            context.EndCatchBlock(Runtime.StandardErrorRef, tryBlock);
+            context.EndCatchBlock(Runtime.RubyExceptionRef, tryBlock);
 
             context.CodeLabel(endLabel);
 
             context.ldloc(RescueTemp);
 
             context.ReleaseLocal(RescueTemp, true);
+            context.ReleaseLocal(ExceptionTemp, true);
         }
     }
 }
