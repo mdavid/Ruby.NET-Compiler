@@ -257,6 +257,14 @@ namespace Ruby.Interop
             return klass;
         }
 
+        private static string FormatConstant(string name)
+        {
+            if (char.IsLower(name[0]))
+                return char.ToUpper(name[0]) + name.Substring(1);
+            else
+                return name;
+        }
+
         internal static CLRClass Load(System.Type type, Frame caller, bool makeConstant)
         {
             if (type == null)
@@ -310,11 +318,13 @@ namespace Ruby.Interop
                 {
                     foreach (string Namespace in type.Namespace.Split('.'))
                     {
-                        object innerContext;
-                        if (context.const_defined(Namespace, false) && (innerContext = context.const_get(Namespace, caller)) is Class)
-                            context = (Class)innerContext;
+                        Class innerContext;
+                        string constant = FormatConstant(Namespace);
+
+                        if (context.const_defined(constant, false) && (innerContext = context.const_get(constant, caller) as Class) != null)
+                            context = innerContext;
                         else
-                            context.define_const(Namespace, context = new CLRNamespace(Namespace));
+                            context.define_const(constant, context = new CLRNamespace(Namespace));
                     }
                 }
 
@@ -336,15 +346,16 @@ namespace Ruby.Interop
                     System.Type container = type.Assembly.GetType(containerName);
 
                     // otherwise we much build a GenericContainer
-                    if (container == null && !context.const_defined(name))
+                    if (container == null)
                     {
-                        context.define_const(name,
-                            new GenericContainer(type.Assembly, containerName, null));
+                        string constant = FormatConstant(name);
+                        if (!context.const_defined(constant))
+                            context.define_const(constant, new GenericContainer(type.Assembly, containerName, null));
                     }
                 }
                 else
                 {
-                    context.define_const(type.Name, klass);
+                    context.define_const(FormatConstant(type.Name), klass);
                 }
             }
 
