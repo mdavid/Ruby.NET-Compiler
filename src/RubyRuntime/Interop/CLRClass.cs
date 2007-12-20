@@ -484,22 +484,6 @@ namespace Ruby.Interop
             ArrayConversion
         }
 
-        internal class TypeOnlyParameterInfo : ParameterInfo
-        {
-            System.Type parameterType;
-            internal TypeOnlyParameterInfo(System.Type type)
-            {
-                parameterType = type;
-            }
-            public override System.Type ParameterType
-            {
-                get
-                {
-                    return parameterType;
-                }
-            }
-        }
-
         private static MatchResult MatchArgument(System.Type parameter, object arg)
         {
             if (parameter.IsInstanceOfType(arg))
@@ -519,11 +503,8 @@ namespace Ruby.Interop
         {
             for (int i = 0; i < args.Length; i++)
             {
-                MatchResult result = MatchArgument(parameters[i].ParameterType, args[i]);
-                if (result == MatchResult.NoMatch)
+                if (MatchResult.NoMatch == (conversions[i] = MatchArgument(parameters[i].ParameterType, args[i])))
                     return false;
-                else
-                    conversions[i] = result;
             }
             return true;
         }
@@ -549,49 +530,44 @@ namespace Ruby.Interop
 
         private object ArrayConversion(Array src, System.Type arrayType)
         {
-            if (arrayType == typeof(object[]))
+            System.Type elementType = arrayType.GetElementType();
+            System.Array dst = System.Array.CreateInstance(elementType, src.Count);
+
+            for (int i = 0; i < src.Count; i++)
             {
-                object[] dst = new object[src.Count];
-                ParameterInfo[] parameters = new ParameterInfo[dst.Length];
-                ParameterInfo pinfo = new TypeOnlyParameterInfo(typeof(object));
-                for (int i = 0; i < src.Count; i++)
-                {
-                    dst[i] = src[i];
-                    parameters[i] = pinfo;
-                }
-                MatchResult[] conversions = new MatchResult[dst.Length];
-                if (MatchArguments(dst, conversions, parameters))
-                {
-                    ConvertArguments(dst, conversions, parameters);
-                    return dst;
-                }
+                object o = src[i];
+                MatchResult result = MatchArgument(elementType, o);
+
+                if (result == MatchResult.NoMatch)
+                    throw new System.NotSupportedException();
+
+                dst.SetValue(ConvertArgument(o, result, elementType), i);
             }
-            throw new System.NotSupportedException("Ruby.Array into " + arrayType);
+
+            return dst;
+        }
+
+        private object ConvertArgument(object arg, MatchResult conversion, System.Type parameter)
+        {
+            switch (conversion)
+            {
+                case MatchResult.Exact:
+                    return arg;
+                case MatchResult.BasicConversion:
+                    return ((Basic)arg).Inner();
+                case MatchResult.ProcConversion:
+                    return DelegateConstructor.Convert((Proc)arg, parameter);
+                case MatchResult.ArrayConversion:
+                    return ArrayConversion((Array)arg, parameter);
+                default:
+                    throw new System.NotSupportedException();
+            }
         }
 
         private void ConvertArguments(object[] out_args, MatchResult[] conversions, ParameterInfo[] parameters)
         {
             for (int i = 0; i < out_args.Length; i++)
-            {
-                switch (conversions[i])
-                {
-                    case MatchResult.Exact:
-                        break;
-                    case MatchResult.BasicConversion:
-                        out_args[i] = ((Basic)out_args[i]).Inner();
-                        break;
-                    case MatchResult.ProcConversion:
-                        out_args[i] = DelegateConstructor.Convert(
-                            (Proc)out_args[i],
-                            parameters[i].ParameterType);
-                        break;
-                    case MatchResult.ArrayConversion:
-                        out_args[i] = ArrayConversion((Array)out_args[i], parameters[i].ParameterType);
-                        break;
-                    default:
-                        throw new System.NotSupportedException();
-                }
-            }
+                out_args[i] = ConvertArgument(out_args[i], conversions[i], parameters[i].ParameterType);
         }
 
         public override object Calln(Class last_class, object recv, Frame caller, ArgList args)
