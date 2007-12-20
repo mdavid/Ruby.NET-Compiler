@@ -17,6 +17,11 @@ namespace Ruby.Interop
             this.clrtype = clrtype;
         }
 
+        internal override object Inner()
+        {
+            return clrtype;
+        }
+
         internal override bool get_method(string methodId, out RubyMethod method, out Class klass)
         {
             if (_methods.TryGetValue(methodId, out method))
