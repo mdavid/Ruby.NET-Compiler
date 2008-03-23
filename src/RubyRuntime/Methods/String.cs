@@ -2290,6 +2290,7 @@ namespace Ruby.Methods
         {
             String str = String.uscore_get(caller);
 
+            str = str.rb_str_dup(caller); // Have to work on a copy else rb_str_gsub_bang will change references to $_
             if (rb_str_gsub_bang.singleton.Call(last_class, str, caller, block, rest) == null)
                 return str;
 
