@@ -2056,7 +2056,7 @@ namespace Ruby.Compiler
                         }
                     }
                     if (str != null)
-                        VALUE.str_cat(str, buffer.Substring(p), pend - p, null);
+                        str = VALUE.str_cat(str, buffer.Substring(p), pend - p, null);
                     else
                         str = VALUE.str_new(buffer.Substring(p), pend - p, null);
                     if (pend < lex_pend) VALUE.str_cat(str, "\n", 1, null);
