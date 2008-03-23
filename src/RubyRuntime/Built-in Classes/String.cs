@@ -1169,8 +1169,7 @@ namespace Ruby
                 else
                 {
                     val = Regexp.rb_reg_regsub(repl, str, match);
-
-                    dest.Append(val.value.Substring(beg, val.value.Length - str.value.Length + 1));
+                    dest.Append(val.value.Substring(beg, match.value.Length + val.value.Length - str.value.Length));
                 }
 
                 if (val.Tainted)
