@@ -497,7 +497,9 @@ namespace Ruby.Interop
             Exact,
             BasicConversion,
             ProcConversion,
-            ArrayConversion
+            ArrayConversion,
+            Int64Conversion,
+            UInt64Conversion
         }
 
         private static MatchResult MatchArgument(System.Type parameter, object arg)
@@ -512,6 +514,14 @@ namespace Ruby.Interop
                 return MatchResult.ProcConversion;
             if (arg is Array && (parameter.IsSubclassOf(typeof(System.Array))))
                 return MatchResult.ArrayConversion;
+            if (parameter.IsValueType) {
+                if (parameter == typeof(System.Int64)) {
+                    return MatchResult.Int64Conversion;
+                }
+                if (parameter == typeof(System.UInt64)) {
+                    return MatchResult.UInt64Conversion;
+                }
+            }
             return MatchResult.NoMatch;
         }
 
@@ -575,6 +585,20 @@ namespace Ruby.Interop
                     return DelegateConstructor.Convert((Proc)arg, parameter);
                 case MatchResult.ArrayConversion:
                     return ArrayConversion((Array)arg, parameter);
+                case MatchResult.Int64Conversion:
+                    if (arg is Ruby.Bignum) {
+                        System.Int64 ret;
+                        (arg as Bignum).value.AsInt64(out ret);
+                        return ret;
+                    }
+                    return System.Convert.ToInt64(arg);
+                case MatchResult.UInt64Conversion:
+                    if (arg is Ruby.Bignum) {
+                        System.UInt64 ret;
+                        (arg as Bignum).value.AsUInt64(out ret);
+                        return ret;
+                    }
+                    return System.Convert.ToUInt64(arg);
                 default:
                     throw new System.NotSupportedException();
             }
