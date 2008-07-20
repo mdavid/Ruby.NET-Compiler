@@ -2001,6 +2001,23 @@ end
 test_ok(File.expand_path(".", "//") == "//")
 test_ok(File.expand_path("sub", "//") == "//sub")
 
+test_check "fileopen"
+File.open("afile",  "w") {|f|
+  f.puts "----------1-----------"
+  f.puts "----------2-----------"
+  f.puts "----------3-----------"
+  f.puts "----------4-----------"
+  f.puts "----------5-----------"
+}
+test_ok(IO.readlines('afile').size== 5)
+
+File.open("afile",  "w") {|f|
+  f.puts "----------a-----------"
+}
+test_ok(IO.readlines('afile').size== 1)
+File.unlink "afile"
+test_ok(!File.exist?("afile"))
+
 test_check "gc"
 begin
   1.upto(10000) {

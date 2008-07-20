@@ -1331,7 +1331,8 @@ namespace Ruby
             if ((flags & File.O_APPEND) > 0)
                 return FileMode.Append;
             else if ((flags & File.O_CREAT) > 0)
-                return FileMode.OpenOrCreate;
+                return FileMode.Create;
+                // rifraf : return FileMode.OpenOrCreate;
             else
                 return FileMode.Open;
         }
