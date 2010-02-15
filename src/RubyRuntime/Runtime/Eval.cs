@@ -14,24 +14,21 @@ using Ruby.Methods;
 using Ruby.Runtime;
 using System.Globalization;
 
-namespace Ruby.Runtime
-{
-    internal enum Receiver 
-    { 
+namespace Ruby.Runtime {
+    internal enum Receiver {
         Explicit = 0,   // explicit receiver specified
-        Self     = 1,   // implicit receiver (function call)
-        Virtual  = 2,   // local variable or method call
-        Super    = 3    // super class method call
+        Self = 1,   // implicit receiver (function call)
+        Virtual = 2,   // local variable or method call
+        Super = 3    // super class method call
     }
 
     internal enum CallStatus { Private, Protected, VCall, Super, None };
 
     // Ruby.Eval contains the implementation of Ruby method calling
-    
-    
+
+
     [UsedByRubyCompiler]
-    public class Eval
-    {
+    public class Eval {
         // ------------------------------------------------------------------------------
         [UsedByRubyCompiler]
         public static errinfo_global ruby_errinfo = new errinfo_global();   // $!
@@ -42,9 +39,9 @@ namespace Ruby.Runtime
         internal static safe_global safe = new safe_global();                 // $SAFE
         internal static lastline_global rb_lastline = new lastline_global();  // $_
         internal static ThreadGroup thgroup_default;                          // ThreadGroup.Default
-        internal static Thread curr_thread, main_thread;     
-                                                           
-                                                           
+        internal static Thread curr_thread, main_thread;
+
+
 
         private static bool rubyRunning = false;
 
@@ -53,18 +50,15 @@ namespace Ruby.Runtime
 
         // -----------------------------------------------------------------------------
 
-        internal static bool RubyRunning
-        {
+        internal static bool RubyRunning {
             get { return Eval.rubyRunning; }
             set { Eval.rubyRunning = value; }
         }
 
         [UsedByRubyCompiler]
-        public static object Return(object value, Frame caller)
-        {
+        public static object Return(object value, Frame caller) {
             Array array;
-            if (Array.TryToArray(value, out array, caller))
-            {
+            if (Array.TryToArray(value, out array, caller)) {
                 int length = array.Count;
 
                 if (length == 0)
@@ -72,7 +66,7 @@ namespace Ruby.Runtime
                 if (length == 1)
                     return array[0];
             }
-           
+
             return value;
         }
 
@@ -81,59 +75,48 @@ namespace Ruby.Runtime
 
         private static Frame dummyFrame = new DummyFrame();
 
-        public static object Call0(object recv, string methodId)
-        {
+        public static object Call0(object recv, string methodId) {
             return CallPublic0(recv, dummyFrame, methodId, null);
         }
 
-        public static object Call1(object recv, string methodId, object arg1)
-        {
+        public static object Call1(object recv, string methodId, object arg1) {
             return CallPublic1(recv, dummyFrame, methodId, null, arg1);
         }
 
-        public static object Call2(object recv, string methodId, object arg1, object arg2)
-        {
+        public static object Call2(object recv, string methodId, object arg1, object arg2) {
             return CallPublic2(recv, dummyFrame, methodId, null, arg1, arg2);
         }
 
-        public static object Call3(object recv, string methodId, object arg1, object arg2, object arg3)
-        {
+        public static object Call3(object recv, string methodId, object arg1, object arg2, object arg3) {
             return CallPublic3(recv, dummyFrame, methodId, null, arg1, arg2, arg3);
         }
 
-        public static object Call4(object recv, string methodId, object arg1, object arg2, object arg3, object arg4)
-        {
+        public static object Call4(object recv, string methodId, object arg1, object arg2, object arg3, object arg4) {
             return CallPublic4(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4);
         }
 
-        public static object Call5(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5)
-        {
+        public static object Call5(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5) {
             return CallPublic5(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4, arg5);
         }
 
-        public static object Call6(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6)
-        {
+        public static object Call6(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) {
             return CallPublic6(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
-        public static object Call7(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7)
-        {
+        public static object Call7(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) {
             return CallPublic7(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
-        public static object Call8(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8)
-        {
+        public static object Call8(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) {
             return CallPublic8(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
-        public static object Call9(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9)
-        {
+        public static object Call9(object recv, string methodId, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) {
             return CallPublic9(recv, dummyFrame, methodId, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
 
-        public static object Call(object recv, string methodId, params object[] args)
-        {
+        public static object Call(object recv, string methodId, params object[] args) {
             return CallPublic(recv, dummyFrame, methodId, null, args);
         }
         #endregion
@@ -141,8 +124,7 @@ namespace Ruby.Runtime
 
         #region FixedArgCases
         [UsedByRubyCompiler]
-        public static object CallPublic0(object recv, Frame caller, string methodId, Proc block)
-        {
+        public static object CallPublic0(object recv, Frame caller, string methodId, Proc block) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -152,8 +134,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic1(object recv, Frame caller, string methodId, Proc block, object arg1)
-        {
+        public static object CallPublic1(object recv, Frame caller, string methodId, Proc block, object arg1) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -163,8 +144,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic2(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2)
-        {
+        public static object CallPublic2(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -174,8 +154,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic3(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3)
-        {
+        public static object CallPublic3(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -185,8 +164,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic4(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4)
-        {
+        public static object CallPublic4(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -196,8 +174,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic5(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5)
-        {
+        public static object CallPublic5(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -207,8 +184,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic6(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6)
-        {
+        public static object CallPublic6(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -218,8 +194,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic7(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7)
-        {
+        public static object CallPublic7(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -229,8 +204,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic8(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8)
-        {
+        public static object CallPublic8(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -240,8 +214,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPublic9(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9)
-        {
+        public static object CallPublic9(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -252,15 +225,13 @@ namespace Ruby.Runtime
         #endregion
 
         [UsedByRubyCompiler]
-        public static object CallPublic(object recv, Frame caller, string methodId, Proc block, params object[] args)
-        {
-            return CallPublicA(recv, caller, methodId, new ArgList(block, args)); 
+        public static object CallPublic(object recv, Frame caller, string methodId, Proc block, params object[] args) {
+            return CallPublicA(recv, caller, methodId, new ArgList(block, args));
         }
 
 
         [UsedByRubyCompiler]
-        public static object CallPublicA(object recv, Frame caller, string methodId, ArgList args)
-        {
+        public static object CallPublicA(object recv, Frame caller, string methodId, ArgList args) {
             Class origin;
             RubyMethod method = FindPublicMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -271,10 +242,9 @@ namespace Ruby.Runtime
 
 
         #region FixedArgCases
-        
+
         [UsedByRubyCompiler]
-        public static object CallPrivate0(object recv, Frame caller, string methodId, Proc block)
-        {
+        public static object CallPrivate0(object recv, Frame caller, string methodId, Proc block) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -284,8 +254,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate1(object recv, Frame caller, string methodId, Proc block, object arg1)
-        {
+        public static object CallPrivate1(object recv, Frame caller, string methodId, Proc block, object arg1) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -295,8 +264,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate2(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2)
-        {
+        public static object CallPrivate2(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -306,8 +274,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate3(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3)
-        {
+        public static object CallPrivate3(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -317,8 +284,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate4(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4)
-        {
+        public static object CallPrivate4(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -328,8 +294,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate5(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5)
-        {
+        public static object CallPrivate5(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -339,8 +304,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate6(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6)
-        {
+        public static object CallPrivate6(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -350,8 +314,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate7(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7)
-        {
+        public static object CallPrivate7(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -361,8 +324,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate8(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8)
-        {
+        public static object CallPrivate8(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -372,8 +334,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivate9(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9)
-        {
+        public static object CallPrivate9(object recv, Frame caller, string methodId, Proc block, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -384,14 +345,12 @@ namespace Ruby.Runtime
         #endregion
 
         [UsedByRubyCompiler]
-        public static object CallPrivate(object recv, Frame caller, string methodId, Proc block, params object[] args)
-        {
+        public static object CallPrivate(object recv, Frame caller, string methodId, Proc block, params object[] args) {
             return CallPrivateA(recv, caller, methodId, new ArgList(block, args));
         }
 
         [UsedByRubyCompiler]
-        public static object CallPrivateA(object recv, Frame caller, string methodId, ArgList args)
-        {
+        public static object CallPrivateA(object recv, Frame caller, string methodId, ArgList args) {
             Class origin;
             RubyMethod method = FindPrivateMethod(recv, caller, methodId, out origin);
             if (method != null)
@@ -402,23 +361,20 @@ namespace Ruby.Runtime
 
 
         [UsedByRubyCompiler]
-        public static object CallSuperA(Class klass, Frame caller, object recv, string methodId, ArgList args)
-        {
+        public static object CallSuperA(Class klass, Frame caller, object recv, string methodId, ArgList args) {
             Class origin;
             RubyMethod method = FindSuperMethod(klass, caller, methodId, out origin);
 
             if (method != null)
                 return method.body.Calln(origin, recv, caller, args);
-            else
-            {
+            else {
                 caller.call_status = CallStatus.Super;
                 return method_missing(recv, caller, methodId, args);
             }
         }
 
 
-        internal static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId, out Class origin)
-        {
+        internal static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId, out Class origin) {
             Class superClass = klass.super;
             if (superClass == null && klass._type == Class.Type.Module)
                 superClass = Init.rb_cObject;
@@ -426,22 +382,19 @@ namespace Ruby.Runtime
             return FindMethodForClass(superClass, Receiver.Super, caller, methodId, out origin);
         }
 
-        internal static RubyMethod FindPrivateMethod(object recv, Frame caller, string methodId, out Class origin)
-        {
+        internal static RubyMethod FindPrivateMethod(object recv, Frame caller, string methodId, out Class origin) {
             return FindMethodForClass(Class.CLASS_OF(recv), Receiver.Self, caller, methodId, out origin);
         }
 
 
-        internal static RubyMethod FindPublicMethod(object recv, Frame caller, string methodId, out Class origin)
-        {
+        internal static RubyMethod FindPublicMethod(object recv, Frame caller, string methodId, out Class origin) {
             return FindMethodForClass(Class.CLASS_OF(recv), Receiver.Explicit, caller, methodId, out origin);
         }
 
 
 
         [UsedByRubyCompiler]
-        public static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId)
-        {
+        public static RubyMethod FindSuperMethod(Class klass, Frame caller, string methodId) {
             Class origin;
             Class superClass = klass.super;
             if (superClass == null && klass._type == Class.Type.Module)
@@ -451,15 +404,13 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static RubyMethod FindPrivateMethod(object recv, Frame caller, string methodId)
-        {
+        public static RubyMethod FindPrivateMethod(object recv, Frame caller, string methodId) {
             Class origin;
             return FindMethodForClass(Class.CLASS_OF(recv), Receiver.Self, caller, methodId, out origin);
         }
 
         [UsedByRubyCompiler]
-        public static RubyMethod FindPublicMethod(object recv, Frame caller, string methodId)
-        {
+        public static RubyMethod FindPublicMethod(object recv, Frame caller, string methodId) {
             Class origin;
             return FindMethodForClass(Class.CLASS_OF(recv), Receiver.Explicit, caller, methodId, out origin);
         }
@@ -467,42 +418,35 @@ namespace Ruby.Runtime
 
 
 
-        internal static RubyMethod FindMethodForClass(Class klass, Receiver receiverStyle, Frame caller, string methodId, out Class origin)
-        {
+        internal static RubyMethod FindMethodForClass(Class klass, Receiver receiverStyle, Frame caller, string methodId, out Class origin) {
             RubyMethod method;
 
-            if (klass == null)
-            {
+            if (klass == null) {
                 origin = null;
                 return null;
             }
 
-            if (klass.get_method(methodId, out method, out origin) && method != null)
-            {
+            if (klass.get_method(methodId, out method, out origin) && method != null) {
                 if (method is MethodAlias)
                     origin = method.definingClass;
 
-                if (method.access == Access.Private && receiverStyle == Receiver.Explicit)
-                {
+                if (method.access == Access.Private && receiverStyle == Receiver.Explicit) {
                     if (caller != null)
                         caller.call_status = CallStatus.Private;
                     return null;
                 }
 
-                if (method.access == Access.Protected && receiverStyle == Receiver.Explicit)
-                {
+                if (method.access == Access.Protected && receiverStyle == Receiver.Explicit) {
                     Class outerScope = Ruby.Runtime.Init.rb_cObject;
 
-                    if (caller != null)
-                    {
+                    if (caller != null) {
                         //Class[] nesting = caller.nesting();
                         //if (nesting != null && nesting.Length > 0)
                         //    outerScope = nesting[0];
                         outerScope = caller.lastClass();
                     }
 
-                    if (!outerScope.is_kind_of(method.definingClass))
-                    {
+                    if (!outerScope.is_kind_of(method.definingClass)) {
                         if (caller != null)
                             caller.call_status = CallStatus.Protected;
                         return null;
@@ -510,15 +454,12 @@ namespace Ruby.Runtime
                 }
 
                 return method;
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
-        internal static object method_missing(object recv, Frame caller, string methodId, ArgList args)
-        {
+        internal static object method_missing(object recv, Frame caller, string methodId, ArgList args) {
             ArgList newargs = new ArgList(args.block);
             newargs.Add(new Symbol(methodId));
             newargs.AddRange(args);
@@ -532,8 +473,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object ivar_get(object obj, string id)
-        {
+        public static object ivar_get(object obj, string id) {
             if (obj is Object)
                 return ((Object)obj).instance_variable_get(id);
             else
@@ -544,10 +484,8 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object ivar_set(Frame caller, object obj, string id, object value)
-        {
-            if (obj is Object)
-            {
+        public static object ivar_set(Frame caller, object obj, string id, object value) {
+            if (obj is Object) {
                 Object o = (Object)obj;
                 if (!o.Tainted && Eval.rb_safe_level() >= 4)
                     throw new SecurityError("Insecure: can't modify instance variable").raise(caller);
@@ -555,9 +493,7 @@ namespace Ruby.Runtime
                     throw TypeError.rb_error_frozen(caller, "object").raise(caller);
 
                 o.instance_variable_set(id, value);
-            }
-            else
-            {
+            } else {
                 // Lookaside
                 Object.generic_ivar_set(obj, id, value);
             }
@@ -565,20 +501,17 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object ivar_defined(object obj, string id)
-        {
+        public static object ivar_defined(object obj, string id) {
             if (obj is Object)
                 return ((Object)obj).instance_vars.ContainsKey(id);
-            else
-            {
+            else {
                 // Lookaside
                 return Object.generic_ivar_defined(obj, id);
             }
         }
 
 
-        internal static bool const_defined(Class current, string id, Frame caller)
-        {
+        internal static bool const_defined(Class current, string id, Frame caller) {
             if (current.const_defined(id, false))
                 return true;
 
@@ -590,8 +523,7 @@ namespace Ruby.Runtime
         }
 
 
-        internal static object const_get(Class current, string id, Frame caller)
-        {
+        internal static object const_get(Class current, string id, Frame caller) {
             if (current.const_defined(id, false))
                 return current.const_get(id, caller);
 
@@ -604,8 +536,7 @@ namespace Ruby.Runtime
 
 
         [UsedByRubyCompiler]
-        public static object const_defined(object current, string id, Frame caller)
-        {
+        public static object const_defined(object current, string id, Frame caller) {
             if (current is Class && const_defined((Class)current, id, caller))
                 return new Ruby.String("constant");
             else if (Class.rb_method_boundp(Class.CLASS_OF(current), id, false))
@@ -615,8 +546,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object get_const(object current, string id, Frame caller)
-        {
+        public static object get_const(object current, string id, Frame caller) {
             if (current is Class)
                 return const_get((Class)current, id, caller);
             else
@@ -624,13 +554,11 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static object set_const(Frame caller, object scope, string id, object value)
-        {
+        public static object set_const(Frame caller, object scope, string id, object value) {
             Class klass = (Class)scope;
             if (!klass.Tainted && rb_safe_level() >= 4)
                 throw new SecurityError("Insecure: can't set constant").raise(caller);
-            if (klass.Frozen)
-            {
+            if (klass.Frozen) {
                 if (klass._type == Class.Type.Module)
                     throw TypeError.rb_error_frozen(caller, "module").raise(caller);
                 else
@@ -640,8 +568,7 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static Proc block_pass(object arg, Frame caller)
-        {
+        public static Proc block_pass(object arg, Frame caller) {
             if (arg is Proc)
                 return (Proc)arg;
 
@@ -649,7 +576,7 @@ namespace Ruby.Runtime
                 return null;
 
             object result = Eval.CallPrivate(arg, caller, "to_proc", null);
-            
+
             if (result is Proc)
                 return (Proc)result;
             else
@@ -657,14 +584,13 @@ namespace Ruby.Runtime
         }
 
 
-        internal static int object_id(object obj)
-        {
+        internal static int object_id(object obj) {
             if (obj == null)
                 return 4;
-            
+
             if (obj is int)
                 return ((int)obj) * 2 + 1;
-            
+
             if (obj is bool)
                 if ((bool)obj)
                     return 2;
@@ -679,15 +605,13 @@ namespace Ruby.Runtime
 
 
         [UsedByRubyCompiler]
-        public static object alias(Class klass, string name, string def, Frame caller)
-        {
+        public static object alias(Class klass, string name, string def, Frame caller) {
             klass.define_alias(name, def, caller);
             return null;
         }
 
         // ruby_cbase: gets the class attached to the current 'node' (i.e. the current lexical context)
-        internal static Class ruby_cbase(Frame caller)
-        {
+        internal static Class ruby_cbase(Frame caller) {
             Class[] nesting = caller.nesting();
 
             if (nesting == null || nesting.Length == 0)
@@ -697,24 +621,21 @@ namespace Ruby.Runtime
         }
 
         [UsedByRubyCompiler]
-        public static bool Test(object test)
-        {
+        public static bool Test(object test) {
             return !(test == null || (test is bool && ((bool)test) == false));
         }
 
         /// <summary>
         /// rb_respond_to
         /// </summary>
-        internal static bool RespondTo(object obj, string method)
-        {
+        internal static bool RespondTo(object obj, string method) {
             Class origin;
             // FIXME:
             // - Is the null caller correct?
             // - May need to use rb_method_boundp.
             if (Eval.FindPrivateMethod(obj, null, method, out origin) != null)
                 return true;
-            else
-            {
+            else {
                 // FIXME: Is the null caller correct?
                 object result = Eval.CallPrivate1(obj, null, "respond_to?", null, new Symbol(method));
                 // Return true for any object other than false (even nil).
@@ -725,8 +646,7 @@ namespace Ruby.Runtime
         // ------------------------------------------------------------------------------
 
 
-        internal static object eval(object self, String src, IContext scope, string file, int line, Frame caller)
-        {
+        internal static object eval(object self, String src, IContext scope, string file, int line, Frame caller) {
             //System.Console.WriteLine("eval({0})", src.value);
             Frame frame = scope.Frame();
             //frame.caller = caller;      // BBTAG
@@ -740,8 +660,7 @@ namespace Ruby.Runtime
             //throw new System.Exception("testing");
         }
 
-        internal static object eval_under(Class klass, object self, String src, IContext scope, string file, int line, Frame caller)
-        {
+        internal static object eval_under(Class klass, object self, String src, IContext scope, string file, int line, Frame caller) {
             //System.Console.WriteLine("eval({0})", src.value);
             Frame frame = scope.Frame();
             //frame.caller = caller;      // BBTAG
@@ -756,14 +675,11 @@ namespace Ruby.Runtime
 
         internal static object specific_eval(Class last_class, object self, Class ruby_class, Frame caller, Proc block, Array args) //author: Brian, status: partial
         {
-            if (block != null)
-            {
+            if (block != null) {
                 ArgList argList = new ArgList();
                 argList.AddArray(args, caller);
                 return block.yield_under(caller, argList, ruby_class, self);
-            }
-            else
-            {
+            } else {
                 string file = "eval";
                 int line = 1;
 
@@ -772,15 +688,12 @@ namespace Ruby.Runtime
                 object vline = null;
                 String src = null;
 
-                if (args.Count > 0)
-                {
+                if (args.Count > 0) {
                     src = (String)(args[0]);
-                    if (args.Count > 1)
-                    {
+                    if (args.Count > 1) {
                         vfile = args[1];
                         file = ((String)vfile).value;
-                        if (args.Count > 2)
-                        {
+                        if (args.Count > 2) {
                             vline = args[2];
                             line = (int)vline;
                         }
@@ -803,7 +716,7 @@ namespace Ruby.Runtime
 
         internal static MethodBody rb_method_node(Class klass, string id) // status: unimplemented
         {
-            
+
             throw new System.NotImplementedException();
         }
 
@@ -814,14 +727,10 @@ namespace Ruby.Runtime
 
         internal static void rb_secure(int level, Frame caller) // status: done
         {
-            if (level <= rb_safe_level())
-            {
-                if ((caller != null) && (caller.methodName().Length > 0))
-                {
+            if (level <= rb_safe_level()) {
+                if ((caller != null) && (caller.methodName().Length > 0)) {
                     throw new SecurityError("Insecure operation `" + caller.methodName() + " at level " + ruby_safe_level).raise(caller);
-                }
-                else
-                {
+                } else {
                     throw new SecurityError("Insecure operation at level " + ruby_safe_level).raise(caller);
                 }
             }
@@ -851,7 +760,7 @@ namespace Ruby.Runtime
         {
             //FIXME: prot_tag
             //if (prot_tag)
-            terminate_process(caller, status, "exit");
+            // rifraf commented out: terminate_process(caller, status, "exit");
 
             //ruby_finalize();
 
@@ -877,30 +786,24 @@ namespace Ruby.Runtime
 
 
 
-        private class DummyFrame : Frame
-        {
+        private class DummyFrame : Frame {
             public DummyFrame()
-                : base(null)
-            {
+                : base(null) {
             }
 
-            protected override string file()
-            {
+            protected override string file() {
                 return "";
             }
 
-            public override string methodName()
-            {
+            public override string methodName() {
                 return "";
             }
 
-            public override Class[] nesting()
-            {
+            public override Class[] nesting() {
                 return new Class[0];
             }
 
-            public override Class lastClass()
-            {
+            public override Class lastClass() {
                 return null;
             }
         }
@@ -909,8 +812,7 @@ namespace Ruby.Runtime
 
 
 
-    internal class errat_global : global_variable
-    {
+    internal class errat_global : global_variable {
         internal override object getter(string id, Frame caller) // status: done
         {
             System.Console.WriteLine("get global {0}, currently {1}", id, Eval.ruby_errinfo.value);
@@ -930,8 +832,7 @@ namespace Ruby.Runtime
     }
 
     [UsedByRubyCompiler]
-    public class errinfo_global : global_variable
-    {
+    public class errinfo_global : global_variable {
         internal override void setter(string id, object value, Frame caller) // status: done
         {
             if (value != null && !(value is Exception))
@@ -942,8 +843,7 @@ namespace Ruby.Runtime
     }
 
 
-    internal class safe_global : global_variable
-    {
+    internal class safe_global : global_variable {
         internal override object getter(string id, Frame caller) // author: Brian, status: done
         {
             // safe_getter
@@ -955,8 +855,7 @@ namespace Ruby.Runtime
             // safe_setter
             int level = Object.Convert<int>(value, "to_int", caller);
 
-            if (level < Eval.ruby_safe_level)
-            {
+            if (level < Eval.ruby_safe_level) {
                 throw new SecurityError("tried to downgrade safe level from " + Eval.ruby_safe_level + " to " + level).raise(caller);
             }
 
@@ -970,12 +869,10 @@ namespace Ruby.Runtime
 
     internal class lastline_global : global_variable // author:cjs, status: done
     {
-        internal override object getter(string id, Frame caller)
-        {
+        internal override object getter(string id, Frame caller) {
             return Eval.rb_lastline_get(caller);
         }
-        internal override void setter(string id, object value, Frame caller)
-        {
+        internal override void setter(string id, object value, Frame caller) {
             Eval.rb_lastline_set(caller, String.RStringValue(value, caller));
         }
     }
@@ -983,10 +880,8 @@ namespace Ruby.Runtime
 
 
 
-namespace Ruby
-{    
-    internal class LocalJumpError : StandardError
-    {
+namespace Ruby {
+    internal class LocalJumpError : StandardError {
         public LocalJumpError(string message) : this(message, Ruby.Runtime.Init.rb_eLocalJumpError) { }
 
         public LocalJumpError(string message, Class klass) : base(message, klass) { }
@@ -995,9 +890,8 @@ namespace Ruby
     }
 
 
-    
-    internal class SystemStackError : StandardError
-    {
+
+    internal class SystemStackError : StandardError {
         public SystemStackError(string message) : this(message, Ruby.Runtime.Init.rb_eSysStackError) { }
 
         public SystemStackError(string message, Class klass) : base(message, klass) { }

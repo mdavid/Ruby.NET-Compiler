@@ -660,9 +660,14 @@ namespace Ruby
             return j > str.Length ? 0 : Dir.FNM_NOMATCH;
         }
 
+        // rifraf
+        internal static string WindowsPath(string path) {
+            return path.Replace('/', Path.DirectorySeparatorChar);
+        }
+
         internal static string Extension(string filename)
         {
-            return new System.IO.FileInfo(filename).Extension;
+            return new System.IO.FileInfo(WindowsPath(filename)).Extension;
         }
 
         internal static string dln_find(string fname, string path)
@@ -695,7 +700,7 @@ namespace Ruby
 
             if (try_add_ext)
             {
-                System.IO.FileInfo file = new System.IO.FileInfo(fname);
+                System.IO.FileInfo file = new System.IO.FileInfo(WindowsPath(fname));
                 string temp;
 
                 if (file.Extension == "")
@@ -749,15 +754,16 @@ namespace Ruby
 
         internal static string stripExtension(string name)
         {
-            // BBTAG: try using absolute paths instead
-            //return fileNameToClassName(name);
-            System.IO.FileInfo file = new System.IO.FileInfo(name);
-            return file.Name.Substring(0, file.Name.Length - file.Extension.Length);
+            return basename(name);
+            //rifraf // BBTAG: try using absolute paths instead
+            //rifraf //return fileNameToClassName(name);
+            //rifraf System.IO.FileInfo file = new System.IO.FileInfo(WindowsPath(name));
+            //rifraf return file.Name.Substring(0, file.Name.Length - file.Extension.Length);
         }
 
         internal static string fileNameToClassName(string name)
         {
-            System.IO.FileInfo file = new System.IO.FileInfo(name);
+            System.IO.FileInfo file = new System.IO.FileInfo(WindowsPath(name));
             // FIXME: change to RegExp
             string className = file.FullName.Replace('.', '_').Replace('/', '_').Replace(':', '_').Replace('\\', '_').Replace(' ', '_');
             return className.Substring(0, className.Length - file.Extension.Length);

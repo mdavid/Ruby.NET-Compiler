@@ -448,8 +448,6 @@ namespace Ruby.Methods
         internal static object load(object fname, Frame caller, bool try_add_ext)
         {
             //Indent(indent++);
-            //System.Console.WriteLine("loading {0}", fname);
-
             if (Program.programs.ContainsKey(File.stripExtension(fname.ToString())))
             {
                 Ruby.Compiler.AST.SOURCEFILE.LoadExisting(fname.ToString(), caller);
@@ -457,11 +455,12 @@ namespace Ruby.Methods
                 return true;
             }
          
-            String path = File.rb_find_file((String)fname, try_add_ext); 
+            String path = File.rb_find_file((String)fname, try_add_ext);
 
             if (path == null)
                 throw new LoadError("No such file to load -- " + ((String)fname).value).raise(caller);
 
+            path.value = System.IO.Path.GetFullPath(path.value);
             ((Array)Eval.rb_features.value).Add(fname);
 
             if (path.value.EndsWith(".dll"))
@@ -475,7 +474,6 @@ namespace Ruby.Methods
             }
 
             //Indent(--indent);
-            //System.Console.WriteLine("finished loading {0}", fname);
             return true;
         }
     }

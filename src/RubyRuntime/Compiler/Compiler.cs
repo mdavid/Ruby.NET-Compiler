@@ -191,7 +191,7 @@ namespace Ruby.Compiler
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             { // if Syntax Error then skip code generation
                 return;
             }

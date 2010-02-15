@@ -266,7 +266,7 @@ namespace Ruby.Compiler.AST
 
                 method.Close();
             }
-            catch (PERWAPI.DescriptorException e)
+            catch (PERWAPI.DescriptorException)
             {
             }
         }

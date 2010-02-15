@@ -16,12 +16,10 @@ using PERWAPI;
 using Ruby.Runtime;
 using System.Globalization;
 
-namespace Ruby.Compiler
-{
+namespace Ruby.Compiler {
     // Facade to PERWAPI
 
-    internal class CodeGenContext
-    {
+    internal class CodeGenContext {
         internal PEFile Assembly;
 
         internal MethodDef Method;
@@ -41,13 +39,11 @@ namespace Ruby.Compiler
 
         internal List<PERWAPI.ReferenceScope> peFiles = new List<PERWAPI.ReferenceScope>();
 
-        internal CodeGenContext()
-        {
+        internal CodeGenContext() {
             currentSkeleton = objectSkeleton;
         }
 
-        internal CodeGenContext(CodeGenContext context)
-        {
+        internal CodeGenContext(CodeGenContext context) {
             this.Assembly = context.Assembly;
             this.Method = context.Method;
             this.CLRLocals = context.CLRLocals;
@@ -62,235 +58,191 @@ namespace Ruby.Compiler
         }
 
 
-        private CILInstructions buffer
-        {
+        private CILInstructions buffer {
             get { return this.Method.GetCodeBuffer(); }
         }
 
-        internal void startMethod(YYLTYPE location)
-        {
+        internal void startMethod(YYLTYPE location) {
             buffer.DefaultSourceFile = SourceFile.GetSourceFile(location.file, System.Guid.Empty, System.Guid.Empty, System.Guid.Empty);
             newStartPoint(location);
         }
 
-        internal void newLine(YYLTYPE location)
-        {
+        internal void newLine(YYLTYPE location) {
             if (buffer.DefaultSourceFile != null && location != null)
                 buffer.Line((uint)location.first_line, (uint)location.first_column, (uint)location.last_line, (uint)location.last_column);
         }
 
 
-        internal void newStartPoint(YYLTYPE location)
-        {
+        internal void newStartPoint(YYLTYPE location) {
             if (buffer.DefaultSourceFile != null && location != null)
                 buffer.Line((uint)location.first_line, (uint)location.first_column, (uint)location.first_column);
         }
 
-        internal void newEndPoint(YYLTYPE location)
-        {
+        internal void newEndPoint(YYLTYPE location) {
             if (buffer.DefaultSourceFile != null && location != null)
                 buffer.Line((uint)location.last_line, (uint)location.last_column, (uint)location.last_column);
         }
 
-        internal void newobj(PERWAPI.Method method)
-        {
+        internal void newobj(PERWAPI.Method method) {
             buffer.MethInst(MethodOp.newobj, method);
         }
 
-        internal void newarr(PERWAPI.Type type)
-        {
+        internal void newarr(PERWAPI.Type type) {
             buffer.TypeInst(TypeOp.newarr, type);
         }
 
-        internal void callvirt(PERWAPI.Method method)
-        {
+        internal void callvirt(PERWAPI.Method method) {
             buffer.MethInst(MethodOp.callvirt, method);
         }
 
-        internal void call(PERWAPI.Method method)
-        {
+        internal void call(PERWAPI.Method method) {
             buffer.MethInst(MethodOp.call, method);
         }
 
-        internal void dup()
-        {
+        internal void dup() {
             buffer.Inst(Op.dup);
         }
 
-        internal void pop()
-        {
+        internal void pop() {
             buffer.Inst(Op.pop);
         }
 
-        internal void stelem_ref()
-        {
+        internal void stelem_ref() {
             buffer.Inst(Op.stelem_ref);
         }
 
-        internal void ldloc(int loc)
-        {
+        internal void ldloc(int loc) {
             buffer.LoadLocal(loc);
         }
 
-        internal void stloc(int loc)
-        {
+        internal void stloc(int loc) {
             buffer.StoreLocal(loc);
         }
 
-        internal void ret()
-        {
+        internal void ret() {
             buffer.Inst(Op.ret);
         }
 
-        internal void ldnull()
-        {
+        internal void ldnull() {
             buffer.Inst(Op.ldnull);
         }
 
-        internal void ldtoken(Type aType)
-        {
+        internal void ldtoken(Type aType) {
             buffer.TypeInst(TypeOp.ldtoken, aType);
         }
 
-        internal void ldc_i4(int i)
-        {
+        internal void ldc_i4(int i) {
             buffer.PushInt(i);
         }
 
-        internal void ldc_r8(double d)
-        {
+        internal void ldc_r8(double d) {
             buffer.ldc_r8(d);
         }
 
-        internal void ldstr(string str)
-        {
+        internal void ldstr(string str) {
             Debug.Assert(str != null);
             buffer.ldstr(str);
         }
 
-        internal void ldarg(string argName)
-        {
+        internal void ldarg(string argName) {
             ldarg(FindArg(argName));
         }
 
-        internal void ldarg(int argNum)
-        {
+        internal void ldarg(int argNum) {
             Debug.Assert(argNum >= 0);
             buffer.LoadArg(argNum);
         }
 
-        internal void starg(string argName)
-        {
+        internal void starg(string argName) {
             buffer.StoreArg(FindArg(argName));
         }
 
-        internal void cast(PERWAPI.Type t)
-        {
+        internal void cast(PERWAPI.Type t) {
             buffer.TypeInst(TypeOp.castclass, t);
         }
 
-        internal void isinst(PERWAPI.Type t)
-        {
+        internal void isinst(PERWAPI.Type t) {
             buffer.TypeInst(TypeOp.isinst, t);
         }
 
-        internal void ldfld(Field field)
-        {
+        internal void ldfld(Field field) {
             buffer.FieldInst(FieldOp.ldfld, field);
         }
 
-        internal void ldsfld(Field field)
-        {
+        internal void ldsfld(Field field) {
             buffer.FieldInst(FieldOp.ldsfld, field);
         }
 
-        internal void stfld(Field field)
-        {
+        internal void stfld(Field field) {
             buffer.FieldInst(FieldOp.stfld, field);
         }
 
-        internal void stsfld(Field field)
-        {
+        internal void stsfld(Field field) {
             buffer.FieldInst(FieldOp.stsfld, field);
         }
 
-        internal void box(PERWAPI.Type t)
-        {
+        internal void box(PERWAPI.Type t) {
             buffer.TypeInst(TypeOp.box, t);
         }
 
-        internal void br(CILLabel label)
-        {
+        internal void br(CILLabel label) {
             buffer.Branch(BranchOp.br, label);
         }
 
-        internal void leave(CILLabel label)
-        {
+        internal void leave(CILLabel label) {
             buffer.Branch(BranchOp.leave, label);
         }
 
-        internal void brfalse(CILLabel label)
-        {
+        internal void brfalse(CILLabel label) {
             buffer.Branch(BranchOp.brfalse, label);
         }
 
-        internal void brtrue(CILLabel label)
-        {
+        internal void brtrue(CILLabel label) {
             buffer.Branch(BranchOp.brtrue, label);
         }
 
-        internal void bne(CILLabel label)
-        {
+        internal void bne(CILLabel label) {
             buffer.Branch(BranchOp.bne_un, label);
         }
 
-        internal void bge(CILLabel label)
-        {
+        internal void bge(CILLabel label) {
             buffer.Branch(BranchOp.bge, label);
         }
 
-        internal void endfinally()
-        {
+        internal void endfinally() {
             buffer.Inst(Op.endfinally);
         }
 
-        internal void rethrow()
-        {
+        internal void rethrow() {
             buffer.Inst(Op.rethrow);
         }
 
-        internal void throwOp()
-        {
+        internal void throwOp() {
             buffer.Inst(Op.throwOp);
         }
 
 
-        internal void PushTrue()
-        {
+        internal void PushTrue() {
             buffer.PushTrue();
         }
 
-        internal void PushFalse()
-        {
+        internal void PushFalse() {
             buffer.PushFalse();
         }
 
         // -----------------------------------------------------------------
 
-        internal void CodeLabel(CILLabel label)
-        {
+        internal void CodeLabel(CILLabel label) {
             buffer.CodeLabel(label);
         }
 
-        internal CILLabel NewLabel()
-        {
+        internal CILLabel NewLabel() {
             return buffer.NewLabel();
         }
 
         internal Stack<Clause> blocks = new Stack<Clause>();
 
-        internal void Goto(CILLabel label)
-        {
+        internal void Goto(CILLabel label) {
             Clause top = Clause.None;
             if (blocks.Count > 0)
                 top = blocks.Peek();
@@ -303,28 +255,24 @@ namespace Ruby.Compiler
                 br(label);
         }
 
-        internal void StartBlock(Clause blockType)
-        {
+        internal void StartBlock(Clause blockType) {
             blocks.Push(blockType);
             buffer.StartBlock();
         }
 
-        internal TryBlock EndTryBlock()
-        {
+        internal TryBlock EndTryBlock() {
             System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Try);
             blocks.Pop();
             return buffer.EndTryBlock();
         }
 
-        internal void EndCatchBlock(PERWAPI.Class type, TryBlock tryBlock)
-        {
+        internal void EndCatchBlock(PERWAPI.Class type, TryBlock tryBlock) {
             System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Catch);
             blocks.Pop();
             buffer.EndCatchBlock(type, tryBlock);
         }
 
-        internal void EndFinallyBlock(TryBlock tryBlock)
-        {
+        internal void EndFinallyBlock(TryBlock tryBlock) {
             System.Diagnostics.Debug.Assert(blocks.Peek() == Clause.Finally);
             blocks.Pop();
             buffer.EndFinallyBlock(tryBlock);
@@ -334,8 +282,7 @@ namespace Ruby.Compiler
         // -----------------------------------------------------------------
 
 
-        internal void CreateAssembly(string directory, string fileName, string assemblyName, bool GUI)
-        {
+        internal void CreateAssembly(string directory, string fileName, string assemblyName, bool GUI) {
             Assembly = new PEFile(fileName, assemblyName);
             Assembly.SetSubSystem(GUI ? SubSystem.Windows_GUI : SubSystem.Windows_CUI);
             Assembly.SetNetVersion(NetVersion.Version2);
@@ -343,24 +290,19 @@ namespace Ruby.Compiler
             Assembly.SetOutputDirectory(directory);
         }
 
-        internal ClassDef CreateNestedClass(ClassDef parent, string name, PERWAPI.Class superType)
-        {
-            if (parent == null)
-            {
+        internal ClassDef CreateNestedClass(ClassDef parent, string name, PERWAPI.Class superType) {
+            if (parent == null) {
                 if (Assembly.GetClass(name) != null)
                     return Assembly.GetClass(name);
                 return Assembly.AddClass(TypeAttr.Public | TypeAttr.BeforeFieldInit, null, name, superType);
-            }
-            else
-            {
+            } else {
                 if (parent.GetNestedClass(name) != null)
                     return parent.GetNestedClass(name);
                 return parent.AddNestedClass(TypeAttr.NestedPublic | TypeAttr.BeforeFieldInit, name, superType);
             }
         }
 
-        internal ClassDef CreateGlobalClass(string nsName, string name, PERWAPI.Class superType)
-        {
+        internal ClassDef CreateGlobalClass(string nsName, string name, PERWAPI.Class superType) {
             string fullname = name;
             int seq = 1;
             // find a name that hasn't been used
@@ -372,14 +314,12 @@ namespace Ruby.Compiler
 
         static int indent = 0;
 
-        internal void Indent()
-        {
+        internal void Indent() {
             for (int i = 0; i < indent; i++)
                 System.Console.Write("\t");
         }
 
-        internal CodeGenContext CreateMethod(ClassDef ParentClass, MethAttr attr, string name, PERWAPI.Type return_type, params Param[] parameters)
-        {
+        internal CodeGenContext CreateMethod(ClassDef ParentClass, MethAttr attr, string name, PERWAPI.Type return_type, params Param[] parameters) {
             CodeGenContext newContext = new CodeGenContext(this);
 
             newContext.Method = ParentClass.AddMethod(attr, ImplAttr.IL, name, return_type, parameters);
@@ -396,8 +336,7 @@ namespace Ruby.Compiler
             return newContext;
         }
 
-        internal CodeGenContext CreateModuleMethod(string name, PERWAPI.Type return_type, params Param[] parameters)
-        {
+        internal CodeGenContext CreateModuleMethod(string name, PERWAPI.Type return_type, params Param[] parameters) {
             CodeGenContext newContext = new CodeGenContext(this);
 
             newContext.Method = Assembly.AddMethod(MethAttr.PublicStatic, ImplAttr.IL, name, return_type, parameters);
@@ -412,37 +351,31 @@ namespace Ruby.Compiler
         }
 
 
-        internal CodeGenContext CreateConstructor(ClassDef ParentClass, params Param[] parameters)
-        {
+        internal CodeGenContext CreateConstructor(ClassDef ParentClass, params Param[] parameters) {
             return CreateMethod(ParentClass, MethAttr.HideBySig | MethAttr.SpecialRTSpecialName | MethAttr.Public, ".ctor", PrimitiveType.Void, parameters);
         }
 
-        internal CodeGenContext CreateStaticConstructor(ClassDef ParentClass)
-        {
+        internal CodeGenContext CreateStaticConstructor(ClassDef ParentClass) {
             return CreateMethod(ParentClass, MethAttr.HideBySig | MethAttr.SpecialRTSpecialName | MethAttr.Private | MethAttr.Static, ".cctor", PrimitiveType.Void);
         }
 
-        internal static FieldDef AddField(ClassDef ParentClass, FieldAttr attr, string fieldName, PERWAPI.Type fieldType)
-        {
+        internal static FieldDef AddField(ClassDef ParentClass, FieldAttr attr, string fieldName, PERWAPI.Type fieldType) {
             return ParentClass.AddField(attr, fieldName, fieldType);
         }
 
         // -----------------------------------------------------------------
 
-        internal ClassDef CurrentClass()
-        {
+        internal ClassDef CurrentClass() {
             return (ClassDef)Method.GetParent();
         }
 
-        internal string CurrentMethodName()
-        {
+        internal string CurrentMethodName() {
             CustomAttribute methodAttribute = CurrentClass().GetCustomAttributes()[0];
             return System.Text.UnicodeEncoding.UTF8.GetString(methodAttribute.byteVal);
         }
 
         // BBTAG: corresponds to ruby_frame->orig_func
-        internal string OrigFuncName()
-        {
+        internal string OrigFuncName() {
             CustomAttribute methodAttribute = ((ClassDef)orig_func.GetParent()).GetCustomAttributes()[0];
             return System.Text.UnicodeEncoding.UTF8.GetString(methodAttribute.byteVal);
         }
@@ -453,8 +386,7 @@ namespace Ruby.Compiler
         internal List<int> locals_inuse = new List<int>();
 
 
-        internal void Close()
-        {
+        internal void Close() {
             //indent--;
             //Indent();
             //System.Console.WriteLine("Close {0}", this.Method.QualifiedName());
@@ -463,50 +395,41 @@ namespace Ruby.Compiler
 
             Method.AddLocals(CLRLocals.ToArray(), true);
 
-            foreach (Local local in CLRLocals)
-            {
+            foreach (Local local in CLRLocals) {
                 //System.Console.WriteLine("\t{0} {1} {2}", local.Name, local.type.TypeName(), local.GetIndex());
                 buffer.BindLocal(local);
             }
 
             buffer.CloseScope();
 
-            if (locals_inuse.Count > 0)
-            {
+            if (locals_inuse.Count > 0) {
                 //foreach (int local in locals_inuse)
                 //    System.Console.WriteLine("({0}, {1})", CLRLocals[local].name, CLRLocals[local].type);
                 throw new System.Exception("unreleased locals");
             }
         }
 
-        internal int CreateLocal(string name, PERWAPI.Type type)
-        {
+        internal int CreateLocal(string name, PERWAPI.Type type) {
             int local;
-            if (unused_locals.ContainsKey(type) && unused_locals[type].Count > 0)
-            {
+            if (unused_locals.ContainsKey(type) && unused_locals[type].Count > 0) {
                 local = unused_locals[type].Pop();
-            }
-            else
-            {
+            } else {
                 Local loc = new Local(name, type);
                 CLRLocals.Add(loc);
                 local = CLRLocals.Count - 1;
             }
-                
+
             locals_inuse.Add(local);
             return local;
         }
 
-        internal void ReleaseLocal(AST.ISimple temp, bool created)
-        {
+        internal void ReleaseLocal(AST.ISimple temp, bool created) {
             if (temp is AST.LOCAL)
                 ReleaseLocal(((AST.LOCAL)temp).local, created);
         }
 
-        internal void ReleaseLocal(int local, bool created)
-        {
-            if (created)
-            {
+        internal void ReleaseLocal(int local, bool created) {
+            if (created) {
                 Debug.Assert(locals_inuse.Contains(local));
                 locals_inuse.Remove(local);
 
@@ -517,50 +440,39 @@ namespace Ruby.Compiler
 
                 Debug.Assert(!unused_locals[type].Contains(local));
                 unused_locals[type].Push(local);
-                }
+            }
         }
 
-        internal int StoreInTemp(string name, PERWAPI.Type type, YYLTYPE location)
-        {
+        internal int StoreInTemp(string name, PERWAPI.Type type, YYLTYPE location) {
             return StoreInLocal(name, type, location).local;
         }
 
-        internal AST.LOCAL StoreInLocal(string name, PERWAPI.Type type, YYLTYPE location)
-        {
+        internal AST.LOCAL StoreInLocal(string name, PERWAPI.Type type, YYLTYPE location) {
             int local = CreateLocal(name, type);
             stloc(local);
             return new AST.LOCAL(local, location);
         }
 
-        internal AST.ISimple PreCompute(AST.Node node, string name, out bool created)
-        {
+        internal AST.ISimple PreCompute(AST.Node node, string name, out bool created) {
             return PreCompute(node, name, PrimitiveType.Object, out created);
         }
 
-        internal AST.ISimple PreCompute(AST.Node node, string name, PERWAPI.Type type, out bool created)
-        {
-            if (node is AST.ISimple)
-            {
+        internal AST.ISimple PreCompute(AST.Node node, string name, PERWAPI.Type type, out bool created) {
+            if (node is AST.ISimple) {
                 created = false;
                 return (AST.ISimple)node;
-            }
-            else
-            {
+            } else {
                 created = true;
                 node.GenCode(this);
                 return StoreInLocal(name, type, node.location);
             }
         }
 
-        internal AST.ISimple PreCompute0(AST.Node node, string name, out bool created)
-        {
-            if (node is AST.ISimple)
-            {
+        internal AST.ISimple PreCompute0(AST.Node node, string name, out bool created) {
+            if (node is AST.ISimple) {
                 created = false;
                 return (AST.ISimple)node;
-            }
-            else
-            {
+            } else {
                 created = true;
                 node.GenCode0(this);
                 return StoreInLocal(name, PrimitiveType.Object, node.location);
@@ -568,24 +480,20 @@ namespace Ruby.Compiler
         }
 
 
-        internal bool HasArg(ClassRef argType)
-        {
+        internal bool HasArg(ClassRef argType) {
             foreach (Type t in Method.GetParTypes())
                 if (argType == t)
                     return true;
             return false;
         }
 
-        internal void ruby_cbase(AST.Scope current)
-        {
+        internal void ruby_cbase(AST.Scope current) {
             LoadCurrentClass();
         }
 
-        internal void ruby_class(AST.Scope current)
-        {
+        internal void ruby_class(AST.Scope current) {
             ClassDef parent = CurrentClass();
-            if (parent.NameSpace() == "_Internal" && parent.Name().StartsWith("Block"))
-            {
+            if (parent.NameSpace() == "_Internal" && parent.Name().StartsWith("Block")) {
                 // if (ruby_class == null)
                 ldarg("ruby_class");
                 CILLabel elseLabel = NewLabel();
@@ -599,88 +507,71 @@ namespace Ruby.Compiler
                 //    ruby_class
                 ldarg("ruby_class");
                 CodeLabel(endLabel);
-            }
-            else
+            } else
                 LoadCurrentClass();
         }
 
-        internal void LoadCurrentClass()
-        {
+        internal void LoadCurrentClass() {
             if (CurrentRubyClass != null)
                 ldsfld(CurrentRubyClass);
             else
                 ldsfld(Runtime.Init.rb_cObject);
         }
 
-        internal void LastClass(AST.Scope parent_scope, bool frame)
-        {
+        internal void LastClass(AST.Scope parent_scope, bool frame) {
             AST.Scope scope_cnt = parent_scope;
             AST.DEFS singletonMethod = null;
 
-            while (!(scope_cnt is AST.CLASS_OR_MODULE) && (scope_cnt != null))
-            {
+            while (!(scope_cnt is AST.CLASS_OR_MODULE) && (scope_cnt != null)) {
                 if (scope_cnt is AST.DEFS)
                     singletonMethod = (AST.DEFS)scope_cnt;
                 scope_cnt = scope_cnt.parent_scope;
             }
 
-            if (scope_cnt == null)
-            {
+            if (scope_cnt == null) {
                 ldsfld(Runtime.Init.rb_cObject);
                 return;
             }
 
             AST.CLASS_OR_MODULE parentClass = (AST.CLASS_OR_MODULE)scope_cnt;
 
-            if (singletonMethod != null)
-            {
-                if (singletonMethod.receiver is AST.SELF)
-                {
+            if (singletonMethod != null) {
+                if (singletonMethod.receiver is AST.SELF) {
                     ldsfld(parentClass.singletonField);
                     call(Runtime.Class.CLASS_OF);
-                }
-                else
-                {
-                    if (frame)
-                    {
-                        if (singletonMethod.receiver is AST.IVAR)
-                        {
+                } else {
+                    if (frame) {
+                        if (singletonMethod.receiver is AST.IVAR) {
                             ldsfld(parentClass.singletonField);
                             ldstr(((AST.IVAR)singletonMethod.receiver).vid);
                             call(Runtime.Eval.ivar_get);
-                        }
-                        else
-                        {
+                        } else {
                             singletonMethod.receiver.GenCode(this);
                             call(Runtime.Class.CLASS_OF);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         singletonMethod.receiver.GenCode(this);
                         call(Runtime.Class.CLASS_OF);
                     }
                 }
-            }
-            else
+            } else
                 ldsfld(parentClass.singletonField);
         }
 
 
-        internal static PERWAPI.FieldRef FindParentClassField(System.Type type)
-        {
+        internal static PERWAPI.FieldRef FindParentClassField(System.Type type) {
             FrameAttribute frame = (FrameAttribute)type.GetCustomAttributes(typeof(FrameAttribute), false)[0];
             if (frame.classname == "")
                 return null;
             System.Reflection.Module module = type.Assembly.GetModules(false)[0];
             System.Type sourcefile = module.GetType("_Internal.SourceFile_" + frame.sourcefile);
+
             FieldInfo field = sourcefile.GetField(frame.classname);
             return FindField(field);
         }
 
 
-        internal bool Reachable()
-        {
+        internal bool Reachable() {
             buffer.EndInstCounter();
             CILInstruction prev = buffer.GetPrevInstruction();
             return !((prev is Instr &&
@@ -698,8 +589,7 @@ namespace Ruby.Compiler
         // -------------------------------------------------------------------------
 
 
-        private int FindArg(string name)
-        {
+        private int FindArg(string name) {
             int seq;
             if ((Method.GetMethAttributes() & MethAttr.Static) != 0)
                 seq = 0;
@@ -715,42 +605,34 @@ namespace Ruby.Compiler
             return -1;
         }
 
-        internal static System.Reflection.Assembly ResolveAssembly(object sender, System.ResolveEventArgs args)
-        {
-            foreach (System.Reflection.Assembly assembly in loaded)
-            {
+        internal static System.Reflection.Assembly ResolveAssembly(object sender, System.ResolveEventArgs args) {
+            foreach (System.Reflection.Assembly assembly in loaded) {
                 if (assembly.FullName == args.Name)
                     return assembly;
             }
             return null;
         }
 
-        private static AssemblyRef FindAssembly(System.Type type)
-        {
+        private static AssemblyRef FindAssembly(System.Type type) {
             if (cached.ContainsKey(type.Assembly))
                 return cached[type.Assembly];
-            else
-            {
+            else {
                 AssemblyName name = type.Assembly.GetName();
                 return cached[type.Assembly] = AssemblyRef.MakeAssemblyRef(name.Name, (ushort)name.Version.Major, (ushort)name.Version.Minor, (ushort)name.Version.Build, (ushort)name.Version.Revision, name.GetPublicKeyToken());
             }
         }
 
 
-        internal static ClassRef FindClass(System.Type type)
-        {
+        internal static ClassRef FindClass(System.Type type) {
             AssemblyRef assembly = FindAssembly(type);
 
             ClassRef result;
-            if (type.IsNested)
-            {
+            if (type.IsNested) {
                 ClassRef parent = FindClass(type.DeclaringType);
                 result = parent.GetNestedClass(type.Name);
                 if (result == null)
                     result = parent.AddNestedClass(type.Name);
-            }
-            else
-            {
+            } else {
                 result = assembly.GetClass(type.Namespace, type.Name);
                 if (result == null)
                     result = assembly.AddClass(type.Namespace, type.Name);
@@ -759,23 +641,20 @@ namespace Ruby.Compiler
             return result;
         }
 
-        internal static FieldRef FindField(FieldInfo field)
-        {
+        internal static FieldRef FindField(FieldInfo field) {
             ClassRef parent = FindClass(field.DeclaringType);
             FieldRef fieldRef = parent.GetField(field.Name);
             if (fieldRef == null)
                 fieldRef = parent.AddField(field.Name, FindClass(field.FieldType));
-            
+
             return fieldRef;
         }
 
 
-        internal static Field FindField(PERWAPI.Class klass, string fieldName)
-        {
+        internal static Field FindField(PERWAPI.Class klass, string fieldName) {
             if (klass is ClassDef)
                 return ((ClassDef)klass).GetField(fieldName);
-            else
-            {
+            else {
                 FieldRef f = ((ClassRef)klass).GetField(fieldName);
                 if (f == null)
                     f = ((ClassRef)klass).AddField(fieldName, PERWAPI.PrimitiveType.Object);
@@ -784,22 +663,20 @@ namespace Ruby.Compiler
         }
 
         private static Dictionary<System.Reflection.Assembly, PERWAPI.AssemblyRef> cached = new Dictionary<System.Reflection.Assembly, PERWAPI.AssemblyRef>();
-        
+
         // --------------------------------------------------------------------------
 
         private static List<System.Reflection.Assembly> loaded = new List<System.Reflection.Assembly>();
 
 
-        internal static System.Reflection.Assembly Load(PEFile assembly)
-        {
+        internal static System.Reflection.Assembly Load(PEFile assembly) {
             MemoryStream binaryStream = new MemoryStream();
             assembly.SetOutputStream(binaryStream);
             assembly.MakeDebuggable(false, false);
             assembly.WritePEFile(false);
             byte[] assemblyBytes = binaryStream.ToArray();
-            //System.Console.WriteLine("Loading {0} ...", Assembly.Name());
+
             System.Reflection.Assembly loadedAssembly = System.Reflection.Assembly.Load(assemblyBytes);
-            //System.Console.WriteLine("Loaded {0}", loadedAssembly.FullName);
             loaded.Add(loadedAssembly);
             return loadedAssembly;
         }
@@ -807,9 +684,8 @@ namespace Ruby.Compiler
 
 
     internal enum Clause { None, Try, Catch, Finally };
-    
-    internal class Labels
-    {
+
+    internal class Labels {
         internal CILLabel Redo;
         internal CILLabel Retry;
         internal CILLabel Break;
