@@ -224,7 +224,7 @@ namespace Ruby.Compiler.AST {
             CodeGenContext context = new CodeGenContext();
 
             //rifraf            context.CreateAssembly(file.DirectoryName, fileName + dll_or_exe, fileName, GUI);
-            context.CreateAssembly(file.DirectoryName, File.stripExtension(fullFileName) + dll_or_exe, File.stripExtension(fullFileName), GUI);
+            context.CreateAssembly(file.DirectoryName, File.stripExtension(fullFileName) + dll_or_exe, fullFileName, GUI);
             //rifraf            ClassDef mainClass = GenerateClassForFile(context, fileName, false, new List<SOURCEFILE>());
             ClassDef mainClass = GenerateClassForFile(context, File.stripExtension(fullFileName), false, new List<SOURCEFILE>());
 
